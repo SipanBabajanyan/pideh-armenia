@@ -15,6 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Комбо')
   const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
+  const [addedToCartHits, setAddedToCartHits] = useState<Set<string>>(new Set())
   const { addItem } = useCart()
 
   useEffect(() => {
@@ -44,6 +45,20 @@ export default function Home() {
     // Убираем подсветку через 2 секунды
     setTimeout(() => {
       setAddedToCart(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(product.id)
+        return newSet
+      })
+    }, 2000)
+  }
+
+  const handleAddToCartHits = (product: Product) => {
+    addItem(product, 1)
+    setAddedToCartHits(prev => new Set(prev).add(product.id))
+    
+    // Убираем подсветку через 2 секунды
+    setTimeout(() => {
+      setAddedToCartHits(prev => {
         const newSet = new Set(prev)
         newSet.delete(product.id)
         return newSet
@@ -335,15 +350,15 @@ export default function Home() {
                           e.stopPropagation();
                           handleAddToCart(product);
                         }}
-                        className={`px-12 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
+                        className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
                           addedToCart.has(product.id)
-                            ? 'bg-green-500 text-white scale-105 shadow-lg'
-                            : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105'
+                            ? 'bg-green-500 text-white shadow-lg'
+                            : 'bg-orange-500 text-white hover:bg-orange-600'
                         }`}
                         title="В корзину"
                       >
                         {addedToCart.has(product.id) ? (
-                          '✓ Добавлено!'
+                          '✓ В корзине'
                         ) : (
                           <>
                             <span className="text-sm font-bold mr-1">+</span>
@@ -448,7 +463,7 @@ export default function Home() {
                     <span className="text-2xl font-bold text-orange-500">1800 ֏</span>
                   </div>
                   <button
-                    onClick={() => handleAddToCart({ 
+                    onClick={() => handleAddToCartHits({ 
                       id: 'meat-pide', 
                       name: 'Мясная пиде', 
                       price: 1800, 
@@ -460,11 +475,21 @@ export default function Home() {
                       createdAt: new Date(),
                       updatedAt: new Date()
                     })}
-                    className="bg-orange-500 text-white px-12 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                    className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
+                      addedToCartHits.has('meat-pide')
+                        ? 'bg-green-500 text-white shadow-lg'
+                        : 'bg-orange-500 text-white hover:bg-orange-600'
+                    }`}
                     title="В корзину"
                   >
-                    <span className="text-sm font-bold mr-1">+</span>
-                    <ShoppingCart className="h-4 w-4" />
+                    {addedToCartHits.has('meat-pide') ? (
+                      '✓ В корзине'
+                    ) : (
+                      <>
+                        <span className="text-sm font-bold mr-1">+</span>
+                        <ShoppingCart className="h-4 w-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -530,7 +555,7 @@ export default function Home() {
                     <span className="text-2xl font-bold text-orange-500">1600 ֏</span>
                   </div>
                   <button
-                    onClick={() => handleAddToCart({ 
+                    onClick={() => handleAddToCartHits({ 
                       id: 'pepperoni-pide', 
                       name: 'Пепперони пиде', 
                       price: 1600, 
@@ -542,11 +567,21 @@ export default function Home() {
                       createdAt: new Date(),
                       updatedAt: new Date()
                     })}
-                    className="bg-orange-500 text-white px-12 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                    className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
+                      addedToCartHits.has('pepperoni-pide')
+                        ? 'bg-green-500 text-white shadow-lg'
+                        : 'bg-orange-500 text-white hover:bg-orange-600'
+                    }`}
                     title="В корзину"
                   >
-                    <span className="text-sm font-bold mr-1">+</span>
-                    <ShoppingCart className="h-4 w-4" />
+                    {addedToCartHits.has('pepperoni-pide') ? (
+                      '✓ В корзине'
+                    ) : (
+                      <>
+                        <span className="text-sm font-bold mr-1">+</span>
+                        <ShoppingCart className="h-4 w-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -612,7 +647,7 @@ export default function Home() {
                     <span className="text-2xl font-bold text-orange-500">1400 ֏</span>
                   </div>
                   <button
-                    onClick={() => handleAddToCart({ 
+                    onClick={() => handleAddToCartHits({ 
                       id: 'cheese-pide', 
                       name: 'Классическая сырная пиде', 
                       price: 1400, 
@@ -624,11 +659,21 @@ export default function Home() {
                       createdAt: new Date(),
                       updatedAt: new Date()
                     })}
-                    className="bg-orange-500 text-white px-12 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                    className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
+                      addedToCartHits.has('cheese-pide')
+                        ? 'bg-green-500 text-white shadow-lg'
+                        : 'bg-orange-500 text-white hover:bg-orange-600'
+                    }`}
                     title="В корзину"
                   >
-                    <span className="text-sm font-bold mr-1">+</span>
-                    <ShoppingCart className="h-4 w-4" />
+                    {addedToCartHits.has('cheese-pide') ? (
+                      '✓ В корзине'
+                    ) : (
+                      <>
+                        <span className="text-sm font-bold mr-1">+</span>
+                        <ShoppingCart className="h-4 w-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

@@ -9,10 +9,12 @@ interface ProductCardProps {
   product: Product
   onAddToCart: (product: Product) => void
   variant?: 'default' | 'compact'
+  addedToCart?: Set<string>
 }
 
-const ProductCard = memo(({ product, onAddToCart, variant = 'default' }: ProductCardProps) => {
+const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCart }: ProductCardProps) => {
   const isCompact = variant === 'compact'
+  const isAdded = addedToCart?.has(product.id) || false
 
   return (
     <Link 
@@ -84,15 +86,25 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default' }: Product
               e.stopPropagation()
               onAddToCart(product)
             }}
-            className={`bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center ${
+            className={`rounded-xl transition-colors duration-300 shadow-lg flex items-center justify-center overflow-hidden ${
+              isAdded
+                ? 'bg-green-500 text-white'
+                : 'bg-orange-500 text-white hover:bg-orange-600'
+            } ${
               isCompact 
-                ? 'px-12 py-3 rounded-lg hover:scale-100' 
-                : 'px-12 py-3'
+                ? 'w-28 h-12 rounded-lg' 
+                : 'w-32 h-12'
             }`}
             title="В корзину"
           >
-            <span className="text-sm font-bold mr-1">+</span>
-            <ShoppingCart className={isCompact ? 'h-4 w-4' : 'h-5 w-5'} />
+            {isAdded ? (
+              '✓ В корзине'
+            ) : (
+              <>
+                <span className="text-sm font-bold mr-1">+</span>
+                <ShoppingCart className={isCompact ? 'h-4 w-4' : 'h-5 w-5'} />
+              </>
+            )}
           </button>
         </div>
       </div>

@@ -17,6 +17,7 @@ export default function ProductsPage() {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
   const [searching, setSearching] = useState(false)
+  const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
   const { addItem } = useCart()
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -113,7 +114,16 @@ export default function ProductsPage() {
 
   const handleAddToCart = useCallback((product: Product) => {
     addItem(product, 1)
-    // Здесь можно добавить уведомление о добавлении в корзину
+    setAddedToCart(prev => new Set(prev).add(product.id))
+    
+    // Убираем подсветку через 2 секунды
+    setTimeout(() => {
+      setAddedToCart(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(product.id)
+        return newSet
+      })
+    }, 2000)
   }, [addItem])
 
   // Мемоизируем сгруппированные продукты
@@ -245,6 +255,7 @@ export default function ProductsPage() {
                       product={product}
                       onAddToCart={handleAddToCart}
                       variant="default"
+                      addedToCart={addedToCart}
                     />
                   ))}
                 </div>
@@ -260,6 +271,7 @@ export default function ProductsPage() {
                 product={product}
                 onAddToCart={handleAddToCart}
                 variant="compact"
+                addedToCart={addedToCart}
               />
             ))}
           </div>
