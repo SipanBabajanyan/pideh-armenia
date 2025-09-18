@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -25,11 +25,11 @@ interface EditProductPageProps {
 }
 
 export default function EditProductPage({ params }: EditProductPageProps) {
-  const resolvedParams = use(params)
   const { data: session, status } = useSession()
   const router = useRouter()
   
   const [product, setProduct] = useState<Product | null>(null)
+  const [productId, setProductId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -44,12 +44,23 @@ export default function EditProductPage({ params }: EditProductPageProps) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
+  // Получаем ID товара из params
+  useEffect(() => {
+    const getProductId = async () => {
+      const resolvedParams = await params
+      setProductId(resolvedParams.id)
+    }
+    getProductId()
+  }, [params])
+
   // Загружаем данные товара
   useEffect(() => {
+    if (!productId) return
+
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/products/${resolvedParams.id}`)
+        const response = await fetch(`/api/products/${productId}`)
         
         if (!response.ok) {
           throw new Error('Product not found')
@@ -77,10 +88,10 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     }
 
     fetchProduct()
-  }, [resolvedParams.id])
+  }, [productId])
 
   // Проверяем права доступа
-  if (status === 'loading') {
+  if (status === 'loading' || !productId) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -116,7 +127,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
         ingredients: formData.ingredients ? formData.ingredients.split(',').map(i => i.trim()) : []
       }
 
-      const response = await fetch(`/api/admin/products/${resolvedParams.id}`, {
+      const response = await fetch(`/api/admin/products/${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -146,7 +157,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
 
     try {
       setSaving(true)
-      const response = await fetch(`/api/products/${resolvedParams.id}`, {
+      const response = await fetch(`/api/products/${productId}`, {
         method: 'DELETE'
       })
 
