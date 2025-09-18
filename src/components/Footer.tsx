@@ -10,8 +10,8 @@ export default function Footer() {
           <div className="md:col-span-2">
             <h3 className="text-2xl font-bold text-orange-500 mb-4">Pideh Armenia</h3>
             <p className="text-gray-300 mb-4">
-              Мини-пиццы в виде аджарских хачапури. Свежие, вкусные, быстрые!
-              Лодочки с начинкой как у пиццы. 15 уникальных вкусов для настоящих гурманов.
+              Армянские пиде - новый вкус. Свежие, вкусные, быстрые!
+              Традиционная форма с современными начинками. 34 уникальных вкуса для настоящих гурманов.
             </p>
             <div className="flex space-x-4">
               <a href="tel:+37499123456" className="text-gray-300 hover:text-orange-500 transition-colors">

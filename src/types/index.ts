@@ -1,5 +1,8 @@
 import { User, Product, Order, OrderItem, OrderStatus } from '@prisma/client'
 
+// Экспортируем типы из Prisma
+export { Product, User, Order, OrderItem, OrderStatus }
+
 // Расширенные типы для приложения
 export interface ProductWithIngredients extends Product {
   // PostgreSQL уже возвращает ingredients как массив

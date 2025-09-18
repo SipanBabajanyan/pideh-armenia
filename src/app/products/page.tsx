@@ -158,14 +158,18 @@ export default function ProductsPage() {
                 {/* Products Grid for this category */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {products.map((product) => (
-                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200">
+                    <Link 
+                      key={product.id} 
+                      href={`/products/${product.id}`}
+                      className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group"
+                    >
                       {/* Image */}
                       <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
                         {product.image ? (
                           <img 
                             src={product.image} 
                             alt={product.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             onError={(e) => {
                               console.error('Ошибка загрузки изображения:', product.image);
                               e.currentTarget.style.display = 'none';
@@ -174,7 +178,7 @@ export default function ProductsPage() {
                           />
                         ) : null}
                         <div 
-                          className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50"
+                          className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50 group-hover:opacity-70 transition-opacity duration-300"
                           style={{ display: product.image ? 'none' : 'flex' }}
                         >
                           🥟
@@ -183,7 +187,7 @@ export default function ProductsPage() {
                       
                       {/* Content */}
                       <div className="p-4">
-                        <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2">
+                        <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors duration-200">
                           {product.name}
                         </h3>
                         
@@ -195,6 +199,7 @@ export default function ProductsPage() {
                           <button
                             onClick={(e) => {
                               e.preventDefault()
+                              e.stopPropagation()
                               handleAddToCart(product)
                             }}
                             className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium"
@@ -203,7 +208,7 @@ export default function ProductsPage() {
                           </button>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -213,14 +218,18 @@ export default function ProductsPage() {
           // Показываем товары выбранной категории
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200">
+              <Link 
+                key={product.id} 
+                href={`/products/${product.id}`}
+                className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group"
+              >
                 {/* Image */}
                 <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
                   {product.image ? (
                     <img 
                       src={product.image} 
                       alt={product.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       onError={(e) => {
                         console.error('Ошибка загрузки изображения:', product.image);
                         e.currentTarget.style.display = 'none';
@@ -229,7 +238,7 @@ export default function ProductsPage() {
                     />
                   ) : null}
                   <div 
-                    className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50"
+                    className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50 group-hover:opacity-70 transition-opacity duration-300"
                     style={{ display: product.image ? 'none' : 'flex' }}
                   >
                     🥟
@@ -238,7 +247,7 @@ export default function ProductsPage() {
                 
                 {/* Content */}
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors duration-200">
                     {product.name}
                   </h3>
                   
@@ -250,6 +259,7 @@ export default function ProductsPage() {
                     <button
                       onClick={(e) => {
                         e.preventDefault()
+                        e.stopPropagation()
                         handleAddToCart(product)
                       }}
                       className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium"
@@ -258,7 +268,7 @@ export default function ProductsPage() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
