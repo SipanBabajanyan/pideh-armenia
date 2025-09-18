@@ -5,13 +5,24 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MapPin, Clock, CreditCard, Phone, User } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
+import { useSession } from 'next-auth/react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+
+interface UserProfile {
+  id: string
+  name: string | null
+  email: string
+  phone: string | null
+  address: string | null
+}
 
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCart()
+  const { data: session, status } = useSession()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   
   // Form state
   const [formData, setFormData] = useState({
@@ -31,6 +42,35 @@ export default function CheckoutPage() {
       router.push('/cart')
     }
   }, [items, router])
+
+  // Load user profile and auto-fill form
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      if (status === 'loading') return
+      
+      if (!session) return
+
+      try {
+        const response = await fetch('/api/user/profile')
+        if (response.ok) {
+          const profile = await response.json()
+          setUserProfile(profile)
+          
+          // Просто копируем данные в форму, как будто пользователь сам их ввел
+          setFormData(prev => ({
+            ...prev,
+            name: profile.name || '',
+            phone: profile.phone || '',
+            address: profile.address || ''
+          }))
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error)
+      }
+    }
+
+    loadUserProfile()
+  }, [session, status])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
