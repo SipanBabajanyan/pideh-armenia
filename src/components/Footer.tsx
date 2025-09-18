@@ -76,11 +76,14 @@ export default function Footer() {
                   info@pideh.am
                 </a>
               </div>
-              <div className="flex items-start space-x-2">
-                <MapPin className="h-4 w-4 text-orange-500 mt-1" />
-                <div className="text-gray-300">
-                  <div>Филиал 1: Zoravar Andranik 151/2</div>
-                  <div>Филиал 2: Yeznik Koghbatsi 83</div>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-orange-500" />
+                  <span className="text-gray-300">Zoravar Andranik 151/2</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-orange-500" />
+                  <span className="text-gray-300">Yeznik Koghbatsi 83</span>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
