@@ -70,8 +70,10 @@ export default function ContactPage() {
               <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="h-10 w-10 text-orange-500" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Филиал 1</h3>
-              <p className="text-gray-600 mb-4">Zoravar Andranik 151/2, Yerevan, Armenia</p>
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <MapPin className="h-5 w-5 text-orange-500" />
+                <p className="text-gray-600 text-lg font-semibold">Zoravar Andranik 151/2</p>
+              </div>
               <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
                 На карте
               </button>
@@ -81,8 +83,10 @@ export default function ContactPage() {
               <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="h-10 w-10 text-orange-500" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Филиал 2</h3>
-              <p className="text-gray-600 mb-4">Yeznik Koghbatsi 83, Yerevan, Armenia 0002</p>
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <MapPin className="h-5 w-5 text-orange-500" />
+                <p className="text-gray-600 text-lg font-semibold">Yeznik Koghbatsi 83</p>
+              </div>
               <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
                 На карте
               </button>
