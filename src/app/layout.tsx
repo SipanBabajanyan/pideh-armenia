@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: "Pideh Armenia - Армянские пиде новый вкус",
   description: "Традиционная форма с современными начинками. 15 уникальных вкуса для настоящих гурманов! Доставка по Еревану.",
   keywords: "пиде, армянские пиде, мини-пиццы, доставка еды, Ереван, Армения",
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

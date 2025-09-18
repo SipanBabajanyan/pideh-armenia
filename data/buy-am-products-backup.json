@@ -3,7 +3,7 @@
     "name": "Комбо «Я один»",
     "description": "Пиде с беконом + картофель фри + напиток Tan",
     "price": 1700,
-    "image": "/images/kombo-ya-odin.jpg",
+    "image": "https://buy.am//media/image/02/c3/56/SW981501_200x200@2x.jpg",
     "category": "Комбо",
     "ingredients": [
       "Пиде с беконом",
@@ -17,7 +17,7 @@
     "name": "Комбо «Мы вдвоем»",
     "description": "2 пиде (пепперони + 2 мяса) + 2 напитка Tan",
     "price": 2900,
-    "image": "/images/kombo-my-vdvoyom.jpg",
+    "image": "https://buy.am//media/image/0a/db/a6/SW98151_200x200@2x.jpg",
     "category": "Комбо",
     "ingredients": [
       "Пиде пепперони",
@@ -31,7 +31,7 @@
     "name": "Комбо «Мы голодны»",
     "description": "2 пиде с бастурмой + 2 куриные легкие пиде + картофель фри + кока-кола",
     "price": 4900,
-    "image": "/images/kombo-my-golodny.jpg",
+    "image": "https://buy.am//media/image/76/60/33/SW98152_200x200@2x.jpg",
     "category": "Комбо",
     "ingredients": [
       "2 пиде с бастурмой",
@@ -46,7 +46,7 @@
     "name": "Комбо «Мы очень голодны»",
     "description": "4 пиде пепперони + 4 классических сырных пиде + картофель фри + куриный попкорн",
     "price": 7900,
-    "image": "/images/kombo-my-ochen-golodny.jpg",
+    "image": "https://buy.am//media/image/90/88/83/SW98153_200x200@2x.jpg",
     "category": "Комбо",
     "ingredients": [
       "4 пиде пепперони",
@@ -61,7 +61,7 @@
     "name": "2 мяса пиде",
     "description": "Пиде с двумя видами мяса, зеленым перцем и помидорами черри",
     "price": 950,
-    "image": "/images/2-myasa-pide.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -77,7 +77,7 @@
     "name": "Пиде с беконом",
     "description": "Пиде с хрустящим беконом, сыром и маринованными огурцами",
     "price": 950,
-    "image": "/images/pide-s-bekonom.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -92,7 +92,7 @@
     "name": "Пиде с говядиной",
     "description": "Пиде с фаршем из говядины, зеленью и помидорами черри",
     "price": 950,
-    "image": "/images/pide-s-govyadinoj.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -108,7 +108,7 @@
     "name": "Классическое сырное пиде",
     "description": "Традиционное пиде с расплавленным сыром и помидорами черри",
     "price": 700,
-    "image": "/images/classic-chees.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -122,7 +122,7 @@
     "name": "Кавказский пиде",
     "description": "Пиде с белым сыром, зеленью и помидорами черри",
     "price": 750,
-    "image": "/images/caucasus-cheese.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -137,7 +137,7 @@
     "name": "Куриные легкие пиде",
     "description": "Пиде с курицей, сладким перцем и помидорами черри",
     "price": 800,
-    "image": "/images/kurinye-legkie-pide.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -153,7 +153,7 @@
     "name": "Пиде с бастурмой",
     "description": "Пиде с бастурмой, сыром и зеленым перцем",
     "price": 950,
-    "image": "/images/pide-s-basturmoj.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -168,7 +168,7 @@
     "name": "Овощное пиде",
     "description": "Пиде с грибами, зеленым луком и помидорами черри",
     "price": 800,
-    "image": "/images/ovoshchnoe-pide.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -184,7 +184,7 @@
     "name": "Грибное пиде",
     "description": "Пиде с жареными грибами и зеленью",
     "price": 750,
-    "image": "/images/gribnoe-pide.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -199,7 +199,7 @@
     "name": "Пиде с пхали",
     "description": "Пиде с грузинской овощной пастой пхали и кинзой",
     "price": 700,
-    "image": "/images/pide-s-phali.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -214,7 +214,7 @@
     "name": "Шпинат пиде",
     "description": "Пиде со шпинатом, сыром и помидорами черри",
     "price": 900,
-    "image": "/images/shpinat.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -229,7 +229,7 @@
     "name": "Пепперони пиде",
     "description": "Пиде с пепперони, сыром и зеленым перцем",
     "price": 950,
-    "image": "/images/pepperoni-pide.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -244,7 +244,7 @@
     "name": "Сладкий пиде",
     "description": "Десертное пиде с шоколадными конфетами и сладким соусом",
     "price": 750,
-    "image": "/images/sladkiy-pide.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -258,7 +258,7 @@
     "name": "Пиде Хот Дог",
     "description": "Пиде с сосисками, сыром и маринованными огурцами",
     "price": 700,
-    "image": "/images/pide-hot-dog.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -273,7 +273,7 @@
     "name": "Пиде Blue Pear",
     "description": "Пиде с грушами и легким соусом",
     "price": 700,
-    "image": "/images/pide-blue-pear.jpg",
+    "image": "",
     "category": "Пиде",
     "ingredients": [
       "Тесто",
@@ -288,7 +288,7 @@
     "name": "Куриный попкорн",
     "description": "Хрустящие кусочки курицы в панировке",
     "price": 600,
-    "image": "/images/kurinyy-popkorn.jpg",
+    "image": "",
     "category": "Снэк",
     "ingredients": [
       "Курица",
@@ -302,7 +302,7 @@
     "name": "Картофель фри",
     "description": "Хрустящий картофель фри",
     "price": 500,
-    "image": "/images/kartofel-fri.jpg",
+    "image": "",
     "category": "Снэк",
     "ingredients": [
       "Картофель",
@@ -316,7 +316,7 @@
     "name": "Барбекю соус",
     "description": "Пикантный соус барбекю",
     "price": 300,
-    "image": "/images/BBQ-sauce-Pideh.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Томатная паста",
@@ -331,7 +331,7 @@
     "name": "Коктейль соус",
     "description": "Классический коктейльный соус",
     "price": 300,
-    "image": "/images/Cocktail-sauce-Pideh.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Майонез",
@@ -346,7 +346,7 @@
     "name": "Сырный соус",
     "description": "Сливочный сырный соус",
     "price": 300,
-    "image": "/images/caucasus-cheese.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Сыр",
@@ -361,7 +361,7 @@
     "name": "Чесночный соус",
     "description": "Ароматный чесночный соус с зеленью",
     "price": 300,
-    "image": "/images/Garlic-sauce-Pideh.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Чеснок",
@@ -376,7 +376,7 @@
     "name": "Кетчуп",
     "description": "Классический томатный кетчуп",
     "price": 300,
-    "image": "/images/Ketchup-Pideh.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Томатная паста",
@@ -391,7 +391,7 @@
     "name": "Майонез",
     "description": "Классический майонез",
     "price": 300,
-    "image": "/images/Mayonnaise-Pideh.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Яичный желток",
@@ -406,7 +406,7 @@
     "name": "Горчица",
     "description": "Острая горчица",
     "price": 300,
-    "image": "/images/Mustard-sauce-Pideh.jpg",
+    "image": "",
     "category": "Соусы",
     "ingredients": [
       "Горчичные зерна",
@@ -421,7 +421,7 @@
     "name": "Кока-Кола",
     "description": "Газированный напиток Кока-Кола",
     "price": 500,
-    "image": "/images/cola-sprite-fanta.jpg",
+    "image": "",
     "category": "Освежающие напитки",
     "ingredients": [
       "Вода",
@@ -435,7 +435,7 @@
     "name": "Фанта",
     "description": "Газированный напиток Фанта",
     "price": 500,
-    "image": "/images/cola-sprite-fanta.jpg",
+    "image": "",
     "category": "Освежающие напитки",
     "ingredients": [
       "Вода",
@@ -449,7 +449,7 @@
     "name": "Спрайт",
     "description": "Газированный напиток Спрайт",
     "price": 500,
-    "image": "/images/cola-sprite-fanta.jpg",
+    "image": "",
     "category": "Освежающие напитки",
     "ingredients": [
       "Вода",
@@ -477,7 +477,7 @@
     "name": "Минеральная вода",
     "description": "Бутилированная минеральная вода",
     "price": 300,
-    "image": "/images/jur0000.jpg",
+    "image": "",
     "category": "Освежающие напитки",
     "ingredients": [
       "Минеральная вода"
@@ -489,7 +489,7 @@
     "name": "Сок (ассорти)",
     "description": "Сок в ассортименте",
     "price": 600,
-    "image": "/images/juice.jpg",
+    "image": "",
     "category": "Освежающие напитки",
     "ingredients": [
       "Фруктовый сок"

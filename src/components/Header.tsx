@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ShoppingCart, Phone, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '@/hooks/useCart'
@@ -14,8 +15,15 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-orange-500">
-            Pideh Armenia
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <Image 
+              src="/logo.png" 
+              alt="Pideh Armenia Logo" 
+              width={120} 
+              height={40}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
