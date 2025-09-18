@@ -29,7 +29,7 @@ export default function CheckoutPage() {
     name: '',
     phone: '',
     address: '',
-    deliveryTime: '',
+    deliveryTime: 'asap', // Дефолтное значение "Как можно скорее (20-30 мин)"
     paymentMethod: 'cash',
     notes: ''
   })
@@ -105,9 +105,7 @@ export default function CheckoutPage() {
       newErrors.address = 'Адрес обязателен'
     }
 
-    if (!formData.deliveryTime) {
-      newErrors.deliveryTime = 'Выберите время доставки'
-    }
+    // Время доставки уже имеет дефолтное значение, валидация не нужна
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -257,11 +255,8 @@ export default function CheckoutPage() {
                       name="deliveryTime"
                       value={formData.deliveryTime}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
-                        errors.deliveryTime ? 'border-red-500' : 'border-gray-200'
-                      }`}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                     >
-                      <option value="">Выберите время</option>
                       <option value="asap">Как можно скорее (20-30 мин)</option>
                       <option value="11:00-12:00">11:00 - 12:00</option>
                       <option value="12:00-13:00">12:00 - 13:00</option>
