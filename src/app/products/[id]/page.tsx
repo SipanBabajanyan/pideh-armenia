@@ -352,12 +352,8 @@ export default function ProductPage() {
                 >
                   <ShoppingCart className="h-6 w-6" />
                   <span>
-                    {addedToCart ? '✓ Добавлено в корзину!' : `Добавить в корзину - ${product.price * quantity} ֏`}
+                    {addedToCart ? '✓ Добавлено в корзину!' : 'Добавить в корзину'}
                   </span>
-                </button>
-
-                <button className="w-full border-2 border-orange-500 text-orange-500 px-8 py-4 rounded-xl font-bold text-lg hover:bg-orange-500 hover:text-white transition-all duration-300">
-                  Купить сейчас
                 </button>
               </div>
             </div>
