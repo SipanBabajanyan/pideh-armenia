@@ -1,6 +1,5 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import CompanyInfo from '@/components/CompanyInfo'
 import { Clock, Users, Heart, Award, ChefHat, Truck, Star, CheckCircle, MapPin } from 'lucide-react'
 
 export default function AboutPage() {
@@ -23,12 +22,12 @@ export default function AboutPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Story Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
+        <div className="mb-24">
           <div className="space-y-6">
             <h2 className="text-4xl font-bold text-gray-900 mb-8">Наша история</h2>
             <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
               <p>
-                Pideh Armenia родился из любви к традиционной армянской кухне и желания 
+                Пидех Армения родился из любви к традиционной армянской кухне и желания 
                 создать что-то уникальное для армянского рынка. Мы создали новый 
                 продукт - армянские пиде, наполнив их начинками, которые любят 
                 современные гурманы.
@@ -43,18 +42,6 @@ export default function AboutPage() {
                 За короткое время мы стали любимым местом для тех, кто ценит 
                 качество, вкус и оригинальность. Наша миссия - привнести 
                 в Ереван новые вкусы, сохраняя при этом уважение к традициям.
-              </p>
-            </div>
-          </div>
-          <div className="relative">
-            <div className="bg-orange-100 rounded-3xl p-12 text-center shadow-2xl">
-              <div className="w-40 h-40 mx-auto mb-8 bg-white rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-8xl">🥟</span>
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">Свежесть каждый день</h3>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Готовим только из свежих ингредиентов, 
-                закупаемых каждое утро
               </p>
             </div>
           </div>
@@ -230,8 +217,6 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Company Info Section */}
-        <CompanyInfo />
       </div>
       
       <Footer />
