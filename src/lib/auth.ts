@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const authConfig = {
   providers: [
     Credentials({
       name: "credentials",
@@ -67,4 +67,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/login',
   },
-})
+}
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
+
+// Для совместимости с getServerSession
+export const authOptions = authConfig
