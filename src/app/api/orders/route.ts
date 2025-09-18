@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getToken } from 'next-auth/jwt'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const token = await getToken({ req: request })
 
-    if (!session) {
+    if (!token) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     const orders = await prisma.order.findMany({
       where: {
-        userId: session.user.id
+        userId: token.sub
       },
       include: {
         items: {
@@ -49,21 +48,21 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const token = await getToken({ req: request })
 
-    if (!session) {
+    if (!token) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
 
-    const { name, phone, address, deliveryTime, paymentMethod, notes, items, total } = await request.json()
+    const { phone, address, paymentMethod, notes, items, total } = await request.json()
 
     // Create order
     const order = await prisma.order.create({
       data: {
-        userId: session.user.id,
+        userId: token.sub!,
         status: 'PENDING',
         total,
         address,
@@ -71,7 +70,7 @@ export async function POST(request: NextRequest) {
         notes,
         paymentMethod,
         items: {
-          create: items.map((item: any) => ({
+          create: items.map((item: { productId: string; quantity: number; price: number }) => ({
             productId: item.productId,
             quantity: item.quantity,
             price: item.price

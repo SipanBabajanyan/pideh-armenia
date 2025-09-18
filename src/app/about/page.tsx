@@ -1,7 +1,7 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CompanyInfo from '@/components/CompanyInfo'
-import { Clock, Users, Heart, Award, ChefHat, Truck, Star, CheckCircle } from 'lucide-react'
+import { Clock, Users, Heart, Award, ChefHat, Truck, Star, CheckCircle, MapPin } from 'lucide-react'
 
 export default function AboutPage() {
   return (

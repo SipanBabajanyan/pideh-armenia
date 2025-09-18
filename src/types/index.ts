@@ -30,6 +30,12 @@ export interface CartContextType {
   getTotalItems: () => number
 }
 
+export interface OrderItem {
+  productId: string
+  quantity: number
+  price: number
+}
+
 // Типы для форм
 export interface OrderFormData {
   name: string

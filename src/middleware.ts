@@ -1,43 +1,32 @@
-import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-export default withAuth(
-  function middleware(req) {
-    // Проверяем, если пользователь пытается зайти в админку
-    if (req.nextUrl.pathname.startsWith('/admin')) {
-      // Проверяем роль пользователя
-      if (req.nextauth.token?.role !== 'ADMIN') {
-        return NextResponse.redirect(new URL('/login', req.url))
-      }
-    }
+export async function middleware(request: NextRequest) {
+  const token = await getToken({ req: request })
 
-    // Проверяем, если пользователь пытается зайти в профиль
-    if (req.nextUrl.pathname.startsWith('/profile')) {
-      // Если пользователь не авторизован, перенаправляем на страницу входа
-      if (!req.nextauth.token) {
-        return NextResponse.redirect(new URL('/login', req.url))
-      }
+  // Проверяем, если пользователь пытается зайти в админку
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    // Если пользователь не авторизован, перенаправляем на страницу входа
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url))
     }
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        // Для админ-страниц проверяем роль
-        if (req.nextUrl.pathname.startsWith('/admin')) {
-          return token?.role === 'ADMIN'
-        }
-        
-        // Для профиля проверяем наличие токена
-        if (req.nextUrl.pathname.startsWith('/profile')) {
-          return !!token
-        }
-        
-        // Для остальных страниц разрешаем доступ
-        return true
-      },
-    },
+    
+    // Проверяем роль пользователя
+    if (token.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
   }
-)
+
+  // Проверяем, если пользователь пытается зайти в профиль
+  if (request.nextUrl.pathname.startsWith('/profile')) {
+    // Если пользователь не авторизован, перенаправляем на страницу входа
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
+
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: ['/admin/:path*', '/profile/:path*']
