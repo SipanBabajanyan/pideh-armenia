@@ -9,7 +9,7 @@ export default function AboutPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-24">
+      <section className="bg-orange-500 text-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-8">
             О Pideh Armenia
@@ -47,7 +47,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="relative">
-            <div className="bg-gradient-to-br from-orange-100 to-red-100 rounded-3xl p-12 text-center shadow-2xl">
+            <div className="bg-orange-100 rounded-3xl p-12 text-center shadow-2xl">
               <div className="w-40 h-40 mx-auto mb-8 bg-white rounded-full flex items-center justify-center shadow-lg">
                 <span className="text-8xl">🥟</span>
               </div>
@@ -65,7 +65,7 @@ export default function AboutPage() {
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Наши ценности</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <Heart className="h-10 w-10 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Любовь к делу</h3>
@@ -75,7 +75,7 @@ export default function AboutPage() {
             </div>
             
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <Award className="h-10 w-10 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Качество</h3>
@@ -85,7 +85,7 @@ export default function AboutPage() {
             </div>
             
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <Clock className="h-10 w-10 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Скорость</h3>
@@ -95,7 +95,7 @@ export default function AboutPage() {
             </div>
             
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <Users className="h-10 w-10 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Сообщество</h3>
@@ -111,7 +111,7 @@ export default function AboutPage() {
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Наша команда</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-32 h-32 bg-gradient-to-br from-orange-200 to-red-200 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-32 h-32 bg-orange-200 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <ChefHat className="h-16 w-16 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-3">Главный повар</h3>
@@ -122,7 +122,7 @@ export default function AboutPage() {
             </div>
             
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-32 h-32 bg-gradient-to-br from-orange-200 to-red-200 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-32 h-32 bg-orange-200 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Users className="h-16 w-16 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-3">Менеджер</h3>
@@ -133,7 +133,7 @@ export default function AboutPage() {
             </div>
             
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center group">
-              <div className="w-32 h-32 bg-gradient-to-br from-orange-200 to-red-200 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-32 h-32 bg-orange-200 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Truck className="h-16 w-16 text-orange-500" />
               </div>
               <h3 className="text-2xl font-bold mb-3">Доставка</h3>
@@ -146,7 +146,7 @@ export default function AboutPage() {
         </div>
 
         {/* Stats Section */}
-        <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-16 text-white text-center mb-16">
+        <div className="bg-orange-500 rounded-3xl p-16 text-white text-center mb-16">
           <h2 className="text-4xl font-bold mb-12">Pideh Armenia в цифрах</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="group">

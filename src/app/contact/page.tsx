@@ -8,7 +8,7 @@ export default function ContactPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-20">
+      <section className="bg-orange-500 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Свяжитесь с нами
@@ -75,7 +75,7 @@ export default function ContactPage() {
         </div>
 
         {/* Quick Order Section */}
-        <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-12 text-white text-center mb-16">
+        <div className="bg-orange-500 rounded-3xl p-12 text-white text-center mb-16">
           <h2 className="text-3xl font-bold mb-4">Быстрый заказ</h2>
           <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
             Просто позвоните нам или напишите в WhatsApp для быстрого заказа

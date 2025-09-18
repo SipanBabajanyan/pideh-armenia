@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 
 export default function Footer() {
@@ -8,7 +9,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold text-orange-500 mb-4">Pideh Armenia</h3>
+            <div className="flex items-center mb-4">
+              <Image 
+                src="/logo.png" 
+                alt="Pideh Armenia Logo" 
+                width={120} 
+                height={40}
+                className="h-10 w-auto mr-3"
+              />
+              <h3 className="text-2xl font-bold text-orange-500">Pideh Armenia</h3>
+            </div>
             <p className="text-gray-300 mb-4">
               Армянские пиде - новый вкус. Свежие, вкусные, быстрые!
               Традиционная форма с современными начинками. 34 уникальных вкуса для настоящих гурманов.
