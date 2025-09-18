@@ -106,12 +106,12 @@ export default function CheckoutPage() {
         throw new Error('Failed to create order')
       }
       
-      // Redirect to success page first, then clear cart
-      router.push('/order-success')
-      // Clear cart after a short delay to ensure redirect happens first
-      setTimeout(() => {
-        clearCart()
-      }, 100)
+      console.log('Order created successfully, redirecting to order-success page')
+      
+      // Clear cart first
+      clearCart()
+      // Force redirect to success page using window.location
+      window.location.href = '/order-success'
     } catch (error) {
       console.error('Error submitting order:', error)
       alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.')
