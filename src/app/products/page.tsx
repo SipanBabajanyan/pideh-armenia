@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { ShoppingCart, Search, Filter } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product, Category } from '@/types'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -72,32 +74,22 @@ export default function ProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Загружаем меню...</p>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Загружаем меню...</p>
+          </div>
         </div>
+        <Footer />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/" className="text-2xl font-bold text-orange-500">
-              Pideh Armenia
-            </Link>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-900 hover:text-orange-500">
-                <ShoppingCart className="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filter */}
@@ -137,11 +129,15 @@ export default function ProductsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="h-48 bg-orange-100 flex items-center justify-center">
-                <span className="text-6xl">🥟</span>
-              </div>
+              <Link href={`/products/${product.id}`} className="block">
+                <div className="h-48 bg-orange-100 flex items-center justify-center hover:bg-orange-200 transition-colors">
+                  <span className="text-6xl">🥟</span>
+                </div>
+              </Link>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                <Link href={`/products/${product.id}`} className="block hover:text-orange-500 transition-colors">
+                  <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                </Link>
                 <p className="text-gray-600 mb-4">{product.description}</p>
                 
                 <div className="mb-4">
@@ -163,7 +159,10 @@ export default function ProductsPage() {
                     {product.price} ֏
                   </span>
                   <button
-                    onClick={() => handleAddToCart(product)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      handleAddToCart(product)
+                    }}
                     className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
                   >
                     В корзину
@@ -181,6 +180,8 @@ export default function ProductsPage() {
           </div>
         )}
       </div>
+      
+      <Footer />
     </div>
   )
 }

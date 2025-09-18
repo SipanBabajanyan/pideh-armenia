@@ -1,34 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Phone, MapPin, Clock } from "lucide-react";
+import { Phone, MapPin, Clock } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-orange-500">Pideh Armenia</h1>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-900 hover:text-orange-500">Главная</Link>
-              <Link href="/products" className="text-gray-900 hover:text-orange-500">Меню</Link>
-              <Link href="/about" className="text-gray-900 hover:text-orange-500">О нас</Link>
-              <Link href="/contact" className="text-gray-900 hover:text-orange-500">Контакты</Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-900 hover:text-orange-500">
-                <ShoppingCart className="h-6 w-6" />
-              </button>
-              <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
-                Заказать
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
@@ -137,33 +116,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-2xl font-bold text-orange-500 mb-4">Pideh Armenia</h3>
-              <p className="text-gray-300 mb-4">
-                Мини-пиццы в виде аджарских хачапури. Свежие, вкусные, быстрые!
-              </p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Контакты</h4>
-              <p className="text-gray-300 mb-2">+374 99 123 456</p>
-              <p className="text-gray-300 mb-2">info@pideh-armenia.am</p>
-              <p className="text-gray-300">Ереван, Армения</p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Время работы</h4>
-              <p className="text-gray-300 mb-2">Пн-Вс: 10:00 - 22:00</p>
-              <p className="text-gray-300">Доставка: 11:00 - 21:00</p>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 Pideh Armenia. Все права защищены.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
