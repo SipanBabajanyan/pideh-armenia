@@ -769,27 +769,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Additional info */}
-          <div className="mt-16 bg-orange-500 rounded-3xl p-8 text-white text-center">
-            <h3 className="text-2xl font-bold mb-4">Гарантия качества</h3>
-            <p className="text-lg text-orange-100 mb-6">
-              Если вам не понравится наша пиде, мы вернем деньги или приготовим новую бесплатно!
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">✅</span>
-                <span>100% свежие продукты</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">✅</span>
-                <span>Гигиеничная упаковка</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">✅</span>
-                <span>Гарантия возврата</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
