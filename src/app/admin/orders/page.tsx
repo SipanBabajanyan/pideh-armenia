@@ -7,7 +7,6 @@ import { Order, OrderItem, User } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Search, Filter, Eye, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
@@ -202,20 +201,19 @@ export default function AdminOrdersPage() {
               </div>
             </div>
             <div className="sm:w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Все статусы" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Все статусы</SelectItem>
-                  <SelectItem value="PENDING">Ожидает</SelectItem>
-                  <SelectItem value="CONFIRMED">Подтвержден</SelectItem>
-                  <SelectItem value="PREPARING">Готовится</SelectItem>
-                  <SelectItem value="READY">Готов</SelectItem>
-                  <SelectItem value="DELIVERED">Доставлен</SelectItem>
-                  <SelectItem value="CANCELLED">Отменен</SelectItem>
-                </SelectContent>
-              </Select>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="">Все статусы</option>
+                <option value="PENDING">Ожидает</option>
+                <option value="CONFIRMED">Подтвержден</option>
+                <option value="PREPARING">Готовится</option>
+                <option value="READY">Готов</option>
+                <option value="DELIVERED">Доставлен</option>
+                <option value="CANCELLED">Отменен</option>
+              </select>
             </div>
             <Button onClick={fetchOrders} variant="outline" className="flex items-center gap-2">
               <RefreshCw className="h-4 w-4" />
@@ -255,22 +253,18 @@ export default function AdminOrdersPage() {
                       <Badge className={statusColors[order.status]}>
                         {statusLabels[order.status]}
                       </Badge>
-                      <Select
+                      <select
                         value={order.status}
-                        onValueChange={(value) => updateOrderStatus(order.id, value)}
+                        onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       >
-                        <SelectTrigger className="w-40">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PENDING">Ожидает</SelectItem>
-                          <SelectItem value="CONFIRMED">Подтвержден</SelectItem>
-                          <SelectItem value="PREPARING">Готовится</SelectItem>
-                          <SelectItem value="READY">Готов</SelectItem>
-                          <SelectItem value="DELIVERED">Доставлен</SelectItem>
-                          <SelectItem value="CANCELLED">Отменен</SelectItem>
-                        </SelectContent>
-                      </Select>
+                        <option value="PENDING">Ожидает</option>
+                        <option value="CONFIRMED">Подтвержден</option>
+                        <option value="PREPARING">Готовится</option>
+                        <option value="READY">Готов</option>
+                        <option value="DELIVERED">Доставлен</option>
+                        <option value="CANCELLED">Отменен</option>
+                      </select>
                     </div>
                   </div>
                 </CardHeader>

@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ArrowLeft, Save, X, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { Product } from '@/types'
@@ -20,12 +19,13 @@ const categories = [
 ]
 
 interface EditProductPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default function EditProductPage({ params }: EditProductPageProps) {
+  const resolvedParams = use(params)
   const { data: session, status } = useSession()
   const router = useRouter()
   
@@ -44,29 +44,12 @@ export default function EditProductPage({ params }: EditProductPageProps) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
-  // Проверяем права доступа
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Загрузка...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!session || session.user.role !== 'ADMIN') {
-    router.push('/login')
-    return null
-  }
-
   // Загружаем данные товара
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/products/${params.id}`)
+        const response = await fetch(`/api/products/${resolvedParams.id}`)
         
         if (!response.ok) {
           throw new Error('Product not found')
@@ -94,7 +77,24 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     }
 
     fetchProduct()
-  }, [params.id])
+  }, [resolvedParams.id])
+
+  // Проверяем права доступа
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Загрузка...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!session || session.user.role !== 'ADMIN') {
+    router.push('/login')
+    return null
+  }
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
@@ -116,7 +116,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
         ingredients: formData.ingredients ? formData.ingredients.split(',').map(i => i.trim()) : []
       }
 
-      const response = await fetch(`/api/admin/products/${params.id}`, {
+      const response = await fetch(`/api/admin/products/${resolvedParams.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -146,7 +146,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
 
     try {
       setSaving(true)
-      const response = await fetch(`/api/products/${params.id}`, {
+      const response = await fetch(`/api/products/${resolvedParams.id}`, {
         method: 'DELETE'
       })
 
@@ -276,18 +276,19 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Категория *
                   </label>
-                  <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите категорию" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => handleInputChange('category', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    required
+                  >
+                    <option value="">Выберите категорию</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Изображение */}
