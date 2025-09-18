@@ -27,10 +27,10 @@ export default function ContactPage() {
               <Phone className="h-8 w-8 text-orange-500" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">Телефон</h3>
-            <p className="text-gray-600 mb-2">+374 99 123 456</p>
+            <p className="text-gray-600 mb-2">+374 95-044-888</p>
             <p className="text-sm text-gray-500">Пн-Вс: 10:00 - 22:00</p>
             <a 
-              href="tel:+37499123456"
+              href="tel:+37495044888"
               className="inline-block mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
             >
               Позвонить
@@ -57,7 +57,7 @@ export default function ContactPage() {
               <MapPin className="h-8 w-8 text-orange-500" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">Адрес</h3>
-            <p className="text-gray-600 mb-2">Ереван, Армения</p>
+            <p className="text-gray-600 mb-2">Yeznik Koghbatsi 83, Yerevan, Armenia 0002</p>
             <p className="text-sm text-gray-500">Доставка по всему городу</p>
             <button className="inline-block mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
               На карте
@@ -82,14 +82,14 @@ export default function ContactPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
-              href="tel:+37499123456"
+              href="tel:+37495044888"
               className="bg-white text-orange-500 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2"
             >
               <Phone className="h-5 w-5" />
-              <span>Позвонить +374 99 123 456</span>
+              <span>Позвонить +374 95-044-888</span>
             </a>
             <a 
-              href="https://wa.me/37499123456"
+              href="https://wa.me/37495044888"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"

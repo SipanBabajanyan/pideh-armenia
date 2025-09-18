@@ -20,14 +20,14 @@ export default function Footer() {
               <h3 className="text-2xl font-bold text-orange-500">Pideh Armenia</h3>
             </div>
             <p className="text-gray-300 mb-4">
-              Армянские пиде - новый вкус. Свежие, вкусные, быстрые!
-              Традиционная форма с современными начинками. 34 уникальных вкуса для настоящих гурманов.
+              🍟Fast food chain🍟 - Армянские пиде - новый вкус. Свежие, вкусные, быстрые!
+              Традиционная форма с современными начинками. 15 уникальных вкусов для настоящих гурманов.
             </p>
             <div className="flex space-x-4">
-              <a href="tel:+37499123456" className="text-gray-300 hover:text-orange-500 transition-colors">
+              <a href="tel:+37495044888" className="text-gray-300 hover:text-orange-500 transition-colors">
                 <Phone className="h-5 w-5" />
               </a>
-              <a href="mailto:info@pideh-armenia.am" className="text-gray-300 hover:text-orange-500 transition-colors">
+              <a href="mailto:info@pideh.am" className="text-gray-300 hover:text-orange-500 transition-colors">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
@@ -66,19 +66,19 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-orange-500" />
-                <a href="tel:+37499123456" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  +374 99 123 456
+                <a href="tel:+37495044888" className="text-gray-300 hover:text-orange-500 transition-colors">
+                  +374 95-044-888
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-orange-500" />
-                <a href="mailto:info@pideh-armenia.am" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  info@pideh-armenia.am
+                <a href="mailto:info@pideh.am" className="text-gray-300 hover:text-orange-500 transition-colors">
+                  info@pideh.am
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-orange-500" />
-                <span className="text-gray-300">Ереван, Армения</span>
+                <span className="text-gray-300">Yeznik Koghbatsi 83, Yerevan, Armenia 0002</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-orange-500" />

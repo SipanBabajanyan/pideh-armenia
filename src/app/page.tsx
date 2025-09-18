@@ -662,7 +662,7 @@ export default function Home() {
                 <Phone className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">Поддержка</h3>
-              <p className="text-gray-600 text-center mb-4">+374 99 123 456</p>
+              <p className="text-gray-600 text-center mb-4">+374 95-044-888</p>
             <div className="text-center">
                 <span className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
                   💬 24/7

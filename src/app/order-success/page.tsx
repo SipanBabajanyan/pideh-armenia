@@ -69,11 +69,11 @@ export default function OrderSuccessPage() {
               Если у вас есть вопросы по заказу, звоните нам:
             </p>
             <a 
-              href="tel:+37499123456"
+              href="tel:+37495044888"
               className="inline-flex items-center text-orange-600 hover:text-orange-700 font-semibold text-lg"
             >
               <Phone className="h-5 w-5 mr-2" />
-              +374 99 123 456
+              +374 95-044-888
             </a>
           </div>
           
