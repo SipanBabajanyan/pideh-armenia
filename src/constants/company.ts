@@ -19,7 +19,7 @@ export const companyInfo = {
   workingHours: 'Пн-Вс: 10:00 - 22:00',
   socialMedia: {
     facebook: 'https://www.facebook.com/PIDEH.Armenia/',
-    instagram: '', // Добавьте, если есть
+    instagram: 'https://www.instagram.com/pideh.armenia/',
     website: '' // Добавьте, если есть
   }
 }
