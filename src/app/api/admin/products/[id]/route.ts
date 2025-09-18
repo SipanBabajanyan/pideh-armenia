@@ -5,9 +5,11 @@ import { auth } from '@/lib/auth'
 // PUT /api/admin/products/[id] - обновить товар (только для админов)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
+    
     // Проверяем аутентификацию
     const session = await auth()
     
@@ -32,7 +34,7 @@ export async function PUT(
 
     // Проверяем существование товара
     const existingProduct = await prisma.product.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!existingProduct) {
@@ -63,7 +65,7 @@ export async function PUT(
 
     // Обновляем товар
     const updatedProduct = await prisma.product.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(description && { description }),

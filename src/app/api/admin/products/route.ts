@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         description,
         price,
         category,
-        image: image || '/images/products/default.jpg',
+        image: image || null,
         ingredients: ingredients || [],
         isAvailable
       }

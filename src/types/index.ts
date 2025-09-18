@@ -30,7 +30,7 @@ export interface CartContextType {
   getTotalItems: () => number
 }
 
-export interface OrderItem {
+export interface OrderItemForm {
   productId: string
   quantity: number
   price: number

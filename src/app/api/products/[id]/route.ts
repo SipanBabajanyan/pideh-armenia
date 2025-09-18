@@ -5,12 +5,13 @@ import { auth } from '@/lib/auth'
 // GET /api/products/[id] - получить товар по ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const product = await prisma.product.findUnique({
       where: {
-        id: params.id,
+        id,
         isAvailable: true
       },
       select: {
@@ -50,9 +51,11 @@ export async function GET(
 // DELETE /api/products/[id] - удалить товар (только для админов)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
+    
     // Проверяем аутентификацию
     const session = await auth()
     
@@ -73,7 +76,7 @@ export async function DELETE(
 
     // Проверяем существование товара
     const existingProduct = await prisma.product.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!existingProduct) {
@@ -85,7 +88,7 @@ export async function DELETE(
 
     // Удаляем товар
     await prisma.product.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json(
