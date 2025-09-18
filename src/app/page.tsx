@@ -269,9 +269,10 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {getFilteredProducts().map((product, index) => (
-                <div 
+                <Link 
                   key={product.id} 
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100"
+                  href={`/products/${product.id}`}
+                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 block"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   {/* Product image */}
@@ -306,7 +307,11 @@ export default function Home() {
                     
                     {/* Quick add button */}
                     <button
-                      onClick={() => handleAddToCart(product)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleAddToCart(product);
+                      }}
                       className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white"
                     >
                       <ShoppingCart className="h-5 w-5" />
@@ -325,7 +330,11 @@ export default function Home() {
                       <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
                       </div>
                       <button
-                        onClick={() => handleAddToCart(product)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddToCart(product);
+                        }}
                         className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 text-sm ${
                           addedToCart.has(product.id)
                             ? 'bg-green-500 text-white scale-105 shadow-lg'
@@ -336,7 +345,7 @@ export default function Home() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

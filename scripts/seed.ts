@@ -1,10 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-import { sampleProducts } from '../src/constants/products'
+import fs from 'fs'
+import path from 'path'
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log('🌱 Начинаем заполнение базы данных...')
+
+  // Загружаем данные товаров из JSON файла
+  const productsPath = path.join(__dirname, '../data/buy-am-products.json')
+  const productsData = JSON.parse(fs.readFileSync(productsPath, 'utf8'))
+  
+  console.log(`📦 Загружено ${productsData.length} товаров из JSON файла`)
 
   // Очищаем существующие данные
   await prisma.orderItem.deleteMany()
@@ -15,27 +22,36 @@ async function main() {
   console.log('🗑️ Очистили существующие данные')
 
   // Создаем товары
-  for (const productData of sampleProducts) {
+  for (const productData of productsData) {
     const product = await prisma.product.create({
-      data: productData
+      data: {
+        name: productData.name,
+        description: productData.description,
+        price: productData.price,
+        image: productData.image,
+        category: productData.category,
+        ingredients: productData.ingredients,
+        isAvailable: productData.isAvailable
+      }
     })
     console.log(`✅ Создан товар: ${product.name}`)
   }
 
   // Создаем тестового пользователя
+  const bcrypt = require('bcryptjs')
   const testUser = await prisma.user.create({
     data: {
       email: 'test@pideh-armenia.am',
       name: 'Тестовый Пользователь',
       phone: '+374 99 123 456',
       address: 'Ереван, ул. Абовяна, 1',
+      password: await bcrypt.hash('test123', 12),
       role: 'USER'
     }
   })
   console.log(`✅ Создан тестовый пользователь: ${testUser.email}`)
 
   // Создаем админ-пользователя
-  const bcrypt = require('bcryptjs')
   const adminUser = await prisma.user.create({
     data: {
       email: 'admin@pideh-armenia.am',
@@ -75,9 +91,9 @@ async function main() {
 
   console.log('🎉 База данных успешно заполнена!')
   console.log(`📊 Статистика:`)
-  console.log(`   - Товаров: ${products.length}`)
-  console.log(`   - Пользователей: 1`)
-  console.log(`   - Заказов: 1`)
+  console.log(`   - Товаров: ${productsData.length}`)
+  console.log(`   - Пользователей: 2 (тестовый + админ)`)
+  console.log(`   - Заказов: 1 (тестовый)`)
 }
 
 main()

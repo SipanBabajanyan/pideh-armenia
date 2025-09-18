@@ -3,21 +3,27 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ShoppingCart, Plus, Minus } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowLeft, ShoppingCart, Plus, Minus, Star, Clock, MapPin, Phone, Heart, Share2 } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product } from '@/types'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export default function ProductPage() {
   const params = useParams()
   const router = useRouter()
   const { addItem } = useCart()
   const [product, setProduct] = useState<Product | null>(null)
+  const [similarProducts, setSimilarProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [quantity, setQuantity] = useState(1)
+  const [addedToCart, setAddedToCart] = useState(false)
 
   useEffect(() => {
     if (params.id) {
       fetchProduct(params.id as string)
+      fetchSimilarProducts(params.id as string)
     }
   }, [params.id])
 
@@ -38,75 +44,187 @@ export default function ProductPage() {
     }
   }
 
+  const fetchSimilarProducts = async (currentProductId: string) => {
+    try {
+      const response = await fetch('/api/products')
+      if (response.ok) {
+        const products = await response.json()
+        // Фильтруем похожие товары (исключаем текущий и берем первые 4)
+        const similar = products
+          .filter((p: Product) => p.id !== currentProductId)
+          .slice(0, 4)
+        setSimilarProducts(similar)
+      }
+    } catch (error) {
+      console.error('Error fetching similar products:', error)
+    }
+  }
+
   const handleAddToCart = () => {
     if (product) {
       addItem(product, quantity)
-      // Здесь можно добавить уведомление
+      setAddedToCart(true)
+      setTimeout(() => setAddedToCart(false), 2000)
     }
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Загружаем товар...</p>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">Загружаем товар...</p>
+          </div>
         </div>
+        <Footer />
       </div>
     )
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Товар не найден</h1>
-          <Link href="/products" className="text-orange-500 hover:text-orange-600">
-            Вернуться к каталогу
-          </Link>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="text-6xl mb-4">😔</div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Товар не найден</h1>
+            <p className="text-gray-600 mb-6">Возможно, товар был удален или не существует</p>
+            <Link 
+              href="/products" 
+              className="inline-flex items-center bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Вернуться к каталогу
+            </Link>
+          </div>
         </div>
+        <Footer />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <nav className="flex items-center space-x-2 text-sm">
+            <Link href="/" className="text-gray-500 hover:text-orange-500">Главная</Link>
+            <span className="text-gray-400">/</span>
+            <Link href="/products" className="text-gray-500 hover:text-orange-500">Меню</Link>
+            <span className="text-gray-400">/</span>
+            <span className="text-gray-900 font-medium">{product.name}</span>
+          </nav>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <Link 
           href="/products"
-          className="inline-flex items-center text-gray-600 hover:text-orange-500 mb-8"
+          className="inline-flex items-center text-gray-600 hover:text-orange-500 mb-8 group"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
+          <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
           Назад к каталогу
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Product Image */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="h-96 bg-orange-100 flex items-center justify-center">
-              <span className="text-8xl">🥟</span>
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden group">
+              <div className="relative h-96 bg-gradient-to-br from-orange-50 to-orange-100">
+                {product.image ? (
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (nextElement) {
+                        nextElement.style.display = 'flex';
+                      }
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className="w-full h-full flex items-center justify-center text-8xl opacity-60"
+                  style={{ display: product.image ? 'none' : 'flex' }}
+                >
+                  🥟
+                </div>
+                
+                {/* Badges */}
+                <div className="absolute top-4 left-4 flex flex-col space-y-2">
+                  <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    {product.category}
+                  </div>
+                  {product.category === 'Пиде' && (
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      ХИТ
+                    </div>
+                  )}
+                </div>
+
+                {/* Action buttons */}
+                <div className="absolute top-4 right-4 flex space-x-2">
+                  <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                    <Heart className="h-5 w-5" />
+                  </button>
+                  <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                    <Share2 className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional images placeholder */}
+            <div className="grid grid-cols-4 gap-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl opacity-50">📷</span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              <p className="text-lg text-gray-600 mb-4">{product.description}</p>
-              <div className="text-3xl font-bold text-orange-500 mb-6">
-                {product.price} ֏
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
+              <p className="text-xl text-gray-600 mb-6 leading-relaxed">{product.description}</p>
+              
+              {/* Rating */}
+              <div className="flex items-center space-x-2 mb-6">
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
+                </div>
+                <span className="text-gray-600">(4.9) • 127 отзывов</span>
+              </div>
+
+              {/* Price */}
+              <div className="flex items-center space-x-4 mb-8">
+                <span className="text-4xl font-bold text-orange-500">{product.price} ֏</span>
+                <span className="text-lg text-gray-500">за порцию</span>
               </div>
             </div>
 
             {/* Ingredients */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Ингредиенты:</h3>
-              <div className="flex flex-wrap gap-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Ингредиенты:</h3>
+              <div className="flex flex-wrap gap-3">
                 {product.ingredients.map((ingredient, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full"
+                    className="px-4 py-2 bg-orange-100 text-orange-800 text-sm rounded-full font-medium hover:bg-orange-200 transition-colors"
                   >
                     {ingredient}
                   </span>
@@ -115,48 +233,185 @@ export default function ProductPage() {
             </div>
 
             {/* Quantity and Add to Cart */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
+            <div className="space-y-6">
+              <div className="flex items-center space-x-6">
                 <label className="text-lg font-medium text-gray-900">Количество:</label>
-                <div className="flex items-center border border-gray-300 rounded-lg">
+                <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-2 hover:bg-gray-100 transition-colors"
+                    className="p-3 hover:bg-gray-100 transition-colors"
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-5 w-5" />
                   </button>
-                  <span className="px-4 py-2 min-w-[3rem] text-center">{quantity}</span>
+                  <span className="px-6 py-3 min-w-[4rem] text-center text-lg font-semibold">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-2 hover:bg-gray-100 transition-colors"
+                    className="p-3 hover:bg-gray-100 transition-colors"
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-5 w-5" />
                   </button>
                 </div>
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                className="w-full bg-orange-500 text-white px-6 py-4 rounded-lg font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center space-x-2"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                <span>Добавить в корзину - {product.price * quantity} ֏</span>
-              </button>
+              <div className="space-y-4">
+                <button
+                  onClick={handleAddToCart}
+                  className={`w-full px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center space-x-3 ${
+                    addedToCart
+                      ? 'bg-green-500 text-white scale-105 shadow-lg'
+                      : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105 shadow-lg hover:shadow-xl'
+                  }`}
+                >
+                  <ShoppingCart className="h-6 w-6" />
+                  <span>
+                    {addedToCart ? '✓ Добавлено в корзину!' : `Добавить в корзину - ${product.price * quantity} ֏`}
+                  </span>
+                </button>
+
+                <button className="w-full border-2 border-orange-500 text-orange-500 px-8 py-4 rounded-xl font-bold text-lg hover:bg-orange-500 hover:text-white transition-all duration-300">
+                  Купить сейчас
+                </button>
+              </div>
+            </div>
+
+            {/* Product Info Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Clock className="h-6 w-6 text-orange-500" />
+                  <div>
+                    <div className="font-semibold text-gray-900">15-20 мин</div>
+                    <div className="text-sm text-gray-600">Время приготовления</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <MapPin className="h-6 w-6 text-orange-500" />
+                  <div>
+                    <div className="font-semibold text-gray-900">30 мин</div>
+                    <div className="text-sm text-gray-600">Доставка</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Phone className="h-6 w-6 text-orange-500" />
+                  <div>
+                    <div className="font-semibold text-gray-900">24/7</div>
+                    <div className="text-sm text-gray-600">Поддержка</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Additional Info */}
-            <div className="bg-gray-100 rounded-lg p-4">
-              <h4 className="font-semibold text-gray-900 mb-2">Информация о товаре:</h4>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Категория: {product.category}</li>
-                <li>• Время приготовления: 15-20 минут</li>
-                <li>• Вес: ~300г</li>
-                <li>• Свежие ингредиенты</li>
+            <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl p-6">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Информация о товаре:</h4>
+              <ul className="space-y-2 text-gray-700">
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Категория: {product.category}
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Время приготовления: 15-20 минут
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Вес: ~300г
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Только свежие ингредиенты
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Без консервантов
+                </li>
               </ul>
             </div>
           </div>
         </div>
+
+        {/* Similar Products */}
+        {similarProducts.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-3xl font-bold text-gray-900">Похожие товары</h2>
+              <Link 
+                href="/products" 
+                className="text-orange-500 hover:text-orange-600 font-semibold flex items-center"
+              >
+                Посмотреть все
+                <ArrowLeft className="h-4 w-4 ml-1 rotate-180" />
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {similarProducts.map((similarProduct) => (
+                <Link
+                  key={similarProduct.id}
+                  href={`/products/${similarProduct.id}`}
+                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                >
+                  <div className="relative h-48 bg-orange-50 flex items-center justify-center overflow-hidden">
+                    {similarProduct.image ? (
+                      <Image
+                        src={similarProduct.image}
+                        alt={similarProduct.name}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                          if (nextElement) {
+                            nextElement.style.display = 'flex';
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className="w-full h-full flex items-center justify-center text-6xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                      style={{ display: similarProduct.image ? 'none' : 'flex' }}
+                    >
+                      🥟
+                    </div>
+                  </div>
+                  
+                  <div className="p-4">
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                      {similarProduct.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      {similarProduct.description}
+                    </p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-bold text-orange-500">
+                        {similarProduct.price} ֏
+                      </span>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          addItem(similarProduct, 1);
+                        }}
+                        className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
+
+      <Footer />
     </div>
   )
 }
