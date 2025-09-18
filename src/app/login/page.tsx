@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
@@ -31,13 +31,8 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Неверный email или пароль')
       } else {
-        // Получаем сессию для проверки роли
-        const session = await getSession()
-        if (session?.user?.role === 'ADMIN') {
-          router.push('/admin')
-        } else {
-          router.push('/')
-        }
+        // Перенаправляем на главную страницу
+        router.push('/')
       }
     } catch (error) {
       setError('Произошла ошибка при входе')
