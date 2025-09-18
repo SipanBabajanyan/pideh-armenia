@@ -1,0 +1,91 @@
+// Prisma schema for Pideh Armenia - Интернет-магазин мини-пицц
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Модель пользователя
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Связи
+  orders    Order[]
+  
+  @@map("users")
+}
+
+// Модель товара (мини-пицца)
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  image       String
+  category    String
+  ingredients String[] // Массив ингредиентов (PostgreSQL поддерживает)
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Связи
+  orderItems  OrderItem[]
+  
+  @@map("products")
+}
+
+// Модель заказа
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  status      OrderStatus @default(PENDING)
+  total       Float
+  address     String
+  phone       String
+  notes       String?
+  paymentMethod String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Связи
+  user        User        @relation(fields: [userId], references: [id])
+  items       OrderItem[]
+  
+  @@map("orders")
+}
+
+// Модель позиции заказа
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float   // Цена на момент заказа
+  
+  // Связи
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+  
+  @@map("order_items")
+}
+
+// Статусы заказа
+enum OrderStatus {
+  PENDING    // Ожидает подтверждения
+  CONFIRMED  // Подтвержден
+  PREPARING  // Готовится
+  READY      // Готов к выдаче
+  DELIVERED  // Доставлен
+  CANCELLED  // Отменен
+}
