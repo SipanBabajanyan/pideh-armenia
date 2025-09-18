@@ -145,6 +145,30 @@ export default function AboutPage() {
           </div>
         </div>
 
+        {/* Locations Section */}
+        <div className="bg-white rounded-3xl p-16 shadow-lg mb-16">
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Наши филиалы</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center">
+              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MapPin className="h-12 w-12 text-orange-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Филиал 1</h3>
+              <p className="text-lg text-gray-600 mb-4">Zoravar Andranik 151/2, Yerevan, Armenia</p>
+              <p className="text-gray-500">Основной филиал с полным меню</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MapPin className="h-12 w-12 text-orange-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Филиал 2</h3>
+              <p className="text-lg text-gray-600 mb-4">Yeznik Koghbatsi 83, Yerevan, Armenia 0002</p>
+              <p className="text-gray-500">Дополнительный филиал для удобства клиентов</p>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Section */}
         <div className="bg-orange-500 rounded-3xl p-16 text-white text-center mb-16">
           <h2 className="text-4xl font-bold mb-12">Pideh Armenia в цифрах</h2>
@@ -158,8 +182,8 @@ export default function AboutPage() {
               <div className="text-xl text-orange-100">Уникальных вкусов</div>
             </div>
             <div className="group">
-              <div className="text-6xl font-bold mb-4 group-hover:scale-110 transition-transform">1000+</div>
-              <div className="text-xl text-orange-100">Довольных клиентов</div>
+              <div className="text-6xl font-bold mb-4 group-hover:scale-110 transition-transform">2</div>
+              <div className="text-xl text-orange-100">Филиала в Ереване</div>
             </div>
             <div className="group">
               <div className="text-6xl font-bold mb-4 group-hover:scale-110 transition-transform">15-20</div>

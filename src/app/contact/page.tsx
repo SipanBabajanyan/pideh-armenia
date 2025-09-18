@@ -74,6 +74,34 @@ export default function ContactPage() {
           </div>
         </div>
 
+        {/* Addresses Section */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-16">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Наши филиалы</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-10 w-10 text-orange-500" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Филиал 1</h3>
+              <p className="text-gray-600 mb-4">Zoravar Andranik 151/2, Yerevan, Armenia</p>
+              <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                На карте
+              </button>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-10 w-10 text-orange-500" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Филиал 2</h3>
+              <p className="text-gray-600 mb-4">Yeznik Koghbatsi 83, Yerevan, Armenia 0002</p>
+              <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                На карте
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Order Section */}
         <div className="bg-orange-500 rounded-3xl p-12 text-white text-center mb-16">
           <h2 className="text-3xl font-bold mb-4">Быстрый заказ</h2>
