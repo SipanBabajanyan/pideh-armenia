@@ -13,10 +13,12 @@ import {
   CheckCircle,
   XCircle,
   Package,
-  ArrowLeft
+  ArrowLeft,
+  Edit
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import EditProfileModal from '@/components/EditProfileModal'
 
 interface Order {
   id: string
@@ -38,6 +40,13 @@ export default function ProfilePage() {
   const router = useRouter()
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [userProfile, setUserProfile] = useState({
+    name: session?.user?.name || null,
+    email: session?.user?.email || null,
+    phone: null as string | null,
+    address: null as string | null
+  })
 
   useEffect(() => {
     if (status === 'loading') return
@@ -48,7 +57,18 @@ export default function ProfilePage() {
     }
 
     fetchOrders()
+    fetchUserProfile()
   }, [session, status, router])
+
+  useEffect(() => {
+    if (session?.user) {
+      setUserProfile(prev => ({
+        ...prev,
+        name: session.user?.name || null,
+        email: session.user?.email || null
+      }))
+    }
+  }, [session])
 
   const fetchOrders = async () => {
     try {
@@ -61,6 +81,50 @@ export default function ProfilePage() {
       console.error('Error fetching orders:', error)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch('/api/user/profile')
+      if (response.ok) {
+        const data = await response.json()
+        setUserProfile(prev => ({
+          ...prev,
+          name: data.name,
+          phone: data.phone,
+          address: data.address
+        }))
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error)
+    }
+  }
+
+  const handleSaveProfile = async (data: { name: string; phone: string; address: string }) => {
+    try {
+      const response = await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (response.ok) {
+        const updatedProfile = await response.json()
+        setUserProfile(prev => ({
+          ...prev,
+          name: updatedProfile.name,
+          phone: updatedProfile.phone,
+          address: updatedProfile.address
+        }))
+      } else {
+        throw new Error('Failed to update profile')
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      throw error
     }
   }
 
@@ -144,7 +208,7 @@ export default function ProfilePage() {
                   <User className="h-5 w-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-600">Имя</p>
-                    <p className="font-medium text-gray-900">{session.user?.name || 'Не указано'}</p>
+                    <p className="font-medium text-gray-900">{userProfile.name || 'Не указано'}</p>
                   </div>
                 </div>
                 
@@ -152,7 +216,7 @@ export default function ProfilePage() {
                   <Mail className="h-5 w-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-600">Email</p>
-                    <p className="font-medium text-gray-900">{session.user?.email}</p>
+                    <p className="font-medium text-gray-900">{userProfile.email}</p>
                   </div>
                 </div>
                 
@@ -160,7 +224,7 @@ export default function ProfilePage() {
                   <Phone className="h-5 w-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-600">Телефон</p>
-                    <p className="font-medium text-gray-900">Не указан</p>
+                    <p className="font-medium text-gray-900">{userProfile.phone || 'Не указан'}</p>
                   </div>
                 </div>
                 
@@ -168,12 +232,16 @@ export default function ProfilePage() {
                   <MapPin className="h-5 w-5 text-gray-400" />
                   <div>
                     <p className="text-sm text-gray-600">Адрес</p>
-                    <p className="font-medium text-gray-900">Не указан</p>
+                    <p className="font-medium text-gray-900">{userProfile.address || 'Не указан'}</p>
                   </div>
                 </div>
               </div>
               
-              <button className="w-full mt-6 bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors">
+              <button 
+                onClick={() => setIsEditModalOpen(true)}
+                className="w-full mt-6 bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center"
+              >
+                <Edit className="h-5 w-5 mr-2" />
                 Редактировать профиль
               </button>
             </div>
@@ -256,6 +324,14 @@ export default function ProfilePage() {
       </div>
       
       <Footer />
+      
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={userProfile}
+        onSave={handleSaveProfile}
+      />
     </div>
   )
 }
