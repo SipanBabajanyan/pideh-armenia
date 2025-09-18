@@ -13,7 +13,8 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
   const [comboProducts, setComboProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Все товары')
+  const [activeCategory, setActiveCategory] = useState('Комбо')
+  const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
   const { addItem } = useCart()
 
   useEffect(() => {
@@ -38,16 +39,29 @@ export default function Home() {
 
   const handleAddToCart = (product: Product) => {
     addItem(product, 1)
+    setAddedToCart(prev => new Set(prev).add(product.id))
+    
+    // Убираем подсветку через 2 секунды
+    setTimeout(() => {
+      setAddedToCart(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(product.id)
+        return newSet
+      })
+    }, 2000)
   }
 
   const getFilteredProducts = () => {
-    if (activeCategory === 'Все товары') {
-      return products
-    }
     return products.filter(product => product.category === activeCategory)
   }
 
-  const categories = ['Все товары', 'Пиде', 'Комбо', 'Освежающие напитки', 'Соусы', 'Снэк']
+  const isPopularProduct = (product: Product) => {
+    // Определяем популярные товары по названию или другим критериям
+    const popularNames = ['Мясная пиде', 'Пепперони пиде', 'Классическая сырная пиде', 'Грибная пиде']
+    return popularNames.some(name => product.name.toLowerCase().includes(name.toLowerCase()))
+  }
+
+  const categories = ['Комбо', 'Пиде', 'Освежающие напитки', 'Соусы', 'Снэк']
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -204,15 +218,9 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Наше меню
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
-              Выберите из {products.length} уникальных вкусов армянских пиде
-            </p>
             {!loading && (
               <p className="text-lg text-orange-600 font-semibold mb-8">
-                {activeCategory === 'Все товары' 
-                  ? `Показано ${products.length} товаров`
-                  : `Показано ${getFilteredProducts().length} товаров в категории "${activeCategory}"`
-                }
+                Показано {getFilteredProducts().length} товаров в категории "{activeCategory}"
               </p>
             )}
             
@@ -249,13 +257,13 @@ export default function Home() {
                 Товары в категории "{activeCategory}" скоро появятся
               </h3>
               <p className="text-gray-600 mb-6">
-                Пока что посмотрите другие категории или все товары
+                Пока что посмотрите другие категории
               </p>
               <button
-                onClick={() => setActiveCategory('Все товары')}
+                onClick={() => setActiveCategory('Комбо')}
                 className="bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors"
               >
-                Показать все товары
+                Показать комбо
               </button>
             </div>
           ) : (
@@ -289,10 +297,12 @@ export default function Home() {
                       🥟
                     </div>
                     
-                    {/* Badge */}
-                    <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      Популярное
-                    </div>
+                    {/* Badge - только для популярных товаров */}
+                    {isPopularProduct(product) && (
+                      <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        Популярное
+                      </div>
+                    )}
                     
                     {/* Quick add button */}
                     <button
@@ -305,25 +315,25 @@ export default function Home() {
                   
                   {/* Product info */}
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200">
+                    <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-200">
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      Вкусная армянская пиде с традиционными ингредиентами
-                    </p>
                     
                     {/* Price and action */}
                     <div className="flex justify-between items-center">
                       <div>
                       <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
-                        <span className="text-sm text-gray-500 ml-2">за порцию</span>
                       </div>
-                      <Link 
-                        href={`/products/${product.id}`}
-                        className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600 transition-colors text-sm"
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 text-sm ${
+                          addedToCart.has(product.id)
+                            ? 'bg-green-500 text-white scale-105 shadow-lg'
+                            : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105'
+                        }`}
                       >
-                        Подробнее
-                      </Link>
+                        {addedToCart.has(product.id) ? '✓ Добавлено!' : 'В корзину'}
+                      </button>
                     </div>
                   </div>
                 </div>
