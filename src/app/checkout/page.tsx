@@ -29,7 +29,7 @@ export default function CheckoutPage() {
     name: '',
     phone: '',
     address: '',
-    deliveryTime: 'asap', // Дефолтное значение "Как можно скорее (20-30 мин)"
+    deliveryTime: 'asap', // Дефолтное значение "Как можно скорее"
     paymentMethod: 'cash',
     notes: ''
   })
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                     >
-                      <option value="asap">Как можно скорее (20-30 мин)</option>
+                      <option value="asap">Как можно скорее</option>
                       <option value="11:00-12:00">11:00 - 12:00</option>
                       <option value="12:00-13:00">12:00 - 13:00</option>
                       <option value="13:00-14:00">13:00 - 14:00</option>
