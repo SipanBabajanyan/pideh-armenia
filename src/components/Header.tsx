@@ -54,13 +54,6 @@ export default function Header() {
               )}
             </Link>
 
-            {/* Order Button */}
-            <Link 
-              href="/products"
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
-            >
-              Заказать
-            </Link>
 
             {/* Mobile Menu Button */}
             <button

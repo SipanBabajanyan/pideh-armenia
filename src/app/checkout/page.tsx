@@ -93,9 +93,12 @@ export default function CheckoutPage() {
         total: getTotalPrice()
       })
       
-      // Clear cart and redirect to success page
-      clearCart()
+      // Redirect to success page first, then clear cart
       router.push('/order-success')
+      // Clear cart after a short delay to ensure redirect happens first
+      setTimeout(() => {
+        clearCart()
+      }, 100)
     } catch (error) {
       console.error('Error submitting order:', error)
       alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.')
