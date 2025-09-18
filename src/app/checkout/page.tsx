@@ -223,38 +223,72 @@ export default function CheckoutPage() {
 
                   {/* Payment Method */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-4">
                       <CreditCard className="inline h-4 w-4 mr-1" />
                       Способ оплаты *
                     </label>
-                    <div className="space-y-3">
-                      <label className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-orange-300 transition-colors">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <label className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                        formData.paymentMethod === 'cash' 
+                          ? 'border-orange-500 bg-orange-50 shadow-md' 
+                          : 'border-gray-200 hover:border-orange-300'
+                      }`}>
                         <input
                           type="radio"
                           name="paymentMethod"
                           value="cash"
                           checked={formData.paymentMethod === 'cash'}
                           onChange={handleInputChange}
-                          className="h-4 w-4 text-orange-500 focus:ring-orange-500"
+                          className="sr-only"
                         />
-                        <div className="ml-3">
-                          <div className="font-medium text-gray-900">Наличные при доставке</div>
-                          <div className="text-sm text-gray-600">Оплата курьеру наличными</div>
+                        <div className="text-center">
+                          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Наличные</h3>
+                          <p className="text-sm text-gray-600">Оплата курьеру наличными при доставке</p>
+                          {formData.paymentMethod === 'cash' && (
+                            <div className="absolute top-4 right-4">
+                              <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                                <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </label>
                       
-                      <label className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-orange-300 transition-colors">
+                      <label className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                        formData.paymentMethod === 'card' 
+                          ? 'border-orange-500 bg-orange-50 shadow-md' 
+                          : 'border-gray-200 hover:border-orange-300'
+                      }`}>
                         <input
                           type="radio"
                           name="paymentMethod"
                           value="card"
                           checked={formData.paymentMethod === 'card'}
                           onChange={handleInputChange}
-                          className="h-4 w-4 text-orange-500 focus:ring-orange-500"
+                          className="sr-only"
                         />
-                        <div className="ml-3">
-                          <div className="font-medium text-gray-900">Карта курьеру</div>
-                          <div className="text-sm text-gray-600">Оплата картой через терминал курьера</div>
+                        <div className="text-center">
+                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <CreditCard className="h-8 w-8 text-blue-600" />
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Карта</h3>
+                          <p className="text-sm text-gray-600">Оплата картой через терминал курьера</p>
+                          {formData.paymentMethod === 'card' && (
+                            <div className="absolute top-4 right-4">
+                              <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                                <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </label>
                     </div>
