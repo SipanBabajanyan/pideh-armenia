@@ -83,15 +83,28 @@ export default function CheckoutPage() {
     setIsSubmitting(true)
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Here you would normally send the order to your API
-      console.log('Order data:', {
+      // Send order to API
+      const orderData = {
         ...formData,
-        items: items,
+        items: items.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price
+        })),
         total: getTotalPrice()
+      }
+
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
       })
+
+      if (!response.ok) {
+        throw new Error('Failed to create order')
+      }
       
       // Redirect to success page first, then clear cart
       router.push('/order-success')

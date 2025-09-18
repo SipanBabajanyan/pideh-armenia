@@ -28,10 +28,26 @@ async function main() {
       email: 'test@pideh-armenia.am',
       name: 'Тестовый Пользователь',
       phone: '+374 99 123 456',
-      address: 'Ереван, ул. Абовяна, 1'
+      address: 'Ереван, ул. Абовяна, 1',
+      role: 'USER'
     }
   })
   console.log(`✅ Создан тестовый пользователь: ${testUser.email}`)
+
+  // Создаем админ-пользователя
+  const bcrypt = require('bcryptjs')
+  const adminUser = await prisma.user.create({
+    data: {
+      email: 'admin@pideh-armenia.am',
+      name: 'Администратор',
+      phone: '+374 95 044 888',
+      address: 'Ереван, ул. Абовяна, 1',
+      password: await bcrypt.hash('admin123', 12),
+      role: 'ADMIN'
+    }
+  })
+  console.log(`✅ Создан админ-пользователь: ${adminUser.email}`)
+  console.log(`🔑 Пароль админа: admin123`)
 
   // Создаем тестовый заказ
   const products = await prisma.product.findMany()

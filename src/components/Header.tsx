@@ -2,13 +2,15 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ShoppingCart, Phone, Menu, X } from 'lucide-react'
+import { ShoppingCart, Phone, Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '@/hooks/useCart'
+import { useSession, signOut } from 'next-auth/react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { getTotalItems } = useCart()
+  const { data: session, status } = useSession()
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -54,6 +56,55 @@ export default function Header() {
               )}
             </Link>
 
+            {/* Auth Buttons */}
+            {status === 'loading' ? (
+              <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+            ) : session ? (
+              <div className="flex items-center space-x-2">
+                {/* User Profile */}
+                <Link 
+                  href="/profile" 
+                  className="flex items-center space-x-2 text-gray-900 hover:text-orange-500 transition-colors"
+                >
+                  <User className="h-5 w-5" />
+                  <span className="hidden sm:block">{session.user?.name}</span>
+                </Link>
+                
+                {/* Admin Link */}
+                {session.user?.role === 'ADMIN' && (
+                  <Link 
+                    href="/admin" 
+                    className="px-3 py-1 bg-orange-100 text-orange-600 rounded-lg text-sm font-medium hover:bg-orange-200 transition-colors"
+                  >
+                    Админ
+                  </Link>
+                )}
+                
+                {/* Logout */}
+                <button
+                  onClick={() => signOut()}
+                  className="p-2 text-gray-900 hover:text-orange-500 transition-colors"
+                  title="Выйти"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link 
+                  href="/login" 
+                  className="text-gray-900 hover:text-orange-500 transition-colors"
+                >
+                  Войти
+                </Link>
+                <Link 
+                  href="/register" 
+                  className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                >
+                  Регистрация
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <button
