@@ -391,7 +391,7 @@ export default function AdminOrdersPage() {
               filteredOrders.map((order) => (
                 <div key={order.id} className="p-6 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center justify-between">
-                    {/* Order Info */}
+                    {/* Order Info - только главное */}
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center">
                         <ShoppingCart className="h-6 w-6 text-orange-500" />
@@ -402,38 +402,43 @@ export default function AdminOrdersPage() {
                           <h3 className="text-lg font-semibold text-gray-900">
                             Заказ #{order.id.slice(-8)}
                           </h3>
-                          <Badge className={`${statusColors[order.status]} flex items-center gap-1`}>
-                            {getStatusIcon(order.status)}
-                            {statusLabels[order.status]}
-                          </Badge>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                        {/* Только основная информация */}
+                        <div className="flex items-center space-x-6 text-sm">
+                          {/* Сумма - в начале, большая и заметная */}
                           <div>
-                            <p className="font-medium text-gray-900">{order.user.name}</p>
-                            <p>{order.user.email}</p>
-                            {order.user.phone && <p>{order.user.phone}</p>}
-                          </div>
-                          
-                          <div>
-                            <p className="font-medium text-gray-900">
+                            <span className="text-gray-500 text-xs">Сумма:</span>
+                            <div className="text-lg font-bold text-orange-600">
                               {order.totalAmount.toLocaleString()} ֏
-                            </p>
-                            <p>{order.paymentMethod}</p>
-                            <p>{order.items.length} товар{order.items.length > 1 ? 'ов' : ''}</p>
+                            </div>
                           </div>
                           
+                          {/* Количество товаров - тоже заметное */}
                           <div>
-                            <p className="font-medium text-gray-900">
-                              {new Date(order.createdAt).toLocaleDateString('ru-RU')}
-                            </p>
-                            <p>
-                              {new Date(order.createdAt).toLocaleTimeString('ru-RU', { 
+                            <span className="text-gray-500 text-xs">Товаров:</span>
+                            <div className="text-base font-semibold text-gray-900">
+                              {order.items.length} шт.
+                            </div>
+                          </div>
+                          
+                          {/* Время */}
+                          <div>
+                            <span className="text-gray-500 text-xs">Время:</span>
+                            <div className="text-sm font-medium text-gray-900">
+                              {new Date(order.createdAt).toLocaleDateString('ru-RU')} {new Date(order.createdAt).toLocaleTimeString('ru-RU', { 
                                 hour: '2-digit', 
                                 minute: '2-digit' 
                               })}
-                            </p>
-                            <p className="text-xs text-gray-500">{order.deliveryAddress}</p>
+                            </div>
+                          </div>
+                          
+                          {/* Клиент - в конце */}
+                          <div>
+                            <span className="text-gray-500 text-xs">Клиент:</span>
+                            <div className="text-sm font-medium text-gray-900">
+                              {order.user.name}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -450,18 +455,26 @@ export default function AdminOrdersPage() {
                         Детали
                       </Button>
                       
-                      <select
-                        value={order.status}
-                        onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                        className="px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
-                      >
-                        <option value="PENDING">Ожидает</option>
-                        <option value="CONFIRMED">Подтвержден</option>
-                        <option value="PREPARING">Готовится</option>
-                        <option value="READY">Готов</option>
-                        <option value="DELIVERED">Доставлен</option>
-                        <option value="CANCELLED">Отменен</option>
-                      </select>
+                      {/* Объединенный статус и смена статуса */}
+                      <div className="relative">
+                        <select
+                          value={order.status}
+                          onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                          className={`px-4 py-2 rounded-xl border-0 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors cursor-pointer appearance-none pr-10 ${statusColors[order.status]} font-medium`}
+                        >
+                          <option value="PENDING">⏳ Ожидает</option>
+                          <option value="CONFIRMED">✅ Подтвержден</option>
+                          <option value="PREPARING">👨‍🍳 Готовится</option>
+                          <option value="READY">📦 Готов</option>
+                          <option value="DELIVERED">🚚 Доставлен</option>
+                          <option value="CANCELLED">❌ Отменен</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                          <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -503,9 +516,9 @@ export default function AdminOrdersPage() {
 
         {/* Модальное окно с деталями заказа */}
         {showModal && selectedOrder && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-              <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-2xl">
+          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20">
+              <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-white/20 px-6 py-4 flex items-center justify-between rounded-t-2xl">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Заказ #{selectedOrder.id.slice(-8)}
                 </h2>
@@ -567,7 +580,7 @@ export default function AdminOrdersPage() {
                 </div>
 
                 {/* Информация о клиенте */}
-                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6">
+                <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <UserIcon className="h-5 w-5 text-orange-500" />
                     Информация о клиенте
@@ -594,7 +607,7 @@ export default function AdminOrdersPage() {
                 </div>
 
                 {/* Информация о доставке */}
-                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6">
+                <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <MapPin className="h-5 w-5 text-orange-500" />
                     Информация о доставке
@@ -612,14 +625,14 @@ export default function AdminOrdersPage() {
                 </div>
 
                 {/* Товары в заказе */}
-                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6">
+                <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <Package className="h-5 w-5 text-orange-500" />
                     Товары в заказе
                   </h3>
                   <div className="space-y-3">
                     {selectedOrder.items.map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-orange-50 rounded-xl">
+                      <div key={index} className="flex items-center justify-between p-4 bg-orange-50/80 backdrop-blur-sm rounded-xl border border-orange-200/50">
                         <div className="flex items-center gap-3">
                           <img
                             src={item.product.image}
