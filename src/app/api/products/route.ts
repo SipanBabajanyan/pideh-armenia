@@ -26,11 +26,25 @@ export async function GET(request: NextRequest) {
 
     const products = await prisma.product.findMany({
       where: whereClause,
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        category: true,
+        image: true,
+        ingredients: true,
+        isAvailable: true,
+        createdAt: true
+      }
     })
 
-    // PostgreSQL уже возвращает ingredients как массив
-    return NextResponse.json(products)
+    // Добавляем кэширование на 5 минут
+    const response = NextResponse.json(products)
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    
+    return response
   } catch (error) {
     console.error('Error fetching products:', error)
     return NextResponse.json(

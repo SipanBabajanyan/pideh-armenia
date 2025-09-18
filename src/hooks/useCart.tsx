@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useReducer, ReactNode } from 'react'
 import { Product, CartItem, CartContextType } from '@/types'
+import { useHydration } from './useHydration'
 
 // Типы для reducer
 type CartAction =
@@ -63,6 +64,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 // Провайдер контекста
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, dispatch] = useReducer(cartReducer, initialState)
+  const isHydrated = useHydration()
 
   const addItem = (product: Product, quantity: number = 1) => {
     dispatch({ type: 'ADD_ITEM', payload: { product, quantity } })
@@ -89,7 +91,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const value: CartContextType = {
-    items,
+    items: isHydrated ? items : [], // На сервере всегда пустая корзина
     addItem,
     removeItem,
     updateQuantity,

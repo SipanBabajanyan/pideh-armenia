@@ -16,6 +16,7 @@ export default function Footer() {
                 width={120} 
                 height={40}
                 className="h-10 w-auto mr-3"
+                style={{ width: "auto", height: "auto" }}
               />
               <h3 className="text-2xl font-bold text-orange-500">Pideh Armenia</h3>
             </div>

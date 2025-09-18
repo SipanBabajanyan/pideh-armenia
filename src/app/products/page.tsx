@@ -1,20 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { Search, Filter, ShoppingCart } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product, Category } from '@/types'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ProductCard from '@/components/ProductCard'
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState<Category>('Все')
   const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
+  const [searching, setSearching] = useState(false)
   const { addItem } = useCart()
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const categories: Category[] = [
     'Все',
@@ -28,14 +32,6 @@ export default function ProductsPage() {
   // Порядок категорий для сортировки
   const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Освежающие напитки']
 
-  useEffect(() => {
-    fetchProducts()
-  }, [])
-
-  useEffect(() => {
-    filterProducts()
-  }, [products, selectedCategory, searchQuery])
-
   const fetchProducts = async () => {
     try {
       const response = await fetch('/api/products')
@@ -48,25 +44,55 @@ export default function ProductsPage() {
     }
   }
 
-  const filterProducts = () => {
+  const filterProducts = useCallback(() => {
     let filtered = products
 
     if (selectedCategory !== 'Все') {
       filtered = filtered.filter(product => product.category === selectedCategory)
     }
 
-    if (searchQuery) {
+    if (debouncedSearchQuery) {
       filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
       )
     }
 
     setFilteredProducts(filtered)
-  }
+  }, [products, selectedCategory, debouncedSearchQuery])
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+  // Debounce search query
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+    }
+    
+    if (searchQuery !== debouncedSearchQuery) {
+      setSearching(true)
+    }
+    
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery)
+      setSearching(false)
+    }, 300)
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+    }
+  }, [searchQuery, debouncedSearchQuery])
+
+  useEffect(() => {
+    filterProducts()
+  }, [filterProducts])
 
   // Группировка товаров по категориям
-  const groupProductsByCategory = (products: Product[]) => {
+  const groupProductsByCategory = useCallback((products: Product[]) => {
     const grouped: Record<string, Product[]> = {}
     
     products.forEach(product => {
@@ -83,21 +109,56 @@ export default function ProductsPage() {
       category,
       products: grouped[category]
     }))
-  }
+  }, [])
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = useCallback((product: Product) => {
     addItem(product, 1)
     // Здесь можно добавить уведомление о добавлении в корзину
-  }
+  }, [addItem])
+
+  // Мемоизируем сгруппированные продукты
+  const groupedProducts = useMemo(() => {
+    return groupProductsByCategory(filteredProducts)
+  }, [filteredProducts, groupProductsByCategory])
+
+  // Компонент скелетона для карточки товара
+  const ProductSkeleton = () => (
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 animate-pulse">
+      <div className="h-56 bg-gray-200"></div>
+      <div className="p-6">
+        <div className="h-6 bg-gray-200 rounded mb-3"></div>
+        <div className="h-4 bg-gray-200 rounded mb-4"></div>
+        <div className="flex justify-between items-center">
+          <div className="h-8 w-20 bg-gray-200 rounded"></div>
+          <div className="h-12 w-24 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+  )
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="flex items-center justify-center py-20">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-gray-600">Загружаем меню...</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center mb-12">
+            <div className="h-12 bg-gray-200 rounded mx-auto mb-4 w-64 animate-pulse"></div>
+            <div className="h-6 bg-gray-200 rounded mx-auto w-96 animate-pulse"></div>
+          </div>
+          
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 animate-pulse">
+            <div className="h-12 bg-gray-200 rounded mb-6"></div>
+            <div className="flex flex-wrap gap-3">
+              {[1,2,3,4,5,6].map(i => (
+                <div key={i} className="h-12 w-24 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[1,2,3,4,5,6,7,8].map(i => (
+              <ProductSkeleton key={i} />
+            ))}
           </div>
         </div>
         <Footer />
@@ -124,7 +185,9 @@ export default function ProductsPage() {
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
+                searching ? 'text-orange-500 animate-pulse' : 'text-gray-400'
+              }`} />
               <input
                 type="text"
                 placeholder="Поиск по названию или описанию..."
@@ -132,6 +195,11 @@ export default function ProductsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg transition-all duration-300"
               />
+              {searching && (
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500"></div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -157,7 +225,7 @@ export default function ProductsPage() {
         {selectedCategory === 'Все' ? (
           // Показываем все категории с заголовками
           <div className="space-y-12">
-            {groupProductsByCategory(filteredProducts).map(({ category, products }) => (
+            {groupedProducts.map(({ category, products }) => (
               <div key={category} className="space-y-6">
                 {/* Category Header */}
                 <div className="flex items-center space-x-4 mb-8">
@@ -172,70 +240,12 @@ export default function ProductsPage() {
                 {/* Products Grid for this category */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {products.map((product) => (
-                    <Link 
-                      key={product.id} 
-                      href={`/products/${product.id}`}
-                      className="block bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group border border-gray-100"
-                    >
-                      {/* Image */}
-                      <div className="relative h-56 bg-orange-50 flex items-center justify-center overflow-hidden">
-                        {product.image ? (
-                          <img 
-                            src={product.image} 
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            onError={(e) => {
-                              console.error('Ошибка загрузки изображения:', product.image);
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.nextElementSibling.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div 
-                          className="w-full h-full flex items-center justify-center bg-orange-100 text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                          style={{ display: product.image ? 'none' : 'flex' }}
-                        >
-                          🥟
-                        </div>
-                        
-                        {/* Category Badge */}
-                        <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                          {product.category}
-                        </div>
-                      </div>
-                      
-                      {/* Content */}
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold mb-3 text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors duration-200">
-                          {product.name}
-                        </h3>
-                        
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                          {product.description}
-                        </p>
-                        
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <span className="text-2xl font-bold text-orange-500">
-                              {product.price} ֏
-                            </span>
-                          </div>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault()
-                              e.stopPropagation()
-                              handleAddToCart(product)
-                            }}
-                            className="bg-orange-500 text-white px-12 py-3 rounded-xl hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
-                            title="В корзину"
-                          >
-                            <span className="text-sm font-bold mr-1">+</span>
-                            <ShoppingCart className="h-5 w-5" />
-                          </button>
-                        </div>
-                      </div>
-                    </Link>
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      onAddToCart={handleAddToCart}
+                      variant="default"
+                    />
                   ))}
                 </div>
               </div>
@@ -245,59 +255,12 @@ export default function ProductsPage() {
           // Показываем товары выбранной категории
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <Link 
-                key={product.id} 
-                href={`/products/${product.id}`}
-                className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group"
-              >
-                {/* Image */}
-                <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                  {product.image ? (
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      onError={(e) => {
-                        console.error('Ошибка загрузки изображения:', product.image);
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling.style.display = 'flex';
-                      }}
-                    />
-                  ) : null}
-                  <div 
-                    className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50 group-hover:opacity-70 transition-opacity duration-300"
-                    style={{ display: product.image ? 'none' : 'flex' }}
-                  >
-                    🥟
-                  </div>
-                </div>
-                
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors duration-200">
-                    {product.name}
-                  </h3>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-orange-500">
-                      {product.price} ֏
-                    </span>
-                    
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        handleAddToCart(product)
-                      }}
-                      className="bg-orange-500 text-white px-12 py-3 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center"
-                      title="В корзину"
-                    >
-                      <span className="text-sm font-bold mr-1">+</span>
-                      <ShoppingCart className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </Link>
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+                variant="compact"
+              />
             ))}
           </div>
         )}

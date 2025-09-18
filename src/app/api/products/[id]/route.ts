@@ -11,6 +11,17 @@ export async function GET(
       where: {
         id: params.id,
         isAvailable: true
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        category: true,
+        image: true,
+        ingredients: true,
+        isAvailable: true,
+        createdAt: true
       }
     })
 
@@ -21,7 +32,11 @@ export async function GET(
       )
     }
 
-    return NextResponse.json(product)
+    // Добавляем кэширование на 10 минут для отдельных товаров
+    const response = NextResponse.json(product)
+    response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
+    
+    return response
   } catch (error) {
     console.error('Error fetching product:', error)
     return NextResponse.json(

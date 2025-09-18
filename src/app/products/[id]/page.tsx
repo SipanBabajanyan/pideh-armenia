@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -22,65 +22,151 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (params.id) {
-      fetchProduct(params.id as string)
-      fetchSimilarProducts(params.id as string)
+      fetchProductAndSimilar(params.id as string)
     }
   }, [params.id])
 
-  const fetchProduct = async (id: string) => {
+  const fetchProductAndSimilar = async (id: string) => {
     try {
-      const response = await fetch(`/api/products/${id}`)
-      if (response.ok) {
-        const data = await response.json()
-        setProduct(data)
+      // Параллельная загрузка товара и всех товаров для похожих
+      const [productResponse, similarResponse] = await Promise.all([
+        fetch(`/api/products/${id}`),
+        fetch('/api/products')
+      ])
+
+      if (productResponse.ok) {
+        const productData = await productResponse.json()
+        setProduct(productData)
       } else {
         router.push('/products')
+        return
+      }
+
+      if (similarResponse.ok) {
+        const products = await similarResponse.json()
+        // Фильтруем похожие товары (исключаем текущий и берем первые 4)
+        const similar = products
+          .filter((p: Product) => p.id !== id)
+          .slice(0, 4)
+        setSimilarProducts(similar)
       }
     } catch (error) {
-      console.error('Error fetching product:', error)
+      console.error('Error fetching product data:', error)
       router.push('/products')
     } finally {
       setLoading(false)
     }
   }
 
-  const fetchSimilarProducts = async (currentProductId: string) => {
-    try {
-      const response = await fetch('/api/products')
-      if (response.ok) {
-        const products = await response.json()
-        // Фильтруем похожие товары (исключаем текущий и берем первые 4)
-        const similar = products
-          .filter((p: Product) => p.id !== currentProductId)
-          .slice(0, 4)
-        setSimilarProducts(similar)
-      }
-    } catch (error) {
-      console.error('Error fetching similar products:', error)
-    }
-  }
-
-  const handleAddToCart = () => {
+  const handleAddToCart = useCallback(() => {
     if (product) {
       addItem(product, quantity)
       setAddedToCart(true)
       setTimeout(() => setAddedToCart(false), 2000)
     }
-  }
+  }, [product, quantity, addItem])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="flex items-center justify-center py-20">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Загружаем товар...</p>
+  // Мемоизируем похожие товары
+  const memoizedSimilarProducts = useMemo(() => {
+    return similarProducts
+  }, [similarProducts])
+
+  // Компонент скелетона для страницы товара
+  const ProductPageSkeleton = () => (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      {/* Breadcrumb Skeleton */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center space-x-2">
+            <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
+            <span className="text-gray-400">/</span>
+            <div className="h-4 bg-gray-200 rounded w-12 animate-pulse"></div>
+            <span className="text-gray-400">/</span>
+            <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
           </div>
         </div>
-        <Footer />
       </div>
-    )
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button Skeleton */}
+        <div className="h-6 bg-gray-200 rounded w-32 mb-8 animate-pulse"></div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          {/* Product Image Skeleton */}
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="h-96 bg-gray-200 animate-pulse"></div>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Product Info Skeleton */}
+          <div className="space-y-8">
+            <div>
+              <div className="h-12 bg-gray-200 rounded mb-4 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 rounded mb-6 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 rounded w-32 mb-6 animate-pulse"></div>
+              <div className="h-10 bg-gray-200 rounded w-48 animate-pulse"></div>
+            </div>
+
+            <div>
+              <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
+              <div className="flex flex-wrap gap-3">
+                {[1,2,3,4,5].map(i => (
+                  <div key={i} className="h-8 bg-gray-200 rounded-full w-20 animate-pulse"></div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="h-12 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-14 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-14 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[1,2,3].map(i => (
+                <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                  <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Similar Products Skeleton */}
+        <section className="mb-16">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-8 animate-pulse"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="h-48 bg-gray-200 animate-pulse"></div>
+                <div className="p-4">
+                  <div className="h-6 bg-gray-200 rounded mb-2 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-3 animate-pulse"></div>
+                  <div className="flex justify-between items-center">
+                    <div className="h-6 bg-gray-200 rounded w-16 animate-pulse"></div>
+                    <div className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <Footer />
+    </div>
+  )
+
+  if (loading) {
+    return <ProductPageSkeleton />
   }
 
   if (!product) {
@@ -143,6 +229,8 @@ export default function ProductPage() {
                     src={product.image}
                     alt={product.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
@@ -337,7 +425,7 @@ export default function ProductPage() {
         </div>
 
         {/* Similar Products */}
-        {similarProducts.length > 0 && (
+        {memoizedSimilarProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold text-gray-900">Похожие товары</h2>
@@ -351,7 +439,7 @@ export default function ProductPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {similarProducts.map((similarProduct) => (
+              {memoizedSimilarProducts.map((similarProduct) => (
                 <Link
                   key={similarProduct.id}
                   href={`/products/${similarProduct.id}`}
@@ -363,6 +451,8 @@ export default function ProductPage() {
                         src={similarProduct.image}
                         alt={similarProduct.name}
                         fill
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+                        loading="lazy"
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';

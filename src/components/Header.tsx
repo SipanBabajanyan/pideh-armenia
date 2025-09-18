@@ -5,10 +5,12 @@ import Image from 'next/image'
 import { ShoppingCart, Phone, Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '@/hooks/useCart'
+import { useHydration } from '@/hooks/useHydration'
 import { useSession, signOut } from 'next-auth/react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const isHydrated = useHydration()
   const { getTotalItems } = useCart()
   const { data: session, status } = useSession()
 
@@ -49,7 +51,7 @@ export default function Header() {
             {/* Cart */}
             <Link href="/cart" className="relative p-2 text-gray-900 hover:text-orange-500 transition-colors">
               <ShoppingCart className="h-6 w-6" />
-              {getTotalItems() > 0 && (
+              {isHydrated && getTotalItems() > 0 && (
                 <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {getTotalItems()}
                 </span>
