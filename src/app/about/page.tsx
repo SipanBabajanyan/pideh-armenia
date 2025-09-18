@@ -1,5 +1,6 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import CompanyInfo from '@/components/CompanyInfo'
 import { Clock, Users, Heart, Award, ChefHat, Truck, Star, CheckCircle } from 'lucide-react'
 
 export default function AboutPage() {
@@ -168,7 +169,7 @@ export default function AboutPage() {
         </div>
 
         {/* Process Section */}
-        <div className="bg-white rounded-3xl p-16 shadow-lg">
+        <div className="bg-white rounded-3xl p-16 shadow-lg mb-16">
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Как мы готовим</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
@@ -204,6 +205,9 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
+
+        {/* Company Info Section */}
+        <CompanyInfo />
       </div>
       
       <Footer />

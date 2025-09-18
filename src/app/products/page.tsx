@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, Search, Filter } from 'lucide-react'
+import { Search, Filter } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product, Category } from '@/types'
 import Header from '@/components/Header'
@@ -18,17 +18,15 @@ export default function ProductsPage() {
 
   const categories: Category[] = [
     'Все',
-    'Классические',
-    'Мясные',
-    'Сырные',
-    'Овощные',
-    'Грибные',
-    'Острые',
-    'Морепродукты',
-    'Детские',
-    'Веганские',
-    'Сладкие',
+    'Комбо',
+    'Пиде',
+    'Снэк',
+    'Соусы',
+    'Освежающие напитки',
   ]
+
+  // Порядок категорий для сортировки
+  const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Освежающие напитки']
 
   useEffect(() => {
     fetchProducts()
@@ -65,6 +63,26 @@ export default function ProductsPage() {
     }
 
     setFilteredProducts(filtered)
+  }
+
+  // Группировка товаров по категориям
+  const groupProductsByCategory = (products: Product[]) => {
+    const grouped: Record<string, Product[]> = {}
+    
+    products.forEach(product => {
+      if (!grouped[product.category]) {
+        grouped[product.category] = []
+      }
+      grouped[product.category].push(product)
+    })
+
+    // Сортируем категории в нужном порядке
+    const sortedCategories = categoryOrder.filter(cat => grouped[cat])
+    
+    return sortedCategories.map(category => ({
+      category,
+      products: grouped[category]
+    }))
   }
 
   const handleAddToCart = (product: Product) => {
@@ -125,53 +143,125 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <Link href={`/products/${product.id}`} className="block">
-                <div className="h-48 bg-orange-100 flex items-center justify-center hover:bg-orange-200 transition-colors">
-                  <span className="text-6xl">🥟</span>
+        {/* Products by Categories */}
+        {selectedCategory === 'Все' ? (
+          // Показываем все категории с заголовками
+          <div className="space-y-12">
+            {groupProductsByCategory(filteredProducts).map(({ category, products }) => (
+              <div key={category} className="space-y-6">
+                {/* Category Header */}
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-2xl font-bold text-gray-900">{category}</h2>
+                  <div className="flex-1 h-px bg-gradient-to-r from-orange-200 to-transparent"></div>
                 </div>
-              </Link>
-              <div className="p-6">
-                <Link href={`/products/${product.id}`} className="block hover:text-orange-500 transition-colors">
-                  <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-                </Link>
-                <p className="text-gray-600 mb-4">{product.description}</p>
                 
-                <div className="mb-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Ингредиенты:</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {product.ingredients.map((ingredient, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded"
-                      >
-                        {ingredient}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-orange-500">
-                    {product.price} ֏
-                  </span>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault()
-                      handleAddToCart(product)
-                    }}
-                    className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
-                  >
-                    В корзину
-                  </button>
+                {/* Products Grid for this category */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {products.map((product) => (
+                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200">
+                      {/* Image */}
+                      <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                        {product.image ? (
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              console.error('Ошибка загрузки изображения:', product.image);
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50"
+                          style={{ display: product.image ? 'none' : 'flex' }}
+                        >
+                          🥟
+                        </div>
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2">
+                          {product.name}
+                        </h3>
+                        
+                        <div className="flex justify-between items-center">
+                          <span className="text-xl font-bold text-orange-500">
+                            {product.price} ֏
+                          </span>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              handleAddToCart(product)
+                            }}
+                            className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium"
+                          >
+                            В корзину
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          // Показываем товары выбранной категории
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200">
+                {/* Image */}
+                <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                  {product.image ? (
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error('Ошибка загрузки изображения:', product.image);
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className="w-full h-full flex items-center justify-center bg-orange-100 text-6xl opacity-50"
+                    style={{ display: product.image ? 'none' : 'flex' }}
+                  >
+                    🥟
+                  </div>
+                </div>
+                
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900 line-clamp-2">
+                    {product.name}
+                  </h3>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-xl font-bold text-orange-500">
+                      {product.price} ֏
+                    </span>
+                    
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleAddToCart(product)
+                      }}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium"
+                    >
+                      В корзину
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">

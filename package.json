@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx scripts/seed.ts",
-    "db:reset": "prisma migrate reset --force && npm run db:seed"
+    "db:reset": "prisma migrate reset --force && npm run db:seed",
+    "parse": "tsx scripts/parse-buy-am.ts",
+    "import": "tsx scripts/import-from-file.ts",
+    "auto-import": "tsx scripts/auto-import.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -31,6 +34,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
+    "puppeteer": "^24.22.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",
     "typescript": "^5"
