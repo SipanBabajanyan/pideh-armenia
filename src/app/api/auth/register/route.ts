@@ -8,6 +8,30 @@ export async function POST(request: NextRequest) {
   try {
     const { name, email, phone, password } = await request.json()
 
+    // Валидация обязательных полей
+    if (!name || !email || !password) {
+      return NextResponse.json(
+        { error: 'Имя, email и пароль обязательны для заполнения' },
+        { status: 400 }
+      )
+    }
+
+    // Валидация пароля
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: 'Пароль должен содержать минимум 6 символов' },
+        { status: 400 }
+      )
+    }
+
+    // Проверяем, что пароль не пустой
+    if (password.trim().length === 0) {
+      return NextResponse.json(
+        { error: 'Пароль не может быть пустым' },
+        { status: 400 }
+      )
+    }
+
     // Проверяем, существует ли пользователь
     const existingUser = await prisma.user.findUnique({
       where: { email }
