@@ -327,7 +327,7 @@ export default function Home() {
                     {/* Price and action */}
                     <div className="flex justify-between items-center">
                       <div>
-                      <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
+                        <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
                       </div>
                       <button
                         onClick={(e) => {
@@ -335,13 +335,21 @@ export default function Home() {
                           e.stopPropagation();
                           handleAddToCart(product);
                         }}
-                        className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 text-sm ${
+                        className={`px-12 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
                           addedToCart.has(product.id)
                             ? 'bg-green-500 text-white scale-105 shadow-lg'
                             : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105'
                         }`}
+                        title="В корзину"
                       >
-                        {addedToCart.has(product.id) ? '✓ Добавлено!' : 'В корзину'}
+                        {addedToCart.has(product.id) ? (
+                          '✓ Добавлено!'
+                        ) : (
+                          <>
+                            <span className="text-sm font-bold mr-1">+</span>
+                            <ShoppingCart className="h-4 w-4" />
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -438,14 +446,26 @@ export default function Home() {
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-2xl font-bold text-orange-500">1800 ֏</span>
-                    <span className="text-sm text-gray-500 ml-2">за порцию</span>
                   </div>
-                  <Link 
-                    href="/products/meat-pide"
-                    className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600 transition-colors text-sm"
+                  <button
+                    onClick={() => handleAddToCart({ 
+                      id: 'meat-pide', 
+                      name: 'Мясная пиде', 
+                      price: 1800, 
+                      category: 'Пиде',
+                      description: 'Сочная говядина, свежие овощи и ароматные специи',
+                      image: '/images/2-myasa-pide.jpg',
+                      ingredients: ['Говядина', 'Овощи', 'Специи'],
+                      isAvailable: true,
+                      createdAt: new Date(),
+                      updatedAt: new Date()
+                    })}
+                    className="bg-orange-500 text-white px-12 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                    title="В корзину"
                   >
-                    Заказать
-                  </Link>
+                    <span className="text-sm font-bold mr-1">+</span>
+                    <ShoppingCart className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -508,14 +528,26 @@ export default function Home() {
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-2xl font-bold text-orange-500">1600 ֏</span>
-                    <span className="text-sm text-gray-500 ml-2">за порцию</span>
                   </div>
-                  <Link 
-                    href="/products/pepperoni-pide"
-                    className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600 transition-colors text-sm"
+                  <button
+                    onClick={() => handleAddToCart({ 
+                      id: 'pepperoni-pide', 
+                      name: 'Пепперони пиде', 
+                      price: 1600, 
+                      category: 'Пиде',
+                      description: 'Острая колбаса пепперони с сыром моцарелла',
+                      image: '/images/pepperoni-pide.jpg',
+                      ingredients: ['Пепперони', 'Моцарелла', 'Томатный соус'],
+                      isAvailable: true,
+                      createdAt: new Date(),
+                      updatedAt: new Date()
+                    })}
+                    className="bg-orange-500 text-white px-12 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                    title="В корзину"
                   >
-                    Заказать
-                  </Link>
+                    <span className="text-sm font-bold mr-1">+</span>
+                    <ShoppingCart className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -578,14 +610,26 @@ export default function Home() {
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-2xl font-bold text-orange-500">1400 ֏</span>
-                    <span className="text-sm text-gray-500 ml-2">за порцию</span>
                   </div>
-                  <Link 
-                    href="/products/cheese-pide"
-                    className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600 transition-colors text-sm"
+                  <button
+                    onClick={() => handleAddToCart({ 
+                      id: 'cheese-pide', 
+                      name: 'Классическая сырная пиде', 
+                      price: 1400, 
+                      category: 'Пиде',
+                      description: 'Традиционная пиде с тремя видами сыра',
+                      image: '/images/classic-chees.jpg',
+                      ingredients: ['Сыр моцарелла', 'Сыр чеддер', 'Сыр пармезан'],
+                      isAvailable: true,
+                      createdAt: new Date(),
+                      updatedAt: new Date()
+                    })}
+                    className="bg-orange-500 text-white px-12 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                    title="В корзину"
                   >
-                    Заказать
-                  </Link>
+                    <span className="text-sm font-bold mr-1">+</span>
+                    <ShoppingCart className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
             </div>

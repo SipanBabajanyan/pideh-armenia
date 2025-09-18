@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, Filter } from 'lucide-react'
+import { Search, Filter, ShoppingCart } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product, Category } from '@/types'
 import Header from '@/components/Header'
@@ -219,7 +219,6 @@ export default function ProductsPage() {
                             <span className="text-2xl font-bold text-orange-500">
                               {product.price} ֏
                             </span>
-                            <span className="text-sm text-gray-500 ml-1">за порцию</span>
                           </div>
                           
                           <button
@@ -228,9 +227,11 @@ export default function ProductsPage() {
                               e.stopPropagation()
                               handleAddToCart(product)
                             }}
-                            className="bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 transition-all duration-300 font-semibold hover:scale-105 shadow-lg"
+                            className="bg-orange-500 text-white px-12 py-3 rounded-xl hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                            title="В корзину"
                           >
-                            В корзину
+                            <span className="text-sm font-bold mr-1">+</span>
+                            <ShoppingCart className="h-5 w-5" />
                           </button>
                         </div>
                       </div>
@@ -288,9 +289,11 @@ export default function ProductsPage() {
                         e.stopPropagation()
                         handleAddToCart(product)
                       }}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium"
+                      className="bg-orange-500 text-white px-12 py-3 rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center"
+                      title="В корзину"
                     >
-                      В корзину
+                      <span className="text-sm font-bold mr-1">+</span>
+                      <ShoppingCart className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
