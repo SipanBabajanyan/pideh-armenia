@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pideh Armenia - Интернет-магазин мини-пицц
 
-## Getting Started
+Мини-пиццы в виде аджарских хачапури. Лодочки с начинкой как у пиццы.
 
-First, run the development server:
+## 🚀 Запуск проекта
 
 ```bash
+# Установка зависимостей
+npm install
+
+# Запуск базы данных PostgreSQL
+brew services start postgresql@15
+
+# Создание базы данных
+psql postgres -c "CREATE DATABASE pideh_armenia;"
+
+# Применение миграций
+npx prisma migrate dev
+
+# Заполнение тестовыми данными
+npx tsx scripts/seed.ts
+
+# Запуск приложения
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Структура проекта
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/
+├── src/
+│   ├── app/
+│   │   ├── api/products/     # API для товаров
+│   │   ├── products/         # Страница каталога
+│   │   └── page.tsx          # Главная страница
+│   ├── constants/            # Константы (товары, цвета)
+│   ├── hooks/                # React хуки (корзина)
+│   ├── lib/                  # Утилиты (Prisma)
+│   └── types/                # TypeScript типы
+├── prisma/                   # Схема базы данных
+└── scripts/                  # Скрипты (seed)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Технологии
 
-## Learn More
+- **Next.js 15.5.1** - React фреймворк
+- **PostgreSQL** - база данных
+- **Prisma** - ORM
+- **Tailwind CSS** - стили
+- **TypeScript** - типизация
 
-To learn more about Next.js, take a look at the following resources:
+## 📊 База данных
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Товары** - 10 позиций хачапури
+- **Пользователи** - система заказов
+- **Заказы** - обработка заказов
+- **Платежи** - Idram, ArCa, Ameriabank
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🌐 Деплой
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Проект готов для деплоя на Vercel с PostgreSQL.
