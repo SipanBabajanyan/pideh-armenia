@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ShoppingCart, Phone, Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useCart } from '@/hooks/useCart'
 import { useHydration } from '@/hooks/useHydration'
 import { useSession, signOut } from 'next-auth/react'
@@ -13,6 +14,23 @@ export default function Header() {
   const isHydrated = useHydration()
   const { getTotalItems } = useCart()
   const { data: session, status } = useSession()
+  const pathname = usePathname()
+
+  // Функция для определения активной ссылки
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/'
+    }
+    return pathname.startsWith(path)
+  }
+
+  // Навигационные ссылки
+  const navLinks = [
+    { href: '/', label: 'Главная' },
+    { href: '/products', label: 'Меню' },
+    { href: '/about', label: 'О нас' },
+    { href: '/contact', label: 'Контакты' },
+  ]
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -31,30 +49,57 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <Link href="/" className="text-gray-900 hover:text-orange-500 transition-colors">
-              Главная
-            </Link>
-            <Link href="/products" className="text-gray-900 hover:text-orange-500 transition-colors">
-              Меню
-            </Link>
-            <Link href="/about" className="text-gray-900 hover:text-orange-500 transition-colors">
-              О нас
-            </Link>
-            <Link href="/contact" className="text-gray-900 hover:text-orange-500 transition-colors">
-              Контакты
-            </Link>
+          <nav className="hidden md:flex space-x-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`
+                  relative px-6 py-3 rounded-xl font-semibold transition-all duration-300 group
+                  ${isActive(link.href)
+                    ? 'text-orange-500 bg-orange-50 shadow-md'
+                    : 'text-gray-700 hover:text-orange-500 hover:bg-orange-50'
+                  }
+                `}
+              >
+                <span className="flex items-center">
+                  <span>{link.label}</span>
+                </span>
+                
+                {/* Активный индикатор */}
+                {isActive(link.href) && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-orange-500 rounded-full"></div>
+                )}
+                
+                {/* Hover эффект */}
+                <div className="absolute inset-0 rounded-lg bg-orange-100 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </Link>
+            ))}
           </nav>
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
             {/* Cart */}
-            <Link href="/cart" className="relative p-2 text-gray-900 hover:text-orange-500 transition-colors">
+            <Link 
+              href="/cart" 
+              className={`
+                relative p-3 rounded-xl transition-all duration-300 group
+                ${isActive('/cart')
+                  ? 'text-orange-500 bg-orange-50 shadow-md'
+                  : 'text-gray-900 hover:text-orange-500 hover:bg-orange-50'
+                }
+              `}
+            >
               <ShoppingCart className="h-6 w-6" />
               {isHydrated && getTotalItems() > 0 && (
                 <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {getTotalItems()}
                 </span>
+              )}
+              
+              {/* Активный индикатор для корзины */}
+              {isActive('/cart') && (
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-orange-500 rounded-full"></div>
               )}
             </Link>
 
@@ -66,19 +111,41 @@ export default function Header() {
                 {/* User Profile */}
                 <Link 
                   href="/profile" 
-                  className="flex items-center space-x-2 text-gray-900 hover:text-orange-500 transition-colors"
+                  className={`
+                    flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 group
+                    ${isActive('/profile')
+                      ? 'text-orange-500 bg-orange-50 shadow-md'
+                      : 'text-gray-900 hover:text-orange-500 hover:bg-orange-50'
+                    }
+                  `}
                 >
                   <User className="h-5 w-5" />
-                  <span className="hidden sm:block">{session.user?.name}</span>
+                  <span className="hidden sm:block font-medium">{session.user?.name}</span>
+                  
+                  {/* Активный индикатор для профиля */}
+                  {isActive('/profile') && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-orange-500 rounded-full"></div>
+                  )}
                 </Link>
                 
                 {/* Admin Link */}
                 {session.user?.role === 'ADMIN' && (
                   <Link 
                     href="/admin" 
-                    className="px-3 py-1 bg-orange-100 text-orange-600 rounded-lg text-sm font-medium hover:bg-orange-200 transition-colors"
+                    className={`
+                      relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group
+                      ${isActive('/admin')
+                        ? 'text-orange-500 bg-orange-50 shadow-md'
+                        : 'bg-orange-100 text-orange-600 hover:bg-orange-200'
+                      }
+                    `}
                   >
                     Админ
+                    
+                    {/* Активный индикатор для админки */}
+                    {isActive('/admin') && (
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-orange-500 rounded-full"></div>
+                    )}
                   </Link>
                 )}
                 
@@ -95,15 +162,37 @@ export default function Header() {
               <div className="flex items-center space-x-2">
                 <Link 
                   href="/login" 
-                  className="text-gray-900 hover:text-orange-500 transition-colors"
+                  className={`
+                    relative px-4 py-2 rounded-xl font-medium transition-all duration-300 group
+                    ${isActive('/login')
+                      ? 'text-orange-500 bg-orange-50 shadow-md'
+                      : 'text-gray-900 hover:text-orange-500 hover:bg-orange-50'
+                    }
+                  `}
                 >
                   Войти
+                  
+                  {/* Активный индикатор для входа */}
+                  {isActive('/login') && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-orange-500 rounded-full"></div>
+                  )}
                 </Link>
                 <Link 
                   href="/register" 
-                  className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                  className={`
+                    relative px-4 py-2 rounded-xl font-semibold transition-all duration-300 group
+                    ${isActive('/register')
+                      ? 'text-orange-500 bg-orange-50 shadow-md'
+                      : 'bg-orange-500 text-white hover:bg-orange-600'
+                    }
+                  `}
                 >
                   Регистрация
+                  
+                  {/* Активный индикатор для регистрации */}
+                  {isActive('/register') && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-orange-500 rounded-full"></div>
+                  )}
                 </Link>
               </div>
             )}
@@ -122,34 +211,32 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden pb-4">
             <nav className="flex flex-col space-y-2">
-              <Link 
-                href="/" 
-                className="text-gray-900 hover:text-orange-500 py-2 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Главная
-              </Link>
-              <Link 
-                href="/products" 
-                className="text-gray-900 hover:text-orange-500 py-2 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Меню
-              </Link>
-              <Link 
-                href="/about" 
-                className="text-gray-900 hover:text-orange-500 py-2 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                О нас
-              </Link>
-              <Link 
-                href="/contact" 
-                className="text-gray-900 hover:text-orange-500 py-2 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Контакты
-              </Link>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`
+                    relative px-6 py-4 rounded-xl font-semibold transition-all duration-300 group
+                    ${isActive(link.href)
+                      ? 'text-orange-500 bg-orange-50 shadow-md'
+                      : 'text-gray-700 hover:text-orange-500 hover:bg-orange-50'
+                    }
+                  `}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="flex items-center">
+                    <span>{link.label}</span>
+                  </span>
+                  
+                  {/* Активный индикатор для мобильного */}
+                  {isActive(link.href) && (
+                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-orange-500 rounded-r-full"></div>
+                  )}
+                  
+                  {/* Hover эффект */}
+                  <div className="absolute inset-0 rounded-lg bg-orange-100 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                </Link>
+              ))}
             </nav>
           </div>
         )}
