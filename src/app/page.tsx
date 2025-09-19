@@ -169,8 +169,8 @@ export default function Home() {
                 {/* Product image */}
                 <div className="relative w-64 h-64 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center overflow-hidden group">
                   <img 
-                    src="/images/2-myasa-pide.jpg" 
-                    alt="Армянские пиде"
+                    src="/images/pide-blue-pear.jpg" 
+                    alt="Пиде Blue Pear"
                     className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
@@ -189,16 +189,27 @@ export default function Home() {
                   
                   {/* Price badge */}
                   <div className="absolute -top-2 -right-2 bg-yellow-400 text-orange-800 px-3 py-1 rounded-full text-sm font-bold">
-                    от 1500 ֏
+                    700 ֏
                   </div>
                 </div>
                 
-                <h3 className="text-2xl font-bold mb-2">Свежие пиде</h3>
-                <p className="text-orange-100 mb-4">Готовим каждый день с любовью</p>
+                <h3 className="text-2xl font-bold mb-2">Пиде Blue Pear</h3>
+                <p className="text-orange-100 mb-4">Пиде с грушами и легким соусом</p>
                 
                 {/* Quick action */}
                 <button
-                  onClick={() => handleAddToCart(products[0] || { id: '1', name: 'Мясная пиде', price: 1500, category: 'Пиде' })}
+                  onClick={() => handleAddToCart({
+                    id: 'cmfpljklo000i7qyiboo3hvtu',
+                    name: 'Пиде Blue Pear',
+                    price: 700,
+                    category: 'Пиде',
+                    description: 'Пиде с грушами и легким соусом',
+                    image: '/images/pide-blue-pear.jpg',
+                    ingredients: ['Тесто', 'Груши', 'Легкий соус', 'Сыр'],
+                    isAvailable: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                  })}
                   className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 hover:scale-105 transition-all duration-300 shadow-lg"
                 >
                   <ShoppingCart className="inline w-5 h-5 mr-2" />
