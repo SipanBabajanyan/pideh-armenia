@@ -1,6 +1,3 @@
-// Prisma schema for Pideh Armenia - Интернет-магазин мини-пицц
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,90 +7,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Модель пользователя
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
   phone     String?
   address   String?
-  password  String   @db.VarChar(255) // Для локальной аутентификации (обязательное поле)
-  role      UserRole @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  // Связи
+  password  String   @db.VarChar(255)
+  role      UserRole @default(USER)
   orders    Order[]
-  
+
   @@map("users")
 }
 
-// Модель товара (мини-пицца)
 model Product {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
   description String
   price       Float
   image       String
   category    String
-  ingredients String[] // Массив ингредиентов (PostgreSQL поддерживает)
-  isAvailable Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Связи
+  ingredients String[]
+  isAvailable Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
-  
+
   @@map("products")
 }
 
-// Модель заказа
 model Order {
-  id          String      @id @default(cuid())
-  userId      String
-  status      OrderStatus @default(PENDING)
-  total       Float
-  address     String
-  phone       String
-  notes       String?
+  id            String      @id @default(cuid())
+  userId        String
+  status        OrderStatus @default(PENDING)
+  total         Float
+  address       String
+  phone         String
+  notes         String?
   paymentMethod String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  // Связи
-  user        User        @relation(fields: [userId], references: [id])
-  items       OrderItem[]
-  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  deliveryTime  String?
+  name          String      @default("Unknown Customer")
+  items         OrderItem[]
+  user          User        @relation(fields: [userId], references: [id])
+
   @@map("orders")
 }
 
-// Модель позиции заказа
 model OrderItem {
   id        String  @id @default(cuid())
   orderId   String
   productId String
   quantity  Int
-  price     Float   // Цена на момент заказа
-  
-  // Связи
+  price     Float
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
-  
+
   @@map("order_items")
 }
 
-// Роли пользователей
 enum UserRole {
-  USER   // Обычный пользователь
-  ADMIN  // Администратор
+  USER
+  ADMIN
 }
 
-// Статусы заказа
 enum OrderStatus {
-  PENDING    // Ожидает подтверждения
-  CONFIRMED  // Подтвержден
-  PREPARING  // Готовится
-  READY      // Готов к выдаче
-  DELIVERED  // Доставлен
-  CANCELLED  // Отменен
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
 }
