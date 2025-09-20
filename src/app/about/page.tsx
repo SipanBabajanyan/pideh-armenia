@@ -7,6 +7,9 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      
       {/* Hero Section */}
       <section className="bg-orange-500 text-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

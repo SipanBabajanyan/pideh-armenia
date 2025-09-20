@@ -171,7 +171,7 @@ export default function ProductsPage() {
         <div className="hidden md:block">
           <Footer />
         </div>
-        <div className="md:hidden h-20"></div>
+        <div className="md:hidden h-24"></div>
       </div>
     )
   }
@@ -180,7 +180,7 @@ export default function ProductsPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       {/* Отступ для fixed хедера */}
-      <div className="md:hidden h-20"></div>
+      <div className="md:hidden h-24"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 

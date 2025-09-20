@@ -183,7 +183,10 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
         {/* Header */}
         <div className="flex items-center space-x-4 mb-8">
           <Link 
@@ -323,7 +326,10 @@ export default function ProfilePage() {
         </div>
       </div>
       
-      <Footer />
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
       
       {/* Edit Profile Modal */}
       <EditProfileModal

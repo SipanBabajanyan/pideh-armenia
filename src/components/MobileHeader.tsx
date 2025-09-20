@@ -50,9 +50,9 @@ export default function MobileHeader() {
               <Image 
                 src="/logo.png" 
                 alt="Pideh Armenia Logo" 
-                width={120} 
-                height={40}
-                className="h-10 w-auto"
+                width={60} 
+                height={20}
+                className="h-5 w-auto"
                 style={{ width: "auto", height: "auto" }}
                 priority
               />

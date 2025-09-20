@@ -82,7 +82,7 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       {/* Отступ для fixed хедера */}
-      <div className="md:hidden h-20"></div>
+      <div className="md:hidden h-24"></div>
 
       {/* Hero Section - Compact for Mobile */}
       <section className="relative bg-orange-500 text-white overflow-hidden">

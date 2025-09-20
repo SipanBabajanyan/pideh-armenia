@@ -32,6 +32,9 @@ export default function CartPage() {
       <div className="min-h-screen bg-gray-50">
         <Header />
         
+        {/* Отступ для fixed хедера */}
+        <div className="md:hidden h-24"></div>
+        
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <div className="w-32 h-32 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -59,6 +62,9 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
       
       {/* Mobile App Style Container */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 md:pb-8">
