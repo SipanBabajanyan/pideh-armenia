@@ -133,7 +133,7 @@ export default function AdminProducts() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                 placeholder="Поиск по названию или описанию..."
               />
             </div>
@@ -146,7 +146,7 @@ export default function AdminProducts() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
               >
                 <option value="">Все категории</option>
                 {categories.map(category => (
@@ -159,7 +159,7 @@ export default function AdminProducts() {
 
         {/* Products List */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-300">
             <h2 className="text-xl font-semibold text-gray-900">
               Товары ({filteredProducts.length})
             </h2>

@@ -203,7 +203,7 @@ export default function ProductsPage() {
                 placeholder="Поиск по названию или описанию..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg transition-all duration-300"
+                className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg transition-all duration-300"
               />
               {searching && (
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">

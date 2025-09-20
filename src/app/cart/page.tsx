@@ -89,7 +89,7 @@ export default function CartPage() {
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
+              <div className="p-6 border-b border-gray-300">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Товары в корзине ({items.length})
                 </h2>
@@ -190,7 +190,7 @@ export default function CartPage() {
                   <span>Доставка</span>
                   <span className="text-green-600 font-semibold">Бесплатно</span>
                 </div>
-                <div className="border-t border-gray-200 pt-4">
+                <div className="border-t border-gray-300 pt-4">
                   <div className="flex justify-between text-xl font-bold text-gray-900">
                     <span>К оплате</span>
                     <span>{getTotalPrice()} ֏</span>

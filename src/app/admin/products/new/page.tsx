@@ -241,7 +241,7 @@ export default function NewProductPage() {
               </div>
 
               {/* Кнопки */}
-              <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-200">
+              <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-300">
                 <Link href="/admin/products">
                   <Button type="button" variant="outline">
                     Отмена

@@ -324,7 +324,7 @@ export default function ProductPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-6">
                 <label className="text-lg font-medium text-gray-900">Количество:</label>
-                <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden">
+                <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="p-3 hover:bg-gray-100 transition-colors"

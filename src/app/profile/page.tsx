@@ -268,7 +268,7 @@ export default function ProfilePage() {
                   {orders.map((order) => {
                     const statusInfo = getStatusInfo(order.status)
                     return (
-                      <div key={order.id} className="border border-gray-200 rounded-xl p-4">
+                      <div key={order.id} className="border border-gray-300 rounded-xl p-4">
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <h3 className="font-semibold text-gray-900">Заказ #{order.id.slice(-8)}</h3>

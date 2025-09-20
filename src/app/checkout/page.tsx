@@ -200,7 +200,7 @@ export default function CheckoutPage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 ${
-                        errors.name ? 'border-red-500' : 'border-gray-200'
+                        errors.name ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="Введите ваше имя"
                     />
@@ -219,7 +219,7 @@ export default function CheckoutPage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 ${
-                        errors.phone ? 'border-red-500' : 'border-gray-200'
+                        errors.phone ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="+374 99 123 456"
                     />
@@ -238,7 +238,7 @@ export default function CheckoutPage() {
                       onChange={handleInputChange}
                       rows={3}
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none text-gray-900 ${
-                        errors.address ? 'border-red-500' : 'border-gray-200'
+                        errors.address ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder="Укажите полный адрес доставки"
                     />
@@ -255,7 +255,7 @@ export default function CheckoutPage() {
                       name="deliveryTime"
                       value={formData.deliveryTime}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900"
                     >
                       <option value="asap">Как можно скорее</option>
                       <option value="11:00-12:00">11:00 - 12:00</option>
@@ -282,7 +282,7 @@ export default function CheckoutPage() {
                       <label className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg ${
                         formData.paymentMethod === 'cash' 
                           ? 'border-orange-500 bg-orange-50 shadow-md' 
-                          : 'border-gray-200 hover:border-orange-300'
+                          : 'border-gray-300 hover:border-orange-300'
                       }`}>
                         <input
                           type="radio"
@@ -315,7 +315,7 @@ export default function CheckoutPage() {
                       <label className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg ${
                         formData.paymentMethod === 'card' 
                           ? 'border-orange-500 bg-orange-50 shadow-md' 
-                          : 'border-gray-200 hover:border-orange-300'
+                          : 'border-gray-300 hover:border-orange-300'
                       }`}>
                         <input
                           type="radio"
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
                       value={formData.notes}
                       onChange={handleInputChange}
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none text-gray-900"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none text-gray-900"
                       placeholder="Дополнительные пожелания к заказу..."
                     />
                   </div>
@@ -381,7 +381,7 @@ export default function CheckoutPage() {
                     </div>
                   ))}
                   
-                  <div className="border-t border-gray-200 pt-4">
+                  <div className="border-t border-gray-300 pt-4">
                     <div className="flex justify-between text-lg font-bold text-gray-900">
                       <span>Итого</span>
                       <span>{getTotalPrice()} ֏</span>

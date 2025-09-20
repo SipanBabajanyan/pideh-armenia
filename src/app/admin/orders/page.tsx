@@ -340,7 +340,7 @@ export default function AdminOrdersPage() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                 placeholder="Поиск по имени, email, телефону или ID..."
               />
             </div>
@@ -353,7 +353,7 @@ export default function AdminOrdersPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
               >
                 <option value="">Все статусы</option>
                 <option value="PENDING">Ожидает</option>
@@ -369,7 +369,7 @@ export default function AdminOrdersPage() {
 
         {/* Orders List */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-300">
             <h2 className="text-xl font-semibold text-gray-900">
               Заказы ({filteredOrders.length})
             </h2>
@@ -546,7 +546,7 @@ export default function AdminOrdersPage() {
                     <select
                       value={selectedOrder.status}
                       onChange={(e) => updateOrderStatus(selectedOrder.id, e.target.value)}
-                      className="w-full mt-2 px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                      className="w-full mt-2 px-3 py-2 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                     >
                       <option value="PENDING">Ожидает</option>
                       <option value="CONFIRMED">Подтвержден</option>
