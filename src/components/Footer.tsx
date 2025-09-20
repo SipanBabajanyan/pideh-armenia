@@ -101,6 +101,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
           <p>&copy; 2024 Pideh Armenia. Все права защищены.</p>
+          <p className="text-sm mt-2 text-gray-400">Версия 1.0.0</p>
         </div>
       </div>
     </footer>
