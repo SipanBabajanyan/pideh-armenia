@@ -198,14 +198,14 @@ export default function ProductsPage() {
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
-                searching ? 'text-orange-500 animate-pulse' : 'text-gray-400'
+                searching ? 'text-orange-500 animate-pulse' : 'text-gray-500'
               }`} />
               <input
                 type="text"
                 placeholder="Поиск по названию или описанию..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg transition-all duration-300"
+                className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg text-gray-900 placeholder-gray-600 bg-white transition-all duration-300 shadow-md hover:shadow-lg"
               />
               {searching && (
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -276,7 +276,7 @@ export default function ProductsPage() {
         </div>
 
         {/* Products by Selected Category */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
