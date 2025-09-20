@@ -142,7 +142,7 @@ export default function CartPage() {
                           onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
                           className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
                         >
-                          <Minus className="h-4 w-4" />
+                          <Minus className="h-4 w-4 text-gray-700" />
                         </button>
                         
                         <span className="w-12 text-center font-semibold text-lg text-gray-900">
@@ -153,7 +153,7 @@ export default function CartPage() {
                           onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
                           className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-4 w-4 text-gray-700" />
                         </button>
                       </div>
                       
