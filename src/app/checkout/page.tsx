@@ -44,13 +44,13 @@ export default function CheckoutPage() {
     }
   }, [items, router])
 
-  // Load user profile and auto-fill form
+  // Load user profile and auto-fill form (only for authenticated users)
   useEffect(() => {
     const loadUserProfile = async () => {
       if (status === 'loading') return
       
       if (!session) {
-        console.log('User not authenticated, skipping profile load')
+        console.log('Guest user - no profile to load')
         return
       }
 
@@ -62,21 +62,21 @@ export default function CheckoutPage() {
           const profile = await response.json()
           setUserProfile(profile)
           
-          // Просто копируем данные в форму, как будто пользователь сам их ввел
+          // Автоматически заполняем форму данными пользователя
           setFormData(prev => ({
             ...prev,
             name: profile.name || '',
             phone: profile.phone || '',
             address: profile.address || ''
           }))
-          console.log('User profile loaded successfully:', profile)
+          console.log('User profile loaded and form auto-filled:', profile)
         } else if (response.status === 401) {
-          console.log('User not authenticated (401), skipping profile load')
+          console.log('User session expired, continuing as guest')
         } else {
-          console.error('Failed to load user profile:', response.status, response.statusText)
+          console.log('Profile not found, continuing as guest')
         }
       } catch (error) {
-        console.error('Error loading user profile:', error)
+        console.log('Error loading profile, continuing as guest:', error)
       }
     }
 
@@ -211,7 +211,14 @@ export default function CheckoutPage() {
           <div className="md:hidden space-y-6">
             {/* Mobile Order Form */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Данные для доставки</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Данные для доставки</h2>
+                {!session && (
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                    Гостевой заказ
+                  </span>
+                )}
+              </div>
                 
               <div className="space-y-4">
                 {/* Name */}
@@ -422,6 +429,11 @@ export default function CheckoutPage() {
               <p className="text-xs text-gray-500 mt-4 text-center">
                 Нажимая "Подтвердить заказ", вы соглашаетесь с условиями доставки
               </p>
+              {!session && (
+                <p className="text-xs text-blue-600 mt-2 text-center">
+                  💡 После заказа вы сможете создать аккаунт для быстрого оформления в будущем
+                </p>
+              )}
             </div>
           </div>
 
@@ -430,7 +442,14 @@ export default function CheckoutPage() {
             {/* Order Form */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-lg p-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Данные для доставки</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-900">Данные для доставки</h2>
+                  {!session && (
+                    <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                      Гостевой заказ
+                    </span>
+                  )}
+                </div>
                 
                 <div className="space-y-6">
                   {/* Name */}
@@ -648,6 +667,11 @@ export default function CheckoutPage() {
                 <p className="text-xs text-gray-500 mt-4 text-center">
                   Нажимая "Подтвердить заказ", вы соглашаетесь с условиями доставки
                 </p>
+                {!session && (
+                  <p className="text-xs text-blue-600 mt-2 text-center">
+                    💡 После заказа вы сможете создать аккаунт для быстрого оформления в будущем
+                  </p>
+                )}
               </div>
             </div>
           </div>
