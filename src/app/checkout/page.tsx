@@ -39,6 +39,7 @@ export default function CheckoutPage() {
   // Redirect if cart is empty
   useEffect(() => {
     if (items.length === 0) {
+      console.log('Cart is empty, redirecting to cart page')
       router.push('/cart')
     }
   }, [items, router])
@@ -48,10 +49,15 @@ export default function CheckoutPage() {
     const loadUserProfile = async () => {
       if (status === 'loading') return
       
-      if (!session) return
+      if (!session) {
+        console.log('User not authenticated, skipping profile load')
+        return
+      }
 
       try {
+        console.log('Loading user profile for authenticated user')
         const response = await fetch('/api/user/profile')
+        
         if (response.ok) {
           const profile = await response.json()
           setUserProfile(profile)
@@ -63,6 +69,11 @@ export default function CheckoutPage() {
             phone: profile.phone || '',
             address: profile.address || ''
           }))
+          console.log('User profile loaded successfully:', profile)
+        } else if (response.status === 401) {
+          console.log('User not authenticated (401), skipping profile load')
+        } else {
+          console.error('Failed to load user profile:', response.status, response.statusText)
         }
       } catch (error) {
         console.error('Error loading user profile:', error)
