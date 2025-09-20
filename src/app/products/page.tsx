@@ -183,15 +183,6 @@ export default function ProductsPage() {
       <div className="md:hidden h-20"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Наше меню
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Выберите из {products.length} вкусных блюд. Свежие ингредиенты, быстрая доставка!
-          </p>
-        </div>
 
         {/* Search and Filter */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">

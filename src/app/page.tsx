@@ -319,7 +319,7 @@ export default function Home() {
       </section>
 
       {/* Mobile Search Section */}
-      <div className="md:hidden bg-white py-6 px-4 border-b border-gray-100">
+      <div className="md:hidden bg-white py-4 px-4 border-b border-gray-100">
         <div className="max-w-sm mx-auto">
           <div className="flex gap-3">
             <div className="relative flex-1">
@@ -340,24 +340,16 @@ export default function Home() {
       </div>
 
       {/* Products Showcase Section - Moved up */}
-      <section className="py-12 md:py-20 bg-white">
+      <section className="py-2 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Наше меню
-            </h2>
-            {!loading && (
-              <p className="text-lg text-orange-600 font-semibold mb-8">
-                Показано {getFilteredProducts().length} товаров в категории "{activeCategory}"
-              </p>
-            )}
+          <div className="text-center mb-4">
             
             {/* Category tabs - Mobile 2 rows, Desktop single row */}
-            <div className="mb-8">
+            <div className="mb-2">
               {/* Mobile - 2 rows with better design */}
               <div className="md:hidden">
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {/* First row - Комбо и Пиде занимают весь ряд */}
                   <div className="grid grid-cols-2 gap-3">
                     {categories.slice(0, 2).map((category) => (
