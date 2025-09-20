@@ -166,9 +166,24 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex items-center space-x-4 mb-8">
+      {/* Mobile App Style Container */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 md:pb-8">
+        {/* Mobile Header */}
+        <div className="md:hidden mb-6">
+          <div className="flex items-center space-x-4 mb-4">
+            <Link 
+              href="/cart"
+              className="flex items-center text-gray-600 hover:text-orange-500 transition-colors"
+            >
+              <ArrowLeft className="h-6 w-6 mr-2" />
+              <span className="text-lg font-medium">к корзине</span>
+            </Link>
+            <h1 className="text-2xl font-bold text-gray-900">оформление</h1>
+          </div>
+        </div>
+
+        {/* Desktop Header */}
+        <div className="hidden md:flex items-center space-x-4 mb-8">
           <Link 
             href="/cart"
             className="flex items-center text-gray-600 hover:text-orange-500 transition-colors"
@@ -181,7 +196,226 @@ export default function CheckoutPage() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Mobile Layout */}
+          <div className="md:hidden space-y-6">
+            {/* Mobile Order Form */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Данные для доставки</h2>
+                
+              <div className="space-y-4">
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <User className="inline h-4 w-4 mr-1" />
+                    Имя *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 ${
+                      errors.name ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Введите ваше имя"
+                  />
+                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <Phone className="inline h-4 w-4 mr-1" />
+                    Телефон *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 ${
+                      errors.phone ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="+374 99 123 456"
+                  />
+                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                </div>
+
+                {/* Address */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <MapPin className="inline h-4 w-4 mr-1" />
+                    Адрес доставки *
+                  </label>
+                  <textarea
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none text-gray-900 ${
+                      errors.address ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Укажите полный адрес доставки"
+                  />
+                  {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                </div>
+
+                {/* Delivery Time */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <Clock className="inline h-4 w-4 mr-1" />
+                    Время доставки *
+                  </label>
+                  <select
+                    name="deliveryTime"
+                    value={formData.deliveryTime}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900"
+                  >
+                    <option value="asap">Как можно скорее (20-30 мин)</option>
+                    <option value="11:00-12:00">11:00 - 12:00</option>
+                    <option value="12:00-13:00">12:00 - 13:00</option>
+                    <option value="13:00-14:00">13:00 - 14:00</option>
+                    <option value="14:00-15:00">14:00 - 15:00</option>
+                    <option value="15:00-16:00">15:00 - 16:00</option>
+                    <option value="16:00-17:00">16:00 - 17:00</option>
+                    <option value="17:00-18:00">17:00 - 18:00</option>
+                    <option value="18:00-19:00">18:00 - 19:00</option>
+                    <option value="19:00-20:00">19:00 - 20:00</option>
+                    <option value="20:00-21:00">20:00 - 21:00</option>
+                  </select>
+                  {errors.deliveryTime && <p className="text-red-500 text-sm mt-1">{errors.deliveryTime}</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Payment Method */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Способ оплаты</h2>
+              <div className="space-y-4">
+                <label className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                  formData.paymentMethod === 'cash' 
+                    ? 'border-orange-500 bg-orange-50' 
+                    : 'border-gray-300'
+                }`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cash"
+                    checked={formData.paymentMethod === 'cash'}
+                    onChange={handleInputChange}
+                    className="sr-only"
+                  />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-semibold text-gray-900">Наличные</h3>
+                      <p className="text-sm text-gray-600">Оплата курьеру наличными</p>
+                    </div>
+                    {formData.paymentMethod === 'cash' && (
+                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                        <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                
+                <label className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                  formData.paymentMethod === 'card' 
+                    ? 'border-orange-500 bg-orange-50' 
+                    : 'border-gray-300'
+                }`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="card"
+                    checked={formData.paymentMethod === 'card'}
+                    onChange={handleInputChange}
+                    className="sr-only"
+                  />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <CreditCard className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-semibold text-gray-900">Карта</h3>
+                      <p className="text-sm text-gray-600">Оплата картой через терминал</p>
+                    </div>
+                    {formData.paymentMethod === 'card' && (
+                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                        <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Mobile Notes */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Комментарий</h2>
+              <textarea
+                name="notes"
+                value={formData.notes}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none text-gray-900"
+                placeholder="Дополнительные пожелания к заказу..."
+              />
+            </div>
+
+            {/* Mobile Order Summary */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Ваш заказ</h2>
+              
+              <div className="space-y-3 mb-6">
+                {items.map((item) => (
+                  <div key={item.product.id} className="flex justify-between items-center py-2">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900 text-sm">{item.product.name}</div>
+                      <div className="text-xs text-gray-600">{item.quantity} шт.</div>
+                    </div>
+                    <div className="font-semibold text-gray-900 text-sm">
+                      {item.product.price * item.quantity} ֏
+                    </div>
+                  </div>
+                ))}
+                
+                <div className="border-t border-gray-300 pt-3">
+                  <div className="flex justify-between text-lg font-bold text-gray-900">
+                    <span>Итого</span>
+                    <span>{getTotalPrice()} ֏</span>
+                  </div>
+                  <div className="text-sm text-green-600 mt-1">
+                    Доставка бесплатно
+                  </div>
+                </div>
+              </div>
+              
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-orange-500 text-white py-4 rounded-xl font-semibold hover:bg-orange-600 transition-colors text-center text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Оформляем заказ...' : 'Подтвердить заказ'}
+              </button>
+              
+              <p className="text-xs text-gray-500 mt-4 text-center">
+                Нажимая "Подтвердить заказ", вы соглашаетесь с условиями доставки
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Order Form */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-lg p-8">
@@ -257,7 +491,7 @@ export default function CheckoutPage() {
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900"
                     >
-                      <option value="asap">Как можно скорее</option>
+                      <option value="asap">Как можно скорее (20-30 мин)</option>
                       <option value="11:00-12:00">11:00 - 12:00</option>
                       <option value="12:00-13:00">12:00 - 13:00</option>
                       <option value="13:00-14:00">13:00 - 14:00</option>
@@ -409,7 +643,10 @@ export default function CheckoutPage() {
         </form>
       </div>
       
-      <Footer />
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
     </div>
   )
 }
