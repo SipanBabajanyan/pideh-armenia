@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, MapPin, Clock, ShoppingCart } from "lucide-react";
+import { Phone, MapPin, Clock, ShoppingCart, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/useCart";
 import { Product } from "@/types";
@@ -81,8 +81,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-20"></div>
 
-      {/* Hero Section */}
+      {/* Hero Section - Compact for Mobile */}
       <section className="relative bg-orange-500 text-white overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0">
@@ -92,7 +94,87 @@ export default function Home() {
           <div className="absolute bottom-32 right-1/3 w-8 h-8 bg-yellow-300/30 rounded-full animate-pulse"></div>
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+        {/* Mobile Compact Version */}
+        <div className="md:hidden relative max-w-7xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            {/* Left content - compact */}
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold leading-tight mb-2">
+                <span className="block text-white">Армянские</span>
+                <span className="block text-yellow-200">пиде</span>
+              </h1>
+              <p className="text-sm text-orange-100 mb-3">
+                15 уникальных вкусов
+              </p>
+              <div className="flex gap-4 text-xs">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-yellow-200">15+</div>
+                  <div className="text-orange-100">Вкусов</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-yellow-200">20</div>
+                  <div className="text-orange-100">Минут</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right content - product showcase */}
+            <div className="relative">
+              <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-4 text-center border border-white/20">
+                <div className="relative w-24 h-24 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/images/pide-blue-pear.jpg" 
+                    alt="Пиде Blue Pear"
+                    className="w-full h-full object-cover rounded-xl"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (nextElement) {
+                        nextElement.style.display = 'flex';
+                      }
+                    }}
+                  />
+                  <div 
+                    className="w-full h-full flex items-center justify-center text-3xl"
+                    style={{ display: 'none' }}
+                  >
+                    🥟
+                  </div>
+                  
+                  {/* Price badge */}
+                  <div className="absolute -top-1 -right-1 bg-yellow-400 text-orange-800 px-2 py-1 rounded-full text-xs font-bold">
+                    700 ֏
+                  </div>
+                </div>
+                
+                <h3 className="text-sm font-bold mb-1">Пиде Blue Pear</h3>
+                <p className="text-xs text-orange-100 mb-2">С грушами и соусом</p>
+                
+                <button
+                  onClick={() => handleAddToCart({
+                    id: 'cmfpljklo000i7qyiboo3hvtu',
+                    name: 'Пиде Blue Pear',
+                    price: 700,
+                    category: 'Пиде',
+                    description: 'Пиде с грушами и легким соусом',
+                    image: '/images/pide-blue-pear.jpg',
+                    ingredients: ['Тесто', 'Груши', 'Легкий соус', 'Сыр'],
+                    isAvailable: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                  })}
+                  className="bg-yellow-400 text-orange-800 px-3 py-1 rounded-lg font-bold text-xs hover:bg-yellow-300 transition-colors"
+                >
+                  <ShoppingCart className="inline w-3 h-3 mr-1" />
+                  Заказать
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Full Version */}
+        <div className="hidden md:block relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left content */}
             <div className="space-y-8">
@@ -236,8 +318,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Mobile Search Section */}
+      <div className="md:hidden bg-white py-4 px-4">
+        <div className="max-w-sm mx-auto">
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Поиск"
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm transition-all duration-300"
+              />
+            </div>
+            <button className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center hover:bg-orange-600 transition-colors">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Products Showcase Section - Moved up */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
           <div className="text-center mb-16">
@@ -250,21 +353,63 @@ export default function Home() {
               </p>
             )}
             
-            {/* Category tabs */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 ${
-                    activeCategory === category
-                      ? 'bg-orange-500 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+            {/* Category tabs - Mobile 2 rows, Desktop single row */}
+            <div className="mb-8">
+              {/* Mobile - 2 rows with better design */}
+              <div className="md:hidden">
+                <div className="space-y-3">
+                  {/* First row - Комбо и Пиде занимают весь ряд */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories.slice(0, 2).map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => setActiveCategory(category)}
+                        className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
+                          activeCategory === category
+                            ? 'bg-orange-500 text-white shadow-md'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {/* Second row - остальные категории */}
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {categories.slice(2).map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => setActiveCategory(category)}
+                        className={`px-4 py-2 rounded-full font-medium transition-all duration-300 text-sm ${
+                          activeCategory === category
+                            ? 'bg-orange-500 text-white shadow-md'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Desktop - single row */}
+              <div className="hidden md:flex flex-wrap justify-center gap-4">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 ${
+                      activeCategory === category
+                        ? 'bg-orange-500 text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -293,16 +438,15 @@ export default function Home() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {getFilteredProducts().map((product, index) => (
-                <Link 
+                <div 
                   key={product.id} 
-                  href={`/products/${product.id}`}
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 block"
+                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   {/* Product image */}
-                  <div className="relative h-56 bg-orange-50 flex items-center justify-center overflow-hidden">
+                  <div className="relative h-32 md:h-40 bg-orange-50 flex items-center justify-center overflow-hidden">
                     {product.image ? (
                       <img 
                         src={product.image} 
@@ -318,7 +462,7 @@ export default function Home() {
                       />
                     ) : null}
                     <div 
-                      className="w-full h-full flex items-center justify-center text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                      className="w-full h-full flex items-center justify-center text-4xl md:text-6xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                       style={{ display: product.image ? 'none' : 'flex' }}
                     >
                       🥟
@@ -326,60 +470,51 @@ export default function Home() {
                     
                     {/* Badge - только для популярных товаров */}
                     {isPopularProduct(product) && (
-                      <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                         Популярное
                       </div>
                     )}
-                    
-                    {/* Quick add button */}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleAddToCart(product);
-                      }}
-                      className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white"
-                    >
-                      <ShoppingCart className="h-5 w-5" />
-                    </button>
                   </div>
                   
                   {/* Product info */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-200">
+                  <div className="p-3 md:p-4">
+                    <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200 line-clamp-2">
                       {product.name}
                     </h3>
                     
-                    {/* Price and action */}
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleAddToCart(product);
-                        }}
-                        className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
-                          addedToCart.has(product.id)
-                            ? 'bg-green-500 text-white shadow-lg'
-                            : 'bg-orange-500 text-white hover:bg-orange-600'
-                        }`}
-                        title="В корзину"
-                      >
-                        {addedToCart.has(product.id) ? (
-                          '✓ В корзине'
-                        ) : (
-                          <>
-                            <span className="text-sm font-bold mr-1">+</span>
-                            <ShoppingCart className="h-4 w-4" />
-                          </>
-                        )}
-                      </button>
+                    {/* Price */}
+                    <div className="mb-3">
+                      <span className="text-lg md:text-xl font-bold text-orange-500">{product.price} ֏</span>
                     </div>
+                    
+                    {/* Add to cart button */}
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className={`w-full h-10 md:h-12 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
+                        addedToCart.has(product.id)
+                          ? 'bg-green-500 text-white shadow-lg'
+                          : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105'
+                      }`}
+                      title="В корзину"
+                    >
+                      {addedToCart.has(product.id) ? (
+                        <span className="flex items-center">
+                          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          В корзине
+                        </span>
+                      ) : (
+                        <span className="flex items-center">
+                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                          </svg>
+                          Добавить
+                        </span>
+                      )}
+                    </button>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}
@@ -399,8 +534,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Additional Pide Showcase Section - Moved up */}
-      <section className="py-20 bg-orange-50">
+      {/* Additional Pide Showcase Section - Hidden on mobile */}
+      <section className="hidden md:block py-20 bg-orange-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
           <div className="text-center mb-16">
@@ -706,8 +841,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Features Section - Hidden on mobile */}
+      <section className="hidden md:block py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
           <div className="text-center mb-16">
@@ -784,8 +919,8 @@ export default function Home() {
       </section>
 
 
-      {/* Testimonials Section */}
-      <section className="py-20 bg-orange-50">
+      {/* Testimonials Section - Hidden on mobile */}
+      <section className="hidden md:block py-20 bg-orange-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
           <div className="text-center mb-16">
@@ -897,8 +1032,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-orange-500 text-white">
+      {/* CTA Section - Hidden on mobile */}
+      <section className="hidden md:block py-20 bg-orange-500 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Готовы попробовать?
@@ -923,7 +1058,13 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer - Hidden on mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
+      
+      {/* Add bottom padding for mobile nav */}
+      <div className="md:hidden h-20"></div>
     </div>
   );
 }
