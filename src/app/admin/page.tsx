@@ -85,6 +85,7 @@ export default function AdminDashboard() {
       
       {/* Отступ для fixed хедера */}
       <div className="md:hidden h-24"></div>
+      <div className="hidden md:block h-24"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
