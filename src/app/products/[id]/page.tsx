@@ -224,7 +224,7 @@ export default function ProductPage() {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden group">
               <div className="relative h-96 bg-gradient-to-br from-orange-50 to-orange-100">
-                {product.image ? (
+                {product.image && product.image !== 'no-image' ? (
                   <Image
                     src={product.image}
                     alt={product.name}
@@ -243,7 +243,7 @@ export default function ProductPage() {
                 ) : null}
                 <div 
                   className="w-full h-full flex items-center justify-center text-8xl opacity-60"
-                  style={{ display: product.image ? 'none' : 'flex' }}
+                  style={{ display: (product.image && product.image !== 'no-image') ? 'none' : 'flex' }}
                 >
                   🥟
                 </div>

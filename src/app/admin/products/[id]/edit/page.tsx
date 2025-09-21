@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Save, X, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { Product } from '@/types'
+import Header from '@/components/Header'
 
 const categories = [
   'Пиде',
@@ -274,7 +275,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                 {/* Цена */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Цена (₽) *
+                    Цена (֏) *
                   </label>
                   <Input
                     type="number"

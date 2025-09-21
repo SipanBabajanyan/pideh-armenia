@@ -27,7 +27,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
       <div className={`relative bg-orange-50 flex items-center justify-center overflow-hidden ${
         isCompact ? 'h-32 bg-gray-100' : 'h-56'
       }`}>
-        {product.image ? (
+        {product.image && product.image !== 'no-image' ? (
           <img 
             src={product.image} 
             alt={product.name}
@@ -44,7 +44,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
           className={`w-full h-full flex items-center justify-center bg-orange-100 opacity-60 group-hover:opacity-80 transition-opacity duration-300 ${
             isCompact ? 'text-6xl opacity-50 group-hover:opacity-70' : 'text-8xl'
           }`}
-          style={{ display: product.image ? 'none' : 'flex' }}
+          style={{ display: (product.image && product.image !== 'no-image') ? 'none' : 'flex' }}
         >
           🥟
         </div>

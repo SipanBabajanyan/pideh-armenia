@@ -127,7 +127,7 @@ export default function CartPage() {
                   <div className="flex items-start space-x-4">
                     {/* Product Image */}
                     <div className="w-16 h-16 bg-orange-50 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {item.product.image ? (
+                      {item.product.image && item.product.image !== 'no-image' ? (
                         <img 
                           src={item.product.image} 
                           alt={item.product.name}
@@ -143,7 +143,7 @@ export default function CartPage() {
                       ) : null}
                       <div 
                         className="w-full h-full flex items-center justify-center text-2xl"
-                        style={{ display: item.product.image ? 'none' : 'flex' }}
+                        style={{ display: (item.product.image && item.product.image !== 'no-image') ? 'none' : 'flex' }}
                       >
                         🥟
                       </div>
@@ -221,7 +221,7 @@ export default function CartPage() {
                     <div className="flex items-center space-x-4">
                       {/* Product Image */}
                       <div className="w-20 h-20 bg-orange-50 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
-                        {item.product.image ? (
+                        {item.product.image && item.product.image !== 'no-image' ? (
                           <img 
                             src={item.product.image} 
                             alt={item.product.name}
@@ -237,7 +237,7 @@ export default function CartPage() {
                         ) : null}
                         <div 
                           className="w-full h-full flex items-center justify-center text-3xl"
-                          style={{ display: item.product.image ? 'none' : 'flex' }}
+                          style={{ display: (item.product.image && item.product.image !== 'no-image') ? 'none' : 'flex' }}
                         >
                           🥟
                         </div>

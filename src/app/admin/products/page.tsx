@@ -174,7 +174,7 @@ export default function AdminProducts() {
                 <div className="flex items-center space-x-4">
                   {/* Product Image */}
                   <div className="w-20 h-20 bg-orange-50 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {product.image ? (
+                    {product.image && product.image !== 'no-image' ? (
                       <img 
                         src={product.image} 
                         alt={product.name}

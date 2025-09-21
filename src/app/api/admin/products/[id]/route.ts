@@ -71,7 +71,7 @@ export async function PUT(
         ...(description && { description }),
         ...(price !== undefined && { price }),
         ...(category && { category }),
-        ...(image && { image }),
+        ...(image !== undefined && { image: image || 'no-image' }), // Специальное значение для отсутствия изображения
         ...(ingredients && { ingredients }),
         ...(isAvailable !== undefined && { isAvailable })
       }

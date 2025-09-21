@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         description,
         price,
         category,
-        image: image || null,
+        image: image || 'no-image', // Специальное значение для отсутствия изображения
         ingredients: ingredients || [],
         isAvailable
       }

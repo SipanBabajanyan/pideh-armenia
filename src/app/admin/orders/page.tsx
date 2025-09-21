@@ -637,11 +637,17 @@ export default function AdminOrdersPage() {
                     {selectedOrder.items.map((item, index) => (
                       <div key={index} className="flex items-center justify-between p-4 bg-orange-50/80 backdrop-blur-sm rounded-xl border border-orange-200/50">
                         <div className="flex items-center gap-3">
-                          <img
-                            src={item.product.image}
-                            alt={item.product.name}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
+                          {item.product.image && item.product.image !== 'no-image' ? (
+                            <img
+                              src={item.product.image}
+                              alt={item.product.name}
+                              className="w-12 h-12 rounded-lg object-cover"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                              <span className="text-lg">🥟</span>
+                            </div>
+                          )}
                           <div>
                             <p className="font-medium text-sm">{item.product.name}</p>
                             <p className="text-xs text-gray-500">
