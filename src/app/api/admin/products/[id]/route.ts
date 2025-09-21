@@ -65,7 +65,7 @@ export async function PUT(
 
     // Валидация статуса (пустая строка означает REGULAR)
     if (status !== undefined) {
-      const validStatuses = ['', 'REGULAR', 'HIT', 'NEW', 'CLASSIC']
+      const validStatuses = ['', 'REGULAR', 'HIT', 'NEW', 'CLASSIC', 'BANNER']
       if (!validStatuses.includes(status)) {
         return NextResponse.json(
           { error: 'Invalid status. Must be one of: ' + validStatuses.filter(s => s).join(', ') },

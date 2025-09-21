@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     } else {
       // Если статус не указан, возвращаем все товары с особыми статусами
       whereClause.status = {
-        in: ['HIT', 'NEW', 'CLASSIC']
+        in: ['HIT', 'NEW', 'CLASSIC', 'BANNER']
       }
     }
 

@@ -67,7 +67,8 @@ export const PRODUCT_STATUS_LABELS: Record<ProductStatus, string> = {
   REGULAR: 'Обычный',
   HIT: 'Хит продаж',
   NEW: 'Новинка',
-  CLASSIC: 'Классика'
+  CLASSIC: 'Классика',
+  BANNER: 'Баннер'
 }
 
 export const PAYMENT_METHODS = {

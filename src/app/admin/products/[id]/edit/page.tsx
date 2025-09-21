@@ -23,7 +23,8 @@ const categories = [
 const statuses = [
   { value: 'HIT', label: 'Хит продаж' },
   { value: 'NEW', label: 'Новинка' },
-  { value: 'CLASSIC', label: 'Классика' }
+  { value: 'CLASSIC', label: 'Классика' },
+  { value: 'BANNER', label: 'Баннер' }
 ]
 
 interface EditProductPageProps {

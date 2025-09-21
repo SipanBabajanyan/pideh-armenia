@@ -75,10 +75,10 @@ export default function AdminProducts() {
                          product.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = !selectedCategory || product.category === selectedCategory
     
-    // Фильтр по статусу: "all" - все товары, "special" - только особые (HIT, NEW, CLASSIC)
+    // Фильтр по статусу: "all" - все товары, "special" - только особые (HIT, NEW, CLASSIC, BANNER)
     const matchesStatus = !selectedStatus || 
                          (selectedStatus === 'all') || 
-                         (selectedStatus === 'special' && ['HIT', 'NEW', 'CLASSIC'].includes(product.status))
+                         (selectedStatus === 'special' && ['HIT', 'NEW', 'CLASSIC', 'BANNER'].includes(product.status))
     
     return matchesSearch && matchesCategory && matchesStatus
   })
@@ -91,7 +91,8 @@ export default function AdminProducts() {
     regular: products.filter(p => p.status === 'REGULAR').length,
     hit: products.filter(p => p.status === 'HIT').length,
     new: products.filter(p => p.status === 'NEW').length,
-    classic: products.filter(p => p.status === 'CLASSIC').length
+    classic: products.filter(p => p.status === 'CLASSIC').length,
+    banner: products.filter(p => p.status === 'BANNER').length
   }
 
   const getStatusBadge = (productStatus: ProductStatus) => {
@@ -110,6 +111,11 @@ export default function AdminProducts() {
         return { 
           text: 'КЛАССИКА', 
           className: 'bg-blue-100 text-blue-800 border-blue-200' 
+        }
+      case 'BANNER':
+        return { 
+          text: 'БАННЕР', 
+          className: 'bg-purple-100 text-purple-800 border-purple-200' 
         }
       default:
         return null // Обычные товары без лейбла
@@ -240,6 +246,11 @@ export default function AdminProducts() {
                 {statusStats.classic > 0 && (
                   <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
                     Классика: {statusStats.classic}
+                  </span>
+                )}
+                {statusStats.banner > 0 && (
+                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
+                    Баннер: {statusStats.banner}
                   </span>
                 )}
               </div>

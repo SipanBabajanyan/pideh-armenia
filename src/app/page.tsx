@@ -14,6 +14,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
   const [comboProducts, setComboProducts] = useState<Product[]>([])
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
+  const [bannerProduct, setBannerProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Комбо')
   const [searchQuery, setSearchQuery] = useState('')
@@ -27,15 +28,18 @@ export default function Home() {
 
   const fetchProducts = async () => {
     try {
-      const [productsResponse, featuredResponse] = await Promise.all([
+      const [productsResponse, featuredResponse, bannerResponse] = await Promise.all([
         fetch('/api/products'),
-        fetch('/api/products/featured')
+        fetch('/api/products/featured'),
+        fetch('/api/products/banner')
       ])
       
       const productsData = await productsResponse.json()
       const featuredData = await featuredResponse.json()
+      const bannerData = await bannerResponse.json()
       
       setProducts(productsData)
+      setBannerProduct(bannerData) // Устанавливаем товар-баннер
       
       // Проверяем, что featuredData является массивом
       if (Array.isArray(featuredData)) {
@@ -51,6 +55,7 @@ export default function Home() {
     } catch (error) {
       console.error('Error fetching products:', error)
       setFeaturedProducts([])
+      setBannerProduct(null)
     } finally {
       setLoading(false)
     }
@@ -92,6 +97,8 @@ export default function Home() {
         return { text: 'НОВИНКА', color: 'bg-green-500' }
       case 'CLASSIC':
         return { text: 'КЛАССИКА', color: 'bg-blue-500' }
+      case 'BANNER':
+        return { text: 'БАННЕР', color: 'bg-purple-500' }
       default:
         return { text: 'ПОПУЛЯРНОЕ', color: 'bg-orange-500' }
     }
@@ -164,55 +171,54 @@ export default function Home() {
             
             {/* Right content - product showcase */}
             <div className="relative">
-              <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-4 text-center border border-white/20">
-                <div className="relative w-28 h-28 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/images/pide-blue-pear.jpg" 
-                    alt="Пиде Blue Pear"
-                    className="w-full h-full object-cover rounded-xl"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (nextElement) {
-                        nextElement.style.display = 'flex';
-                      }
-                    }}
-                  />
-                  <div 
-                    className="w-full h-full flex items-center justify-center text-3xl"
-                    style={{ display: 'none' }}
-                  >
-                    🥟
+              {bannerProduct ? (
+                <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-4 text-center border border-white/20">
+                  <div className="relative w-28 h-28 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center overflow-hidden">
+                    <img 
+                      src={bannerProduct.image} 
+                      alt={bannerProduct.name}
+                      className="w-full h-full object-cover rounded-xl"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <div 
+                      className="w-full h-full flex items-center justify-center text-3xl"
+                      style={{ display: 'none' }}
+                    >
+                      🥟
+                    </div>
+                    
+                    {/* Price badge */}
+                    <div className="absolute -top-1 -right-1 bg-yellow-400 text-orange-800 px-2 py-1 rounded-full text-xs font-bold">
+                      {bannerProduct.price} ֏
+                    </div>
                   </div>
                   
-                  {/* Price badge */}
-                  <div className="absolute -top-1 -right-1 bg-yellow-400 text-orange-800 px-2 py-1 rounded-full text-xs font-bold">
-                    700 ֏
-                  </div>
+                  <h3 className="text-sm font-bold mb-1">{bannerProduct.name}</h3>
+                  <p className="text-xs text-orange-100 mb-2">{bannerProduct.description}</p>
+                  
+                  <button
+                    onClick={() => handleAddToCart(bannerProduct)}
+                    className="bg-yellow-400 text-orange-800 px-3 py-1 rounded-lg font-bold text-xs hover:bg-yellow-300 transition-colors"
+                  >
+                    <ShoppingCart className="inline w-3 h-3 mr-1" />
+                    Заказать
+                  </button>
                 </div>
-                
-                <h3 className="text-sm font-bold mb-1">Пиде Blue Pear</h3>
-                <p className="text-xs text-orange-100 mb-2">С грушами и соусом</p>
-                
-                <button
-                  onClick={() => handleAddToCart({
-                    id: 'cmfpljklo000i7qyiboo3hvtu',
-                    name: 'Пиде Blue Pear',
-                    price: 700,
-                    category: 'Пиде',
-                    description: 'Пиде с грушами и легким соусом',
-                    image: '/images/pide-blue-pear.jpg',
-                    ingredients: ['Тесто', 'Груши', 'Легкий соус', 'Сыр'],
-                    isAvailable: true,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                  })}
-                  className="bg-yellow-400 text-orange-800 px-3 py-1 rounded-lg font-bold text-xs hover:bg-yellow-300 transition-colors"
-                >
-                  <ShoppingCart className="inline w-3 h-3 mr-1" />
-                  Заказать
-                </button>
-              </div>
+              ) : (
+                <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-4 text-center border border-white/20">
+                  <div className="relative w-28 h-28 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center">
+                    <span className="text-3xl">🥟</span>
+                  </div>
+                  <h3 className="text-sm font-bold mb-1">Армянские пиде</h3>
+                  <p className="text-xs text-orange-100 mb-2">Вкусные и свежие</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -294,53 +300,67 @@ export default function Home() {
                 
                 {/* Product image */}
                 <div className="relative w-72 h-72 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center overflow-hidden group">
-                  <img 
-                    src="/images/pide-blue-pear.jpg" 
-                    alt="Пиде Blue Pear"
-                    className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (nextElement) {
-                        nextElement.style.display = 'flex';
-                      }
-                    }}
-                  />
-                  <div 
-                    className="w-full h-full flex items-center justify-center text-8xl"
-                    style={{ display: 'none' }}
-                  >
-                    🥟
-                  </div>
-                  
-                  {/* Price badge */}
-                  <div className="absolute -top-2 -right-2 bg-yellow-400 text-orange-800 px-3 py-1 rounded-full text-sm font-bold">
-                    700 ֏
-                  </div>
+                  {bannerProduct ? (
+                    <>
+                      <img 
+                        src={bannerProduct.image} 
+                        alt={bannerProduct.name}
+                        className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                          if (nextElement) {
+                            nextElement.style.display = 'flex';
+                          }
+                        }}
+                      />
+                      <div 
+                        className="w-full h-full flex items-center justify-center text-8xl"
+                        style={{ display: 'none' }}
+                      >
+                        🥟
+                      </div>
+                      
+                      {/* Price badge */}
+                      <div className="absolute -top-2 -right-2 bg-yellow-400 text-orange-800 px-3 py-1 rounded-full text-sm font-bold">
+                        {bannerProduct.price} ֏
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-8xl">
+                      🥟
+                    </div>
+                  )}
                 </div>
                 
-                <h3 className="text-2xl font-bold mb-2">Пиде Blue Pear</h3>
-                <p className="text-orange-100 mb-4">Пиде с грушами и легким соусом</p>
-                
-                {/* Quick action */}
-                <button
-                  onClick={() => handleAddToCart({
-                    id: 'cmfpljklo000i7qyiboo3hvtu',
-                    name: 'Пиде Blue Pear',
-                    price: 700,
-                    category: 'Пиде',
-                    description: 'Пиде с грушами и легким соусом',
-                    image: '/images/pide-blue-pear.jpg',
-                    ingredients: ['Тесто', 'Груши', 'Легкий соус', 'Сыр'],
-                    isAvailable: true,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                  })}
-                  className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 hover:scale-105 transition-all duration-300 shadow-lg"
-                >
-                  <ShoppingCart className="inline w-5 h-5 mr-2" />
-                  Быстрый заказ
-                </button>
+                {bannerProduct ? (
+                  <>
+                    <h3 className="text-2xl font-bold mb-2">{bannerProduct.name}</h3>
+                    <p className="text-orange-100 mb-4">{bannerProduct.description}</p>
+                    
+                    {/* Quick action */}
+                    <button
+                      onClick={() => handleAddToCart(bannerProduct)}
+                      className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 hover:scale-105 transition-all duration-300 shadow-lg"
+                    >
+                      <ShoppingCart className="inline w-5 h-5 mr-2" />
+                      Быстрый заказ
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-2xl font-bold mb-2">Армянские пиде</h3>
+                    <p className="text-orange-100 mb-4">Вкусные и свежие</p>
+                    
+                    <Link 
+                      href="/products"
+                      className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 hover:scale-105 transition-all duration-300 shadow-lg inline-block"
+                    >
+                      <ShoppingCart className="inline w-5 h-5 mr-2" />
+                      Посмотреть меню
+                    </Link>
+                  </>
+                )}
               </div>
               
               {/* Floating mini cards */}
