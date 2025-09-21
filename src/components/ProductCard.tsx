@@ -66,8 +66,8 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
         </h3>
         
         {isCompact ? (
-          // Компактный вариант - цена и кнопка на разных линиях
-          <div className="space-y-2">
+          // Компактный вариант - цена и кнопка на одной линии на десктопе, вертикально на мобиле
+          <div className="md:flex md:justify-between md:items-center space-y-2 md:space-y-0">
             <div>
               <span className="text-lg font-bold text-orange-500">
                 {product.price} ֏
@@ -80,7 +80,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 e.stopPropagation()
                 onAddToCart(product)
               }}
-              className={`w-full h-10 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg flex items-center justify-center overflow-hidden hover:scale-105 ${
+              className={`w-full md:w-auto md:px-4 h-10 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg flex items-center justify-center overflow-hidden hover:scale-105 ${
                 isAdded
                   ? 'bg-green-500 text-white'
                   : 'bg-orange-500 text-white hover:bg-orange-600'
@@ -96,9 +96,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 </span>
               ) : (
                 <span className="flex items-center">
-                  <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                  <ShoppingCart className="w-3 h-3 mr-1" />
                   Добавить
                 </span>
               )}
@@ -135,9 +133,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 </span>
               ) : (
                 <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                  <ShoppingCart className="w-4 h-4 mr-1" />
                   Добавить
                 </span>
               )}

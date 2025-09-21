@@ -77,7 +77,7 @@ export default function ProductPage() {
       <Header />
       
       {/* Breadcrumb Skeleton */}
-      <div className="bg-white">
+      <div className="bg-white pt-20 md:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-2">
             <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
@@ -98,11 +98,6 @@ export default function ProductPage() {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <div className="h-96 bg-gray-200 animate-pulse"></div>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
-              ))}
             </div>
           </div>
 
@@ -197,7 +192,7 @@ export default function ProductPage() {
       <Header />
       
       {/* Breadcrumb */}
-      <div className="bg-white">
+      <div className="bg-white pt-20 md:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center space-x-2 text-sm">
             <Link href="/" className="text-gray-500 hover:text-orange-500">Главная</Link>
@@ -262,24 +257,43 @@ export default function ProductPage() {
 
                 {/* Action buttons */}
                 <div className="absolute top-4 right-4 flex space-x-2">
-                  <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
-                    <Heart className="h-5 w-5" />
+                  <button className="w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors shadow-lg border border-gray-200">
+                    <Heart className="h-5 w-5 text-gray-700" />
                   </button>
-                  <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
-                    <Share2 className="h-5 w-5" />
+                  <button className="w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors shadow-lg border border-gray-200">
+                    <Share2 className="h-5 w-5 text-gray-700" />
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Additional images placeholder */}
-            <div className="grid grid-cols-4 gap-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl opacity-50">📷</span>
-                </div>
-              ))}
+            {/* Additional Info */}
+            <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl p-6">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Информация о товаре:</h4>
+              <ul className="space-y-2 text-gray-700">
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Категория: {product.category}
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Время приготовления: 15-20 минут
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Вес: ~300г
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Только свежие ингредиенты
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                  Без консервантов
+                </li>
+              </ul>
             </div>
+
           </div>
 
           {/* Product Info */}
@@ -324,17 +338,17 @@ export default function ProductPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-6">
                 <label className="text-lg font-medium text-gray-900">Количество:</label>
-                <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
+                <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden bg-white shadow-sm">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 hover:bg-gray-100 transition-colors"
+                    className="p-3 hover:bg-orange-100 transition-colors text-gray-700 hover:text-orange-600"
                   >
                     <Minus className="h-5 w-5" />
                   </button>
-                  <span className="px-6 py-3 min-w-[4rem] text-center text-lg font-semibold">{quantity}</span>
+                  <span className="px-6 py-3 min-w-[4rem] text-center text-lg font-semibold bg-gray-50 text-gray-900">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 hover:bg-gray-100 transition-colors"
+                    className="p-3 hover:bg-orange-100 transition-colors text-gray-700 hover:text-orange-600"
                   >
                     <Plus className="h-5 w-5" />
                   </button>
@@ -389,33 +403,6 @@ export default function ProductPage() {
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Additional Info */}
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl p-6">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Информация о товаре:</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Категория: {product.category}
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Время приготовления: 15-20 минут
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Вес: ~300г
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Только свежие ингредиенты
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Без консервантов
-                </li>
-              </ul>
             </div>
           </div>
         </div>
@@ -484,9 +471,10 @@ export default function ProductPage() {
                           e.stopPropagation();
                           addItem(similarProduct, 1);
                         }}
-                        className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
+                        className="flex items-center space-x-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium"
                       >
-                        <Plus className="h-4 w-4" />
+                        <ShoppingCart className="h-4 w-4" />
+                        <span>Добавить</span>
                       </button>
                     </div>
                   </div>

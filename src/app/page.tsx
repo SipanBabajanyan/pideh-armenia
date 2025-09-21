@@ -632,7 +632,10 @@ export default function Home() {
                           {addedToCartHits.has(product.id) ? (
                             '✓ В корзине'
                           ) : (
-                            '+ Добавить'
+                            <span className="flex items-center">
+                              <ShoppingCart className="w-4 h-4 mr-1" />
+                              Добавить
+                            </span>
                           )}
                         </button>
                       </div>
