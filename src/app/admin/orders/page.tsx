@@ -220,9 +220,11 @@ export default function AdminOrdersPage() {
     
     const searchLower = searchTerm.toLowerCase()
     return (
-      order.user.name.toLowerCase().includes(searchLower) ||
-      order.user.email.toLowerCase().includes(searchLower) ||
-      order.user.phone?.toLowerCase().includes(searchLower) ||
+      (order.user?.name?.toLowerCase().includes(searchLower)) ||
+      (order.user?.email?.toLowerCase().includes(searchLower)) ||
+      (order.user?.phone?.toLowerCase().includes(searchLower)) ||
+      order.name.toLowerCase().includes(searchLower) ||
+      order.phone.toLowerCase().includes(searchLower) ||
       order.id.toLowerCase().includes(searchLower)
     )
   })
@@ -440,7 +442,7 @@ export default function AdminOrdersPage() {
                           <div>
                             <span className="text-gray-500 text-xs">Клиент:</span>
                             <div className="text-sm font-medium text-gray-900">
-                              {order.user.name}
+                              {order.user?.name || order.name || 'Гость'}
                             </div>
                           </div>
                         </div>
