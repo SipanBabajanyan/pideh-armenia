@@ -16,7 +16,7 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [bannerProduct, setBannerProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Комбо')
+  const [activeCategory, setActiveCategory] = useState('Пиде')
   const [searchQuery, setSearchQuery] = useState('')
   const [addedToCart, setAddedToCart] = useState<Set<string>>(new Set())
   const [addedToCartHits, setAddedToCartHits] = useState<Set<string>>(new Set())
@@ -126,7 +126,7 @@ export default function Home() {
     return popularNames.some(name => product.name.toLowerCase().includes(name.toLowerCase()))
   }
 
-  const categories = ['Комбо', 'Пиде', 'Напитки', 'Соусы', 'Снэк']
+  const categories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Напитки']
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -448,7 +448,7 @@ export default function Home() {
               {/* Mobile - 2 rows with better design */}
               <div className="md:hidden">
                 <div className="space-y-2">
-                  {/* First row - Комбо и Пиде занимают весь ряд */}
+                  {/* First row - Пиде и Комбо занимают весь ряд */}
                   <div className="grid grid-cols-2 gap-3">
                     {categories.slice(0, 2).map((category) => (
                       <button
