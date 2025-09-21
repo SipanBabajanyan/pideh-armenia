@@ -8,10 +8,10 @@ export default function ContactPage() {
       <Header />
       
       {/* Отступ для fixed хедера */}
-      <div className="md:hidden h-24"></div>
+      <div className="h-48 md:h-32"></div>
       
       {/* Hero Section */}
-      <section className="bg-orange-500 text-white py-20">
+      <section className="bg-orange-500 text-white py-20 pt-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Свяжитесь с нами
@@ -114,11 +114,16 @@ export default function ContactPage() {
               </div>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <MapPin className="h-5 w-5 text-orange-500" />
-                <p className="text-gray-600 text-lg font-semibold">Zoravar Andranik 151/2</p>
+                <p className="text-gray-600 text-lg font-semibold">ул. Зоравар Андраник 151/2</p>
               </div>
-              <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+              <a 
+                href="https://maps.google.com/?q=ул.+Зоравар+Андраник+151/2,+Ереван,+Армения"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+              >
                 На карте
-              </button>
+              </a>
             </div>
             
             <div className="text-center">
@@ -127,11 +132,16 @@ export default function ContactPage() {
               </div>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <MapPin className="h-5 w-5 text-orange-500" />
-                <p className="text-gray-600 text-lg font-semibold">Yeznik Koghbatsi 83</p>
+                <p className="text-gray-600 text-lg font-semibold">ул. Езник Кохбаци 83</p>
               </div>
-              <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+              <a 
+                href="https://maps.google.com/?q=ул.+Езник+Кохбаци+83,+Ереван,+Армения"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+              >
                 На карте
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -221,7 +231,10 @@ export default function ContactPage() {
         </div>
       </div>
       
-      <Footer />
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
     </div>
   )
 }

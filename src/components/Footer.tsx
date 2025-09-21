@@ -79,11 +79,25 @@ export default function Footer() {
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-orange-500" />
-                  <span className="text-gray-300">Zoravar Andranik 151/2</span>
+                  <a 
+                    href="https://maps.google.com/?q=ул.+Зоравар+Андраник+151/2,+Ереван,+Армения"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-orange-500 transition-colors"
+                  >
+                    ул. Зоравар Андраник 151/2
+                  </a>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-orange-500" />
-                  <span className="text-gray-300">Yeznik Koghbatsi 83</span>
+                  <a 
+                    href="https://maps.google.com/?q=ул.+Езник+Кохбаци+83,+Ереван,+Армения"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-orange-500 transition-colors"
+                  >
+                    ул. Езник Кохбаци 83
+                  </a>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
