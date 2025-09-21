@@ -310,6 +310,18 @@ export default function Home() {
             
             {/* Right content - Product showcase */}
             <div className="relative animate-fade-in-delay-5">
+              {/* Price Badge - Above the image */}
+              {bannerProduct && (
+                <div 
+                  className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-orange-600 px-4 py-2 rounded-2xl text-lg font-bold shadow-2xl z-[100]"
+                  style={{
+                    boxShadow: '0 15px 35px rgba(0, 0, 0, 0.3)',
+                  }}
+                >
+                  {bannerProduct.price} ֏
+                </div>
+              )}
+              
               {/* Enhanced 3D Product Image - Outside the card */}
               {bannerProduct ? (
                 <div className="relative w-80 h-80 mx-auto mb-4">
@@ -380,18 +392,6 @@ export default function Home() {
                 <div className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-bounce"></div>
                 <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-orange-300 rounded-full animate-pulse"></div>
                 
-                {/* 3D Floating Price Badge */}
-                {bannerProduct && (
-                  <div 
-                    className="absolute top-12 right-4 bg-white/95 backdrop-blur-md text-orange-600 px-4 py-2 rounded-2xl text-lg font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
-                    style={{
-                      boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                      backdropFilter: 'blur(15px)',
-                    }}
-                  >
-                    {bannerProduct.price} ֏
-                  </div>
-                )}
                 
                 {bannerProduct ? (
                   <>
