@@ -27,30 +27,48 @@ interface ImageFile {
 }
 
 export default function ImageSelector({ value, onChange, className = '' }: ImageSelectorProps) {
-  const [activeTab, setActiveTab] = useState<'gallery' | 'upload'>('gallery')
+  const [activeTab, setActiveTab] = useState<'gallery' | 'upload'>(value ? 'gallery' : 'upload')
   const [images, setImages] = useState<ImageFile[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [loadingGallery, setLoadingGallery] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Загружаем список существующих изображений
-  useEffect(() => {
-    const loadImages = async () => {
-      try {
-        // Получаем список изображений из API
-        const response = await fetch('/api/images')
-        if (response.ok) {
-          const imageList = await response.json()
-          setImages(imageList)
-        }
-      } catch (error) {
-        console.error('Error loading images:', error)
+  // Загружаем список существующих изображений только при переходе на вкладку "Галерея"
+  const loadImages = async () => {
+    if (images.length > 0) return // Уже загружены
+    
+    setLoadingGallery(true)
+    try {
+      // Получаем список изображений из API
+      const response = await fetch('/api/images')
+      if (response.ok) {
+        const imageList = await response.json()
+        setImages(imageList)
       }
+    } catch (error) {
+      console.error('Error loading images:', error)
+    } finally {
+      setLoadingGallery(false)
     }
+  }
 
-    loadImages()
-  }, [])
+  // Загружаем изображения при переходе на вкладку "Галерея"
+  useEffect(() => {
+    if (activeTab === 'gallery') {
+      loadImages()
+    }
+  }, [activeTab])
+
+  // Автоматически выбираем подходящую вкладку при изменении value
+  useEffect(() => {
+    if (value && activeTab === 'upload') {
+      setActiveTab('gallery')
+    } else if (!value && activeTab === 'gallery') {
+      setActiveTab('upload')
+    }
+  }, [value])
 
   // Фильтруем изображения по поисковому запросу
   const filteredImages = images.filter(img => 
@@ -151,64 +169,69 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
   }
 
   return (
-    <div className={`space-y-4 ${className}`}>
-      {/* Предпросмотр выбранного изображения */}
-      {value && (
-        <div className="relative">
-          <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
-            <Image
-              src={value}
-              alt="Предпросмотр"
-              fill
-              className="object-cover"
-              onError={(e) => {
-                // Если изображение не загружается, показываем placeholder
-                const target = e.target as HTMLImageElement
-                target.style.display = 'none'
-              }}
-            />
+    <div className={`${className}`}>
+      {/* Основной контейнер с изображением и кнопками */}
+      <div className="flex gap-4 items-start">
+        {/* Предпросмотр выбранного изображения - слева, квадратное */}
+        <div className="relative flex-shrink-0">
+          <div className="relative w-24 h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+            {value ? (
+              <Image
+                src={value}
+                alt="Предпросмотр"
+                fill
+                className="object-cover"
+                onError={(e) => {
+                  // Если изображение не загружается, показываем placeholder
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <ImageIcon className="h-8 w-8 text-gray-400" />
+              </div>
+            )}
           </div>
+          {value && (
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              className="absolute -top-2 -right-2 h-6 w-6 p-0"
+              onClick={clearImage}
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+
+        {/* Кнопки справа от изображения */}
+        <div className="flex flex-col gap-2">
           <Button
             type="button"
-            variant="destructive"
+            variant={activeTab === 'gallery' ? 'default' : 'outline'}
             size="sm"
-            className="absolute top-2 right-2"
-            onClick={clearImage}
+            onClick={() => setActiveTab('gallery')}
+            className="w-24"
           >
-            <X className="h-4 w-4" />
+            Галерея
+          </Button>
+          <Button
+            type="button"
+            variant={activeTab === 'upload' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setActiveTab('upload')}
+            className="w-24"
+          >
+            Загрузить
           </Button>
         </div>
-      )}
-
-      {/* Вкладки */}
-      <div className="flex border-b border-gray-200">
-        <button
-          type="button"
-          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-            activeTab === 'gallery'
-              ? 'border-orange-500 text-orange-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
-          onClick={() => setActiveTab('gallery')}
-        >
-          Галерея
-        </button>
-        <button
-          type="button"
-          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-            activeTab === 'upload'
-              ? 'border-orange-500 text-orange-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
-          onClick={() => setActiveTab('upload')}
-        >
-          Загрузить
-        </button>
       </div>
 
       {/* Содержимое вкладок */}
       {activeTab === 'gallery' && (
-        <div className="space-y-4">
+        <div className="mt-4 space-y-4">
           {/* Поиск */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -221,44 +244,53 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
           </div>
 
           {/* Галерея изображений */}
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-64 overflow-y-auto">
-            {filteredImages.map((image) => (
-              <button
-                key={image.path}
-                type="button"
-                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
-                  value === image.path
-                    ? 'border-orange-500 ring-2 ring-orange-200'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-                onClick={() => selectImage(image.path)}
-              >
-                <Image
-                  src={image.path}
-                  alt={image.name}
-                  fill
-                  className="object-cover"
-                />
-                {value === image.path && (
-                  <div className="absolute inset-0 bg-orange-500 bg-opacity-20 flex items-center justify-center">
-                    <Check className="h-6 w-6 text-orange-600" />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {filteredImages.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              <ImageIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>Изображения не найдены</p>
+          {loadingGallery ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+              <span className="ml-2 text-gray-600">Загрузка галереи...</span>
             </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-64 overflow-y-auto">
+                {filteredImages.map((image) => (
+                  <button
+                    key={image.path}
+                    type="button"
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
+                      value === image.path
+                        ? 'border-orange-500 ring-2 ring-orange-200'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                    onClick={() => selectImage(image.path)}
+                  >
+                    <Image
+                      src={image.path}
+                      alt={image.name}
+                      fill
+                      className="object-cover"
+                    />
+                    {value === image.path && (
+                      <div className="absolute inset-0 bg-orange-500 bg-opacity-20 flex items-center justify-center">
+                        <Check className="h-6 w-6 text-orange-600" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {filteredImages.length === 0 && !loadingGallery && (
+                <div className="text-center py-8 text-gray-500">
+                  <ImageIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <p>Изображения не найдены</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
 
       {activeTab === 'upload' && (
-        <div className="space-y-4">
+        <div className="mt-4 space-y-4">
           {/* Drag & Drop область */}
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
