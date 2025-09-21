@@ -174,7 +174,7 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
       <div className="flex gap-4 items-start">
         {/* Предпросмотр выбранного изображения - слева, квадратное */}
         <div className="relative flex-shrink-0">
-          <div className="relative w-24 h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+          <div className="relative w-36 h-36 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
             {value ? (
               <Image
                 src={value}
@@ -189,7 +189,7 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <ImageIcon className="h-8 w-8 text-gray-400" />
+                <ImageIcon className="h-12 w-12 text-gray-400" />
               </div>
             )}
           </div>
