@@ -32,17 +32,17 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
       <div className={`relative overflow-visible ${
         isCompact ? 'h-48' : 'h-80'
       }`}>
-        {/* Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-orange-100 to-red-50 opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+        {/* Background Gradient - Removed dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-orange-100 to-red-50 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
         
         {/* 3D Floating Product - No top border */}
         {product.image && product.image !== 'no-image' ? (
           <div className="relative w-full h-full">
             {/* 3D Product Image with floating effect */}
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)]">
-              {/* 3D Shadow Layer */}
+              {/* 3D Shadow Layer - Lightened shadow */}
               <div 
-                className="absolute inset-0 bg-gradient-to-br from-gray-400/30 to-gray-600/20 rounded-3xl blur-lg transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl blur-lg transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
                 style={{
                   filter: 'blur(20px)',
                 }}
@@ -54,7 +54,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 alt={product.name}
                 className="relative w-full h-full object-contain drop-shadow-2xl group-hover:scale-110 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
                 style={{
-                  filter: 'drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.2))',
+                  filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.15)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.2))',
                   transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
                 }}
                 loading="lazy"
@@ -80,7 +80,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
               isCompact ? 'text-6xl' : 'text-8xl'
             }`}
             style={{
-              filter: 'drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3))',
+              filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.15))',
               transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
             }}
           >
@@ -142,8 +142,8 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
           {product.price} ֏
         </div>
 
-        {/* Bottom Gradient Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Bottom Gradient Overlay - Removed black overlay */}
+        {/* <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" /> */}
       </div>
       
       {/* 3D Content Section - Adjusted for 3D product */}
