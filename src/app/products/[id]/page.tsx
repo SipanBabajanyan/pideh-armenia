@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, ShoppingCart, Plus, Minus, Star, Clock, MapPin, Phone, Heart, Share2, Zap } from 'lucide-react'
+import { ArrowLeft, ShoppingCart, Plus, Minus, Star, Clock, MapPin, Phone, Zap } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product } from '@/types'
 import Header from '@/components/Header'
@@ -324,15 +324,6 @@ export default function ProductPage() {
                   )}
                 </div>
 
-                {/* 3D Action buttons */}
-                <div className="absolute top-12 right-4 flex space-x-2 z-20">
-                  <button className="w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-2xl border border-gray-200 transform hover:scale-110 hover:-translate-y-1">
-                    <Heart className="h-5 w-5 text-gray-700" />
-                  </button>
-                  <button className="w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-2xl border border-gray-200 transform hover:scale-110 hover:-translate-y-1">
-                    <Share2 className="h-5 w-5 text-gray-700" />
-                  </button>
-                </div>
               </div>
               
               {/* 3D Floating Decorative Elements */}
@@ -521,43 +512,128 @@ export default function ProductPage() {
                 <Link
                   key={similarProduct.id}
                   href={`/products/${similarProduct.id}`}
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                  className="relative block bg-white rounded-3xl shadow-2xl overflow-visible hover:shadow-3xl hover:scale-110 transition-all duration-700 cursor-pointer group border-0 transform hover:-translate-y-3"
+                  style={{
+                    background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%)',
+                    backdropFilter: 'blur(20px)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  }}
                 >
-                  <div className="relative h-48 bg-orange-50 flex items-center justify-center overflow-hidden">
-                    {similarProduct.image ? (
-                      <Image
-                        src={similarProduct.image}
-                        alt={similarProduct.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
-                        loading="lazy"
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (nextElement) {
-                            nextElement.style.display = 'flex';
-                          }
+                  {/* 3D Product Container */}
+                  <div className="relative overflow-visible h-48">
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-orange-100 to-red-50 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                    
+                    {/* 3D Floating Product */}
+                    {similarProduct.image && similarProduct.image !== 'no-image' ? (
+                      <div className="relative w-full h-full">
+                        {/* 3D Product Image with floating effect */}
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-[calc(100%+2rem)] h-[calc(100%+2rem)]">
+                          {/* 3D Shadow Layer */}
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                            style={{
+                              filter: 'none',
+                            }}
+                          />
+                          
+                          {/* Main 3D Product Image */}
+                          <img 
+                            src={similarProduct.image} 
+                            alt={similarProduct.name}
+                            className="relative w-full h-full object-contain group-hover:scale-125 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
+                            style={{
+                              filter: 'none',
+                              transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                              imageRendering: 'crisp-edges',
+                              imageRendering: '-webkit-optimize-contrast',
+                            }}
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (nextElement) {
+                                nextElement.style.display = 'flex';
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div 
+                        className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-[calc(100%+2rem)] h-[calc(100%+2rem)] flex items-center justify-center opacity-70 group-hover:opacity-90 transition-opacity duration-500 text-6xl"
+                        style={{
+                          filter: 'none',
+                          transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
                         }}
-                      />
-                    ) : null}
-                    <div 
-                      className="w-full h-full flex items-center justify-center text-6xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                      style={{ display: similarProduct.image ? 'none' : 'flex' }}
-                    >
-                      🥟
+                      >
+                        🥟
+                      </div>
+                    )}
+                    
+                    {/* 3D Floating Badges */}
+                    <div className="absolute top-6 left-4 flex flex-col gap-2 z-20">
+                      {/* 3D Category Badge */}
+                      <div 
+                        className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-2xl text-xs font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                        style={{
+                          boxShadow: '0 10px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                          backdropFilter: 'blur(10px)',
+                        }}
+                      >
+                        {similarProduct.category}
+                      </div>
+                      
+                      {/* 3D Special Badge */}
+                      {similarProduct.status === 'HIT' && (
+                        <div 
+                          className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                          style={{
+                            boxShadow: '0 10px 25px rgba(255, 193, 7, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                            backdropFilter: 'blur(10px)',
+                          }}
+                        >
+                          <Star className="w-3 h-3" />
+                          ХИТ ПРОДАЖ
+                        </div>
+                      )}
+                      
+                      {similarProduct.status === 'NEW' && (
+                        <div 
+                          className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                          style={{
+                            boxShadow: '0 10px 25px rgba(34, 197, 94, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                            backdropFilter: 'blur(10px)',
+                          }}
+                        >
+                          <Zap className="w-3 h-3" />
+                          НОВИНКА
+                        </div>
+                      )}
+                      
+                      {similarProduct.status === 'CLASSIC' && (
+                        <div 
+                          className="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                          style={{
+                            boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                            backdropFilter: 'blur(10px)',
+                          }}
+                        >
+                          <Star className="w-3 h-3" />
+                          КЛАССИКА
+                        </div>
+                      )}
                     </div>
                   </div>
-                  
-                  <div className="p-4">
-                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+
+                  {/* Product Info */}
+                  <div className="p-6 relative z-10">
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors text-lg">
                       {similarProduct.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
                       {similarProduct.description}
                     </p>
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-orange-500">
+                      <span className="text-2xl font-bold text-orange-500">
                         {similarProduct.price} ֏
                       </span>
                       <button
@@ -566,13 +642,36 @@ export default function ProductPage() {
                           e.stopPropagation();
                           addItem(similarProduct, 1);
                         }}
-                        className="flex items-center space-x-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium"
+                        className="flex items-center space-x-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 transition-colors text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
                       >
                         <ShoppingCart className="h-4 w-4" />
                         <span>Добавить</span>
                       </button>
                     </div>
                   </div>
+
+                  {/* 3D Floating Decorative Elements */}
+                  <div 
+                    className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                    style={{
+                      boxShadow: '0 10px 25px rgba(255, 107, 53, 0.3)',
+                      filter: 'blur(1px)',
+                    }}
+                  />
+                  <div 
+                    className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                    style={{
+                      boxShadow: '0 10px 25px rgba(255, 193, 7, 0.3)',
+                      filter: 'blur(1px)',
+                    }}
+                  />
+                  <div 
+                    className="absolute top-1/2 -left-4 w-3 h-3 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-125"
+                    style={{
+                      boxShadow: '0 5px 15px rgba(236, 72, 153, 0.2)',
+                      filter: 'blur(0.5px)',
+                    }}
+                  />
                 </Link>
               ))}
             </div>
