@@ -1,47 +1,42 @@
-// Проверяем продукты в базе данных
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 async function checkProducts() {
   try {
-    console.log('🔍 Проверяем продукты в базе данных...\n')
+    console.log('🔍 Проверяем продукты в базе данных...')
     
     const products = await prisma.product.findMany({
-      orderBy: { category: 'asc' }
-    })
-    
-    console.log(`📊 Всего продуктов: ${products.length}\n`)
-    
-    // Группируем по категориям
-    const categories = products.reduce((acc, product) => {
-      if (!acc[product.category]) {
-        acc[product.category] = []
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        isAvailable: true
       }
-      acc[product.category].push(product)
-      return acc
-    }, {} as Record<string, any[]>)
-    
-    // Показываем по категориям
-    Object.entries(categories).forEach(([category, products]) => {
-      console.log(`\n📁 ${category} (${products.length} продуктов):`)
-      products.forEach(product => {
-        const hasImage = product.image && product.image !== '' && !product.image.startsWith('http')
-        const imageStatus = hasImage ? '✅' : '❌'
-        console.log(`  ${imageStatus} ${product.name} - ${product.price} ֏ (${product.image || 'нет изображения'})`)
-      })
     })
     
-    // Статистика изображений
-    const withImages = products.filter(p => p.image && p.image !== '' && !p.image.startsWith('http'))
-    const withoutImages = products.filter(p => !p.image || p.image === '' || p.image.startsWith('http'))
+    console.log(`📦 Найдено продуктов: ${products.length}`)
     
-    console.log(`\n📸 Статистика изображений:`)
-    console.log(`  ✅ С изображениями: ${withImages.length}`)
-    console.log(`  ❌ Без изображений: ${withoutImages.length}`)
+    if (products.length === 0) {
+      console.log('❌ В базе данных нет продуктов!')
+      return
+    }
+    
+    console.log('📋 Список продуктов:')
+    products.forEach((product, index) => {
+      console.log(`${index + 1}. ${product.name} (ID: ${product.id}) - ${product.price} ֏ - ${product.isAvailable ? 'Доступен' : 'Недоступен'}`)
+    })
+    
+    // Проверяем доступные продукты
+    const availableProducts = products.filter(p => p.isAvailable)
+    console.log(`\n✅ Доступных продуктов: ${availableProducts.length}`)
+    
+    if (availableProducts.length === 0) {
+      console.log('⚠️ Внимание: Нет доступных продуктов!')
+    }
     
   } catch (error) {
-    console.error('❌ Ошибка:', error)
+    console.error('❌ Ошибка при проверке продуктов:', error)
   } finally {
     await prisma.$disconnect()
   }

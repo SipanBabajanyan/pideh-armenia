@@ -19,7 +19,7 @@ interface UserProfile {
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, getTotalPrice, clearCart } = useCart()
+  const { items, getTotalPrice, clearCart, validateCart } = useCart()
   const { data: session, status } = useSession()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
@@ -36,13 +36,16 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  // Redirect if cart is empty
+  // Redirect if cart is empty and validate cart
   useEffect(() => {
     if (items.length === 0) {
       console.log('Cart is empty, redirecting to cart page')
       router.push('/cart')
+    } else {
+      // Валидируем корзину при загрузке страницы
+      validateCart()
     }
-  }, [items, router])
+  }, [items, router, validateCart])
 
   // Load user profile and auto-fill form (only for authenticated users)
   useEffect(() => {
@@ -129,6 +132,16 @@ export default function CheckoutPage() {
       return
     }
 
+    // Валидируем корзину перед отправкой
+    await validateCart()
+    
+    // Проверяем, что корзина не пуста после валидации
+    if (items.length === 0) {
+      alert('В корзине нет доступных товаров. Пожалуйста, добавьте товары в корзину.')
+      router.push('/products')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -152,7 +165,13 @@ export default function CheckoutPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create order')
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Order creation failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        })
+        throw new Error(`Failed to create order: ${errorData.error || response.statusText}`)
       }
       
       console.log('Order created successfully, redirecting to order-success page')

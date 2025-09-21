@@ -28,6 +28,7 @@ export interface CartContextType {
   clearCart: () => void
   getTotalPrice: () => number
   getTotalItems: () => number
+  validateCart: () => Promise<void>
 }
 
 export interface OrderItemForm {
