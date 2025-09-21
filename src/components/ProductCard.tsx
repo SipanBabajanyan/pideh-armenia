@@ -19,7 +19,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
   return (
     <Link 
       href={`/products/${product.id}`}
-      className={`relative block bg-white rounded-3xl shadow-2xl overflow-visible hover:shadow-3xl hover:scale-105 transition-all duration-700 cursor-pointer group border-0 transform hover:-translate-y-3 ${
+      className={`relative block bg-white rounded-3xl shadow-2xl overflow-visible hover:shadow-3xl hover:scale-110 transition-all duration-700 cursor-pointer group border-0 transform hover:-translate-y-3 ${
         isCompact ? 'rounded-2xl shadow-xl hover:shadow-2xl' : ''
       }`}
       style={{
@@ -52,7 +52,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
               <img 
                 src={product.image} 
                 alt={product.name}
-                className="relative w-full h-full object-contain group-hover:scale-110 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
+                className="relative w-full h-full object-contain group-hover:scale-125 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
                 style={{
                   filter: 'none',
                   transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
