@@ -12,7 +12,7 @@ import ProductCard from '@/components/ProductCard'
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<Category>('Комбо')
+  const [selectedCategory, setSelectedCategory] = useState<string>('Все')
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
@@ -21,7 +21,8 @@ export default function ProductsPage() {
   const { addItem } = useCart()
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const categories: Category[] = [
+  const categories: string[] = [
+    'Все',
     'Комбо',
     'Пиде',
     'Снэк',
@@ -58,7 +59,10 @@ export default function ProductsPage() {
       )
     } else {
       // Если нет поискового запроса, показываем товары выбранной категории
-      filtered = filtered.filter(product => product.category === selectedCategory)
+      if (selectedCategory !== 'Все') {
+        filtered = filtered.filter(product => product.category === selectedCategory)
+      }
+      // Если выбрано "Все", показываем все товары без фильтрации
     }
 
     setFilteredProducts(filtered)
@@ -217,7 +221,7 @@ export default function ProductsPage() {
             {/* Mobile - 2 rows */}
             <div className="md:hidden">
               <div className="space-y-3">
-                {/* First row - Комбо и Пиде занимают весь ряд */}
+                {/* First row - Все и Комбо занимают весь ряд */}
                 <div className="grid grid-cols-2 gap-3">
                   {categories.slice(0, 2).map((category) => (
                     <button
@@ -272,18 +276,49 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        {/* Products by Selected Category */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAddToCart={handleAddToCart}
-              variant="compact"
-              addedToCart={addedToCart}
-            />
-          ))}
-        </div>
+        {/* Products Display */}
+        {selectedCategory === 'Все' && !debouncedSearchQuery ? (
+          // Показываем продукты сгруппированными по категориям
+          <div className="space-y-12">
+            {groupedProducts.map(({ category, products: categoryProducts }) => (
+              <div key={category}>
+                {/* Заголовок категории */}
+                <div className="flex items-center mb-6">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mr-4">
+                    {category}
+                  </h2>
+                  <div className="flex-1 h-px bg-gradient-to-r from-orange-200 to-transparent"></div>
+                </div>
+                
+                {/* Продукты категории */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                  {categoryProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      onAddToCart={handleAddToCart}
+                      variant="compact"
+                      addedToCart={addedToCart}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          // Показываем продукты в обычной сетке (для конкретной категории или поиска)
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+                variant="compact"
+                addedToCart={addedToCart}
+              />
+            ))}
+          </div>
+        )}
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
@@ -304,10 +339,10 @@ export default function ProductsPage() {
                     Очистить поиск
                   </button>
                   <button
-                    onClick={() => setSelectedCategory('Комбо')}
+                    onClick={() => setSelectedCategory('Все')}
                     className="bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors"
                   >
-                    Показать комбо
+                    Показать все товары
                   </button>
                 </div>
               </>
