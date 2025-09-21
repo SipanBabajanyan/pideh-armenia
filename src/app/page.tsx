@@ -43,7 +43,7 @@ export default function Home() {
       
       // Проверяем, что featuredData является массивом
       if (Array.isArray(featuredData)) {
-        setFeaturedProducts(featuredData.slice(0, 3)) // Берем первые 3 товара-хита
+        setFeaturedProducts(featuredData) // Показываем все товары-хиты
       } else {
         console.error('Featured products API returned non-array:', featuredData)
         setFeaturedProducts([])

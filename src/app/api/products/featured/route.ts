@@ -14,9 +14,9 @@ export async function GET(request: NextRequest) {
     if (status) {
       whereClause.status = status
     } else {
-      // Если статус не указан, возвращаем все товары с особыми статусами
+      // Если статус не указан, возвращаем все товары с особыми статусами (кроме BANNER)
       whereClause.status = {
-        in: ['HIT', 'NEW', 'CLASSIC', 'BANNER']
+        in: ['HIT', 'NEW', 'CLASSIC']
       }
     }
 
