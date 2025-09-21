@@ -14,11 +14,13 @@ import {
   XCircle,
   Package,
   ArrowLeft,
-  Edit
+  Edit,
+  Trash2
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import EditProfileModal from '@/components/EditProfileModal'
+import DeleteAccountModal from '@/components/DeleteAccountModal'
 
 interface Order {
   id: string
@@ -41,6 +43,7 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [userProfile, setUserProfile] = useState({
     name: session?.user?.name || null,
     email: session?.user?.email || null,
@@ -124,6 +127,29 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error('Error updating profile:', error)
+      throw error
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch('/api/user/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        // Выходим из системы и перенаправляем на главную
+        const { signOut } = await import('next-auth/react')
+        await signOut({ callbackUrl: '/' })
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to delete account')
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error)
       throw error
     }
   }
@@ -219,7 +245,7 @@ export default function ProfilePage() {
               </button>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-2 gap-4 text-sm mb-4">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-gray-400" />
                 <span className="text-gray-600">{userProfile.phone || 'Не указан'}</span>
@@ -229,6 +255,15 @@ export default function ProfilePage() {
                 <span className="text-gray-600 truncate">{userProfile.address || 'Не указан'}</span>
               </div>
             </div>
+            
+            {/* Mobile Delete Account Button */}
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="w-full bg-red-50 text-red-600 py-3 rounded-xl font-medium hover:bg-red-100 transition-colors flex items-center justify-center space-x-2"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span>Удалить аккаунт</span>
+            </button>
           </div>
         </div>
 
@@ -285,13 +320,23 @@ export default function ProfilePage() {
                 </div>
               </div>
               
-              <button 
-                onClick={() => setIsEditModalOpen(true)}
-                className="w-full mt-6 bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center"
-              >
-                <Edit className="h-5 w-5 mr-2" />
-                Редактировать профиль
-              </button>
+              <div className="space-y-3 mt-6">
+                <button 
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="w-full bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center"
+                >
+                  <Edit className="h-5 w-5 mr-2" />
+                  Редактировать профиль
+                </button>
+                
+                <button
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="w-full bg-red-50 text-red-600 py-3 rounded-xl font-medium hover:bg-red-100 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span>Удалить аккаунт</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -382,6 +427,13 @@ export default function ProfilePage() {
         onClose={() => setIsEditModalOpen(false)}
         user={userProfile}
         onSave={handleSaveProfile}
+      />
+      
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteAccount}
       />
     </div>
   )

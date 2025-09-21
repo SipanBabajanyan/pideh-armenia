@@ -15,10 +15,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Получаем данные пользователя
+    // Получаем данные пользователя (только не удаленных)
     const user = await prisma.user.findUnique({
       where: {
-        id: session.user.id
+        id: session.user.id,
+        deletedAt: null
       },
       select: {
         id: true,
@@ -60,10 +61,11 @@ export async function PUT(request: NextRequest) {
 
     const { name, phone, address } = await request.json()
 
-    // Обновляем данные пользователя
+    // Обновляем данные пользователя (только не удаленных)
     const updatedUser = await prisma.user.update({
       where: {
-        id: session.user.id
+        id: session.user.id,
+        deletedAt: null
       },
       data: {
         name: name || undefined,
