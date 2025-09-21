@@ -131,7 +131,7 @@ export default function CartPage() {
                         <img 
                           src={item.product.image} 
                           alt={item.product.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                             const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
@@ -225,7 +225,7 @@ export default function CartPage() {
                           <img 
                             src={item.product.image} 
                             alt={item.product.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                               const nextElement = e.currentTarget.nextElementSibling as HTMLElement;

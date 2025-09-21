@@ -25,7 +25,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
     >
       {/* Image */}
       <div className={`relative bg-orange-50 flex items-center justify-center overflow-hidden ${
-        isCompact ? 'h-32 bg-gray-100' : 'h-56'
+        isCompact ? 'h-40 bg-gray-100' : 'h-64'
       }`}>
         {product.image && product.image !== 'no-image' ? (
           <img 

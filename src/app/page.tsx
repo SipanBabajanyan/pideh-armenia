@@ -135,7 +135,7 @@ export default function Home() {
             {/* Right content - product showcase */}
             <div className="relative">
               <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-4 text-center border border-white/20">
-                <div className="relative w-24 h-24 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center overflow-hidden">
+                <div className="relative w-28 h-28 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center overflow-hidden">
                   <img 
                     src="/images/pide-blue-pear.jpg" 
                     alt="Пиде Blue Pear"
@@ -263,7 +263,7 @@ export default function Home() {
                 <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-orange-300 rounded-full animate-pulse"></div>
                 
                 {/* Product image */}
-                <div className="relative w-64 h-64 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center overflow-hidden group">
+                <div className="relative w-72 h-72 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center overflow-hidden group">
                   <img 
                     src="/images/pide-blue-pear.jpg" 
                     alt="Пиде Blue Pear"
@@ -529,7 +529,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Featured product 1 */}
             <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-64 bg-orange-100 flex items-center justify-center overflow-hidden">
+              <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
                 <img 
                   src="/images/pide-s-govyadinoj.jpg" 
                   alt="Мясная пиде"
@@ -621,7 +621,7 @@ export default function Home() {
 
             {/* Featured product 2 */}
             <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-64 bg-orange-100 flex items-center justify-center overflow-hidden">
+              <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
                 <img 
                   src="/images/pepperoni-pide.jpg" 
                   alt="Пепперони пиде"
@@ -713,7 +713,7 @@ export default function Home() {
 
             {/* Featured product 3 */}
             <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-64 bg-orange-100 flex items-center justify-center overflow-hidden">
+              <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
                 <img 
                   src="/images/classic-chees.jpg" 
                   alt="Классическая сырная пиде"
