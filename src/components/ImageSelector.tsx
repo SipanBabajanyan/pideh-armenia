@@ -27,7 +27,7 @@ interface ImageFile {
 }
 
 export default function ImageSelector({ value, onChange, className = '' }: ImageSelectorProps) {
-  const [activeTab, setActiveTab] = useState<'gallery' | 'upload'>(value ? 'gallery' : 'upload')
+  const [activeTab, setActiveTab] = useState<'gallery' | 'upload' | null>(null)
   const [images, setImages] = useState<ImageFile[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -60,15 +60,6 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
       loadImages()
     }
   }, [activeTab])
-
-  // Автоматически выбираем подходящую вкладку при изменении value
-  useEffect(() => {
-    if (value && activeTab === 'upload') {
-      setActiveTab('gallery')
-    } else if (!value && activeTab === 'gallery') {
-      setActiveTab('upload')
-    }
-  }, [value])
 
   // Фильтруем изображения по поисковому запросу
   const filteredImages = images.filter(img => 
@@ -207,22 +198,30 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
         </div>
 
         {/* Кнопки справа от изображения */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <Button
             type="button"
             variant={activeTab === 'gallery' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setActiveTab('gallery')}
-            className="w-24"
+            size="default"
+            onClick={() => setActiveTab(activeTab === 'gallery' ? null : 'gallery')}
+            className={`w-32 h-10 ${
+              activeTab === 'gallery' 
+                ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
+                : 'border-orange-300 text-orange-600 hover:bg-orange-50 hover:border-orange-400'
+            }`}
           >
             Галерея
           </Button>
           <Button
             type="button"
             variant={activeTab === 'upload' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setActiveTab('upload')}
-            className="w-24"
+            size="default"
+            onClick={() => setActiveTab(activeTab === 'upload' ? null : 'upload')}
+            className={`w-32 h-10 ${
+              activeTab === 'upload' 
+                ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
+                : 'border-orange-300 text-orange-600 hover:bg-orange-50 hover:border-orange-400'
+            }`}
           >
             Загрузить
           </Button>
