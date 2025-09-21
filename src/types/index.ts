@@ -69,3 +69,6 @@ export const PAYMENT_METHODS = {
 } as const
 
 export type PaymentMethod = keyof typeof PAYMENT_METHODS
+
+// Типы категорий
+export type Category = 'Комбо' | 'Пиде' | 'Снэк' | 'Соусы' | 'Напитки'

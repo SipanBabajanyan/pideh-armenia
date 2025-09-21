@@ -42,7 +42,7 @@ export default function MobileHeader() {
 
   return (
     <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-[100] border-b border-gray-200">
-      <div className="px-4 py-3">
+      <div className="px-4 py-1">
         <div className="flex justify-between items-center">
           {/* Mobile Logo - Centered */}
           <div className="flex-1 flex justify-center">
@@ -52,7 +52,7 @@ export default function MobileHeader() {
                 alt="Pideh Armenia Logo" 
                 width={60} 
                 height={20}
-                className="h-5 w-auto"
+                className="h-4 w-auto"
                 style={{ width: "auto", height: "auto" }}
                 priority
               />
@@ -64,7 +64,7 @@ export default function MobileHeader() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 text-gray-900 hover:text-orange-500 transition-colors duration-200"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 

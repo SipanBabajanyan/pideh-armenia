@@ -14,7 +14,7 @@ const categories = [
   'Комбо', 
   'Снэк',
   'Соусы',
-  'Освежающие напитки'
+  'Напитки'
 ]
 
 export default function NewProductPage() {

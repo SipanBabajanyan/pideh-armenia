@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Валидация категории
-    const validCategories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Освежающие напитки']
+    const validCategories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Напитки']
     if (!validCategories.includes(category)) {
       return NextResponse.json(
         { error: 'Invalid category. Must be one of: ' + validCategories.join(', ') },

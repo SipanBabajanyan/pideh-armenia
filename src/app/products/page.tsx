@@ -26,11 +26,11 @@ export default function ProductsPage() {
     'Пиде',
     'Снэк',
     'Соусы',
-    'Освежающие напитки',
+    'Напитки',
   ]
 
   // Порядок категорий для сортировки
-  const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Освежающие напитки']
+  const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Напитки']
 
   const fetchProducts = async () => {
     try {
@@ -47,13 +47,18 @@ export default function ProductsPage() {
   const filterProducts = useCallback(() => {
     let filtered = products
 
-    filtered = filtered.filter(product => product.category === selectedCategory)
-
+    // Если есть поисковый запрос, ищем по всем товарам
     if (debouncedSearchQuery) {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        product.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        product.ingredients.some(ingredient => 
+          ingredient.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        )
       )
+    } else {
+      // Если нет поискового запроса, показываем товары выбранной категории
+      filtered = filtered.filter(product => product.category === selectedCategory)
     }
 
     setFilteredProducts(filtered)
@@ -186,6 +191,7 @@ export default function ProductsPage() {
 
         {/* Search and Filter */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
@@ -193,7 +199,7 @@ export default function ProductsPage() {
               }`} />
               <input
                 type="text"
-                placeholder="Поиск по названию или описанию..."
+                placeholder="Поиск по названию, описанию или ингредиентам..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg text-gray-900 placeholder-gray-600 bg-white transition-all duration-300 shadow-md hover:shadow-lg"
@@ -234,7 +240,7 @@ export default function ProductsPage() {
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-2 rounded-full font-medium transition-all duration-300 text-sm ${
+                      className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm ${
                         selectedCategory === category
                           ? 'bg-orange-500 text-white shadow-md'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -281,8 +287,36 @@ export default function ProductsPage() {
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Товары не найдены</p>
-            <p className="text-gray-400">Попробуйте изменить фильтры или поисковый запрос</p>
+            <div className="text-6xl mb-4">🍽️</div>
+            {debouncedSearchQuery ? (
+              <>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  По запросу "{debouncedSearchQuery}" ничего не найдено
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Поиск выполнен по всему меню. Попробуйте изменить поисковый запрос или выбрать категорию
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="bg-gray-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-600 transition-colors"
+                  >
+                    Очистить поиск
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory('Комбо')}
+                    className="bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors"
+                  >
+                    Показать комбо
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-500 text-lg">Товары в категории "{selectedCategory}" не найдены</p>
+                <p className="text-gray-400">Попробуйте выбрать другую категорию</p>
+              </>
+            )}
           </div>
         )}
       </div>

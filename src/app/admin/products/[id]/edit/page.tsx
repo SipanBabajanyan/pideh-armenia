@@ -15,7 +15,7 @@ const categories = [
   'Комбо', 
   'Снэк',
   'Соусы',
-  'Освежающие напитки'
+  'Напитки'
 ]
 
 interface EditProductPageProps {
