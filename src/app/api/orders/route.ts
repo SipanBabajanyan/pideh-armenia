@@ -49,26 +49,30 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
+    const { name, phone, address, paymentMethod, notes, items, total, deliveryTime } = await request.json()
 
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    console.log('Creating order with data:', { 
+      hasSession: !!session, 
+      userId: session?.user?.id, 
+      name, 
+      phone, 
+      address, 
+      itemsCount: items?.length,
+      total 
+    })
 
-    const { phone, address, paymentMethod, notes, items, total } = await request.json()
-
-    // Create order
+    // Create order (supports both authenticated and guest users)
     const order = await prisma.order.create({
       data: {
-        userId: session.user.id,
+        userId: session?.user?.id || null, // null for guest orders
+        name: name || 'Guest Customer',
         status: 'PENDING',
         total,
         address,
         phone,
         notes,
         paymentMethod,
+        deliveryTime,
         items: {
           create: items.map((item: { productId: string; quantity: number; price: number }) => ({
             productId: item.productId,
@@ -91,6 +95,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    console.log('Order created successfully:', order.id)
     return NextResponse.json(order, { status: 201 })
   } catch (error) {
     console.error('Create order API error:', error)
