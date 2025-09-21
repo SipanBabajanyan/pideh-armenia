@@ -555,24 +555,6 @@ export default function Home() {
                   ХИТ ПРОДАЖ
                 </div>
                 
-                {/* Quick add button */}
-                <button
-                  onClick={() => handleAddToCart({ 
-                    id: 'meat-pide', 
-                    name: 'Мясная пиде', 
-                    price: 1800, 
-                    category: 'Пиде',
-                    description: 'Сочная говядина, свежие овощи и ароматные специи',
-                    image: '/images/2-myasa-pide.jpg',
-                    ingredients: ['Говядина', 'Овощи', 'Специи'],
-                    isAvailable: true,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                  })}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                </button>
               </div>
               
               <div className="p-6">
@@ -600,9 +582,9 @@ export default function Home() {
                       createdAt: new Date(),
                       updatedAt: new Date()
                     })}
-                    className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
+                    className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
                       addedToCartHits.has('meat-pide')
-                        ? 'bg-green-500 text-white shadow-lg'
+                        ? 'bg-green-500 text-white'
                         : 'bg-orange-500 text-white hover:bg-orange-600'
                     }`}
                     title="В корзину"
@@ -610,10 +592,7 @@ export default function Home() {
                     {addedToCartHits.has('meat-pide') ? (
                       '✓ В корзине'
                     ) : (
-                      <>
-                        <span className="text-sm font-bold mr-1">+</span>
-                        <ShoppingCart className="h-4 w-4" />
-                      </>
+                      '+ Добавить'
                     )}
                   </button>
                 </div>
@@ -647,24 +626,6 @@ export default function Home() {
                   НОВИНКА
                 </div>
                 
-                {/* Quick add button */}
-                <button
-                  onClick={() => handleAddToCart({ 
-                    id: 'pepperoni-pide', 
-                    name: 'Пепперони пиде', 
-                    price: 1600, 
-                    category: 'Пиде',
-                    description: 'Острая колбаса пепперони с сыром моцарелла',
-                    image: '/images/pepperoni-pide.jpg',
-                    ingredients: ['Пепперони', 'Моцарелла', 'Томатный соус'],
-                    isAvailable: true,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                  })}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                </button>
               </div>
               
               <div className="p-6">
@@ -692,9 +653,9 @@ export default function Home() {
                       createdAt: new Date(),
                       updatedAt: new Date()
                     })}
-                    className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
+                    className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
                       addedToCartHits.has('pepperoni-pide')
-                        ? 'bg-green-500 text-white shadow-lg'
+                        ? 'bg-green-500 text-white'
                         : 'bg-orange-500 text-white hover:bg-orange-600'
                     }`}
                     title="В корзину"
@@ -702,10 +663,7 @@ export default function Home() {
                     {addedToCartHits.has('pepperoni-pide') ? (
                       '✓ В корзине'
                     ) : (
-                      <>
-                        <span className="text-sm font-bold mr-1">+</span>
-                        <ShoppingCart className="h-4 w-4" />
-                      </>
+                      '+ Добавить'
                     )}
                   </button>
                 </div>
@@ -739,24 +697,6 @@ export default function Home() {
                   КЛАССИКА
                 </div>
                 
-                {/* Quick add button */}
-                <button
-                  onClick={() => handleAddToCart({ 
-                    id: 'cheese-pide', 
-                    name: 'Классическая сырная пиде', 
-                    price: 1400, 
-                    category: 'Пиде',
-                    description: 'Традиционная пиде с тремя видами сыра',
-                    image: '/images/classic-chees.jpg',
-                    ingredients: ['Сыр моцарелла', 'Сыр чеддер', 'Сыр пармезан'],
-                    isAvailable: true,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                  })}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-orange-500 hover:text-white"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                </button>
               </div>
               
               <div className="p-6">
@@ -784,9 +724,9 @@ export default function Home() {
                       createdAt: new Date(),
                       updatedAt: new Date()
                     })}
-                    className={`w-32 h-12 rounded-xl font-semibold transition-colors duration-300 flex items-center justify-center overflow-hidden ${
+                    className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
                       addedToCartHits.has('cheese-pide')
-                        ? 'bg-green-500 text-white shadow-lg'
+                        ? 'bg-green-500 text-white'
                         : 'bg-orange-500 text-white hover:bg-orange-600'
                     }`}
                     title="В корзину"
@@ -794,10 +734,7 @@ export default function Home() {
                     {addedToCartHits.has('cheese-pide') ? (
                       '✓ В корзине'
                     ) : (
-                      <>
-                        <span className="text-sm font-bold mr-1">+</span>
-                        <ShoppingCart className="h-4 w-4" />
-                      </>
+                      '+ Добавить'
                     )}
                   </button>
                 </div>
