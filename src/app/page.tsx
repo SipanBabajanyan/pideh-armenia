@@ -292,51 +292,76 @@ export default function Home() {
             
             {/* Right content - Product showcase */}
             <div className="relative animate-fade-in-delay-5">
-              {/* Main product card */}
-              <div className="relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 text-center border border-white/20 shadow-2xl">
+              {/* 3D Product Image - Outside the card */}
+              {bannerProduct ? (
+                <div className="relative w-72 h-72 mx-auto mb-6">
+                  {/* 3D Product Image with floating effect */}
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)] group">
+                    {/* 3D Shadow Layer - No blur for maximum quality */}
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                      style={{
+                        filter: 'none',
+                      }}
+                    />
+                    
+                    {/* Main 3D Product Image */}
+                    <img 
+                      src={bannerProduct.image} 
+                      alt={bannerProduct.name}
+                      className="relative w-full h-full object-contain group-hover:scale-125 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
+                      style={{
+                        filter: 'none',
+                        transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                        imageRendering: 'crisp-edges',
+                        imageRendering: '-webkit-optimize-contrast',
+                      }}
+                      loading="lazy"
+                      onError={(e) => {
+                        console.error('Ошибка загрузки изображения:', bannerProduct.image);
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="relative w-72 h-72 mx-auto mb-6">
+                  <div 
+                    className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)] flex items-center justify-center bg-gradient-to-br from-orange-200 to-red-200 opacity-70 group-hover:opacity-90 transition-opacity duration-500 rounded-3xl shadow-2xl text-8xl"
+                    style={{
+                      filter: 'none',
+                      transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                    }}
+                  >
+                    🥟
+                  </div>
+                </div>
+              )}
+
+              {/* Main product card - Same as ProductCard */}
+              <div className="relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 text-center border border-white/20 shadow-2xl overflow-visible hover:shadow-3xl hover:scale-110 transition-all duration-700 cursor-pointer group border-0 transform hover:-translate-y-3">
                 {/* Floating elements */}
                 <div className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-bounce"></div>
                 <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-orange-300 rounded-full animate-pulse"></div>
                 
-                {/* Product image */}
-                <div className="relative w-72 h-72 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center overflow-hidden group">
-                  {bannerProduct ? (
-                    <>
-                      <img 
-                        src={bannerProduct.image} 
-                        alt={bannerProduct.name}
-                        className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (nextElement) {
-                            nextElement.style.display = 'flex';
-                          }
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full flex items-center justify-center text-8xl"
-                        style={{ display: 'none' }}
-                      >
-                        🥟
-                      </div>
-                      
-                      {/* Price badge - moved to bottom right */}
-                      <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-orange-800 px-4 py-2 rounded-full text-lg font-bold shadow-lg">
-                        {bannerProduct.price} ֏
-                      </div>
-                    </>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-8xl">
-                      🥟
-                    </div>
-                  )}
-                </div>
+                {/* 3D Floating Price Badge */}
+                {bannerProduct && (
+                  <div 
+                    className="absolute top-12 right-4 bg-white/95 backdrop-blur-md text-orange-600 px-4 py-2 rounded-2xl text-lg font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
+                    style={{
+                      boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(15px)',
+                    }}
+                  >
+                    {bannerProduct.price} ֏
+                  </div>
+                )}
                 
                 {bannerProduct ? (
                   <>
-                    <h3 className="text-2xl font-bold mb-2">{bannerProduct.name}</h3>
-                    <p className="text-orange-100 mb-4">{bannerProduct.description}</p>
+                    <h3 className="text-2xl font-bold mb-2 group-hover:text-orange-600 transition-colors duration-300">{bannerProduct.name}</h3>
+                    <p className="text-orange-100 mb-4 opacity-80 group-hover:opacity-100 transition-opacity duration-300">{bannerProduct.description}</p>
                     
                     {/* Quick action */}
                     <button
@@ -349,8 +374,8 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-2xl font-bold mb-2">Армянские пиде</h3>
-                    <p className="text-orange-100 mb-4">Вкусные и свежие</p>
+                    <h3 className="text-2xl font-bold mb-2 group-hover:text-orange-600 transition-colors duration-300">Армянские пиде</h3>
+                    <p className="text-orange-100 mb-4 opacity-80 group-hover:opacity-100 transition-opacity duration-300">Вкусные и свежие</p>
                     
                     <Link 
                       href="/products"
