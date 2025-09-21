@@ -40,11 +40,11 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
           <div className="relative w-full h-full">
             {/* 3D Product Image with floating effect */}
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)]">
-              {/* 3D Shadow Layer - Lightened shadow */}
+              {/* 3D Shadow Layer - No blur for maximum quality */}
               <div 
-                className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl blur-lg transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
                 style={{
-                  filter: 'blur(20px)',
+                  filter: 'none',
                 }}
               />
               
@@ -52,10 +52,12 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
               <img 
                 src={product.image} 
                 alt={product.name}
-                className="relative w-full h-full object-contain drop-shadow-2xl group-hover:scale-110 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
+                className="relative w-full h-full object-contain group-hover:scale-110 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
                 style={{
-                  filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.15)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.2))',
+                  filter: 'none',
                   transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                  imageRendering: 'crisp-edges',
+                  imageRendering: '-webkit-optimize-contrast',
                 }}
                 loading="lazy"
                 onError={(e) => {
@@ -65,13 +67,13 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 }}
               />
               
-              {/* 3D Highlight Effect */}
-              <div 
+              {/* 3D Highlight Effect - Removed white overlay */}
+              {/* <div 
                 className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"
                 style={{
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 70%)',
                 }}
-              />
+              /> */}
             </div>
           </div>
         ) : (
@@ -80,7 +82,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
               isCompact ? 'text-6xl' : 'text-8xl'
             }`}
             style={{
-              filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.15))',
+              filter: 'none',
               transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
             }}
           >
@@ -186,8 +188,8 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 }}
                 title="В корзину"
               >
-                {/* 3D Button Background Animation */}
-                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                {/* 3D Button Background Animation - Removed white overlay */}
+                {/* <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" /> */}
                 
                 {isAdded ? (
                   <span className="flex items-center relative z-10">
@@ -236,8 +238,8 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 }}
                 title="В корзину"
               >
-                {/* 3D Button Background Animation */}
-                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                {/* 3D Button Background Animation - Removed white overlay */}
+                {/* <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" /> */}
                 
                 {isAdded ? (
                   <span className="flex items-center relative z-10">
