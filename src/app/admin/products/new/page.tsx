@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Save, X } from 'lucide-react'
 import Link from 'next/link'
 import Header from '@/components/Header'
+import ImageSelector from '@/components/ImageSelector'
 
 const categories = [
   'Пиде',
@@ -204,16 +205,12 @@ export default function NewProductPage() {
                 {/* Изображение */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL изображения
+                    Изображение товара
                   </label>
-                  <Input
+                  <ImageSelector
                     value={formData.image}
-                    onChange={(e) => handleInputChange('image', e.target.value)}
-                    placeholder="https://example.com/image.jpg"
+                    onChange={(imagePath) => handleInputChange('image', imagePath)}
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Если не указано, будет использовано изображение по умолчанию
-                  </p>
                 </div>
 
                 {/* Ингредиенты */}
