@@ -23,6 +23,7 @@ export async function GET(
         image: true,
         ingredients: true,
         isAvailable: true,
+        status: true,
         createdAt: true
       }
     })

@@ -1,7 +1,7 @@
-import { User, Product, Order, OrderItem, OrderStatus } from '@prisma/client'
+import { User, Product, Order, OrderItem, OrderStatus, ProductStatus } from '@prisma/client'
 
 // Экспортируем типы из Prisma
-export { Product, User, Order, OrderItem, OrderStatus }
+export { Product, User, Order, OrderItem, OrderStatus, ProductStatus }
 
 // Расширенные типы для приложения
 export interface ProductWithIngredients extends Product {
@@ -61,6 +61,13 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   READY: 'Готов к выдаче',
   DELIVERED: 'Доставлен',
   CANCELLED: 'Отменен'
+}
+
+export const PRODUCT_STATUS_LABELS: Record<ProductStatus, string> = {
+  REGULAR: 'Обычный',
+  HIT: 'Хит продаж',
+  NEW: 'Новинка',
+  CLASSIC: 'Классика'
 }
 
 export const PAYMENT_METHODS = {

@@ -20,6 +20,12 @@ const categories = [
   'Напитки'
 ]
 
+const statuses = [
+  { value: 'HIT', label: 'Хит продаж' },
+  { value: 'NEW', label: 'Новинка' },
+  { value: 'CLASSIC', label: 'Классика' }
+]
+
 interface EditProductPageProps {
   params: Promise<{
     id: string
@@ -39,7 +45,8 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     category: '',
     image: '',
     ingredients: '',
-    isAvailable: true
+    isAvailable: true,
+    status: ''
   })
   
   const [loading, setLoading] = useState(true)
@@ -79,7 +86,8 @@ export default function EditProductPage({ params }: EditProductPageProps) {
           category: productData.category || '',
           image: productData.image || '',
           ingredients: productData.ingredients?.join(', ') || '',
-          isAvailable: productData.isAvailable ?? true
+          isAvailable: productData.isAvailable ?? true,
+          status: productData.status === 'REGULAR' ? '' : (productData.status || '')
         })
       } catch (error) {
         console.error('Error fetching product:', error)
@@ -305,6 +313,25 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                     {categories.map((category) => (
                       <option key={category} value={category}>
                         {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Статус */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Статус товара
+                  </label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+                  >
+                    <option value="">Не выбрано (обычный товар)</option>
+                    {statuses.map((status) => (
+                      <option key={status.value} value={status.value}>
+                        {status.label}
                       </option>
                     ))}
                   </select>

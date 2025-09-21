@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { Product } from '@/types'
+import { Product, ProductStatus } from '@/types'
 
 export default function AdminProducts() {
   const { data: session, status } = useSession()
@@ -24,6 +24,7 @@ export default function AdminProducts() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedStatus, setSelectedStatus] = useState('')
 
   useEffect(() => {
     if (status === 'loading') return
@@ -73,10 +74,47 @@ export default function AdminProducts() {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = !selectedCategory || product.category === selectedCategory
-    return matchesSearch && matchesCategory
+    
+    // Фильтр по статусу: "all" - все товары, "special" - только особые (HIT, NEW, CLASSIC)
+    const matchesStatus = !selectedStatus || 
+                         (selectedStatus === 'all') || 
+                         (selectedStatus === 'special' && ['HIT', 'NEW', 'CLASSIC'].includes(product.status))
+    
+    return matchesSearch && matchesCategory && matchesStatus
   })
 
   const categories = [...new Set(products.map(p => p.category))]
+  
+  // Статистика по статусам
+  const statusStats = {
+    total: products.length,
+    regular: products.filter(p => p.status === 'REGULAR').length,
+    hit: products.filter(p => p.status === 'HIT').length,
+    new: products.filter(p => p.status === 'NEW').length,
+    classic: products.filter(p => p.status === 'CLASSIC').length
+  }
+
+  const getStatusBadge = (productStatus: ProductStatus) => {
+    switch (productStatus) {
+      case 'HIT':
+        return { 
+          text: 'ХИТ', 
+          className: 'bg-red-100 text-red-800 border-red-200' 
+        }
+      case 'NEW':
+        return { 
+          text: 'НОВИНКА', 
+          className: 'bg-green-100 text-green-800 border-green-200' 
+        }
+      case 'CLASSIC':
+        return { 
+          text: 'КЛАССИКА', 
+          className: 'bg-blue-100 text-blue-800 border-blue-200' 
+        }
+      default:
+        return null // Обычные товары без лейбла
+    }
+  }
 
   if (status === 'loading' || isLoading) {
     return (
@@ -127,7 +165,7 @@ export default function AdminProducts() {
 
         {/* Filters */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Search className="inline h-4 w-4 mr-1" />
@@ -159,15 +197,53 @@ export default function AdminProducts() {
                 ))}
               </select>
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <Filter className="inline h-4 w-4 mr-1" />
+                Статус
+              </label>
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 bg-white"
+                style={{ color: '#111827' }}
+              >
+                <option value="" style={{ color: '#111827', backgroundColor: 'white' }}>Все</option>
+                <option value="special" style={{ color: '#111827', backgroundColor: 'white' }}>Особые</option>
+              </select>
+            </div>
           </div>
         </div>
 
         {/* Products List */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="p-6 border-b border-gray-300">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Товары ({filteredProducts.length})
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Товары ({filteredProducts.length})
+              </h2>
+              
+              {/* Статистика по статусам */}
+              <div className="flex items-center space-x-4 text-sm">
+                <span className="text-gray-500">Всего: {statusStats.total}</span>
+                {statusStats.hit > 0 && (
+                  <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
+                    Хиты: {statusStats.hit}
+                  </span>
+                )}
+                {statusStats.new > 0 && (
+                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                    Новинки: {statusStats.new}
+                  </span>
+                )}
+                {statusStats.classic > 0 && (
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                    Классика: {statusStats.classic}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
           
           <div className="divide-y divide-gray-200">
@@ -205,6 +281,15 @@ export default function AdminProducts() {
                       }`}>
                         {product.isAvailable ? 'Доступен' : 'Недоступен'}
                       </span>
+                      {/* Статус товара */}
+                      {(() => {
+                        const statusBadge = getStatusBadge(product.status)
+                        return statusBadge ? (
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusBadge.className}`}>
+                            {statusBadge.text}
+                          </span>
+                        ) : null
+                      })()}
                     </div>
                   </div>
                   

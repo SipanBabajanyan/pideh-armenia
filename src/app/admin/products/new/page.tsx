@@ -19,6 +19,12 @@ const categories = [
   'Напитки'
 ]
 
+const statuses = [
+  { value: 'HIT', label: 'Хит продаж' },
+  { value: 'NEW', label: 'Новинка' },
+  { value: 'CLASSIC', label: 'Классика' }
+]
+
 export default function NewProductPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -30,7 +36,8 @@ export default function NewProductPage() {
     category: '',
     image: '',
     ingredients: '',
-    isAvailable: true
+    isAvailable: true,
+    status: ''
   })
   
   const [loading, setLoading] = useState(false)
@@ -197,6 +204,25 @@ export default function NewProductPage() {
                     {categories.map((category) => (
                       <option key={category} value={category}>
                         {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Статус */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Статус товара
+                  </label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+                  >
+                    <option value="">Не выбрано (обычный товар)</option>
+                    {statuses.map((status) => (
+                      <option key={status.value} value={status.value}>
+                        {status.label}
                       </option>
                     ))}
                   </select>

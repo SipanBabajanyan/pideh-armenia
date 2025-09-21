@@ -30,7 +30,7 @@ export async function PUT(
 
     // Получаем данные из запроса
     const body = await request.json()
-    const { name, description, price, category, image, ingredients, isAvailable } = body
+    const { name, description, price, category, image, ingredients, isAvailable, status } = body
 
     // Проверяем существование товара
     const existingProduct = await prisma.product.findUnique({
@@ -63,6 +63,17 @@ export async function PUT(
       }
     }
 
+    // Валидация статуса (пустая строка означает REGULAR)
+    if (status !== undefined) {
+      const validStatuses = ['', 'REGULAR', 'HIT', 'NEW', 'CLASSIC']
+      if (!validStatuses.includes(status)) {
+        return NextResponse.json(
+          { error: 'Invalid status. Must be one of: ' + validStatuses.filter(s => s).join(', ') },
+          { status: 400 }
+        )
+      }
+    }
+
     // Обновляем товар
     const updatedProduct = await prisma.product.update({
       where: { id },
@@ -73,7 +84,8 @@ export async function PUT(
         ...(category && { category }),
         ...(image !== undefined && { image: image || 'no-image' }), // Специальное значение для отсутствия изображения
         ...(ingredients && { ingredients }),
-        ...(isAvailable !== undefined && { isAvailable })
+        ...(isAvailable !== undefined && { isAvailable }),
+        ...(status !== undefined && { status: status || 'REGULAR' }) // Если статус пустой, то REGULAR
       }
     })
 

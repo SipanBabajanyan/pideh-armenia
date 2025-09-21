@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     // Получаем данные из запроса
     const body = await request.json()
-    const { name, description, price, category, image, ingredients, isAvailable = true } = body
+    const { name, description, price, category, image, ingredients, isAvailable = true, status = 'REGULAR' } = body
 
     // Валидация обязательных полей
     if (!name || !description || !price || !category) {
@@ -52,6 +52,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Валидация статуса (пустая строка означает REGULAR)
+    const validStatuses = ['', 'REGULAR', 'HIT', 'NEW', 'CLASSIC']
+    if (status && !validStatuses.includes(status)) {
+      return NextResponse.json(
+        { error: 'Invalid status. Must be one of: ' + validStatuses.filter(s => s).join(', ') },
+        { status: 400 }
+      )
+    }
+
     // Создаем товар
     const product = await prisma.product.create({
       data: {
@@ -61,7 +70,8 @@ export async function POST(request: NextRequest) {
         category,
         image: image || 'no-image', // Специальное значение для отсутствия изображения
         ingredients: ingredients || [],
-        isAvailable
+        isAvailable,
+        status: status || 'REGULAR' // Если статус не выбран, то REGULAR
       }
     })
 

@@ -13,6 +13,7 @@ import ProductCard from "@/components/ProductCard";
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
   const [comboProducts, setComboProducts] = useState<Product[]>([])
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Комбо')
   const [searchQuery, setSearchQuery] = useState('')
@@ -26,15 +27,30 @@ export default function Home() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products')
-      const data = await response.json()
-      setProducts(data)
+      const [productsResponse, featuredResponse] = await Promise.all([
+        fetch('/api/products'),
+        fetch('/api/products/featured')
+      ])
+      
+      const productsData = await productsResponse.json()
+      const featuredData = await featuredResponse.json()
+      
+      setProducts(productsData)
+      
+      // Проверяем, что featuredData является массивом
+      if (Array.isArray(featuredData)) {
+        setFeaturedProducts(featuredData.slice(0, 3)) // Берем первые 3 товара-хита
+      } else {
+        console.error('Featured products API returned non-array:', featuredData)
+        setFeaturedProducts([])
+      }
       
       // Фильтруем комбо товары для секции хитов
-      const combos = data.filter((product: Product) => product.category === 'Комбо')
+      const combos = productsData.filter((product: Product) => product.category === 'Комбо')
       setComboProducts(combos.slice(0, 4)) // Берем первые 4 комбо
     } catch (error) {
       console.error('Error fetching products:', error)
+      setFeaturedProducts([])
     } finally {
       setLoading(false)
     }
@@ -66,6 +82,19 @@ export default function Home() {
         return newSet
       })
     }, 2000)
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'HIT':
+        return { text: 'ХИТ ПРОДАЖ', color: 'bg-red-500' }
+      case 'NEW':
+        return { text: 'НОВИНКА', color: 'bg-green-500' }
+      case 'CLASSIC':
+        return { text: 'КЛАССИКА', color: 'bg-blue-500' }
+      default:
+        return { text: 'ПОПУЛЯРНОЕ', color: 'bg-orange-500' }
+    }
   }
 
   const getFilteredProducts = () => {
@@ -528,218 +557,75 @@ export default function Home() {
 
           {/* Featured products grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Featured product 1 */}
-            <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
-                <img 
-                  src="/images/pide-s-govyadinoj.jpg" 
-                  alt="Мясная пиде"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                    if (nextElement) {
-                      nextElement.style.display = 'flex';
-                    }
-                  }}
-                />
-                <div 
-                  className="w-full h-full flex items-center justify-center text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                  style={{ display: 'none' }}
-                >
-                  🥟
-                </div>
-                
-                {/* Special badge */}
-                <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                  ХИТ ПРОДАЖ
-                </div>
-                
-              </div>
-              
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200">
-                  Мясная пиде
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Сочная говядина, свежие овощи и ароматные специи в традиционной форме
-                </p>
-                
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-2xl font-bold text-orange-500">1800 ֏</span>
+            {featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => {
+                const badge = getStatusBadge(product.status)
+                return (
+                  <div key={product.id} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                    <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                          if (nextElement) {
+                            nextElement.style.display = 'flex';
+                          }
+                        }}
+                      />
+                      <div 
+                        className="w-full h-full flex items-center justify-center text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                        style={{ display: 'none' }}
+                      >
+                        🥟
+                      </div>
+                      
+                      {/* Dynamic badge based on status */}
+                      <div className={`absolute top-4 left-4 ${badge.color} text-white px-3 py-1 rounded-full text-sm font-bold`}>
+                        {badge.text}
+                      </div>
+                    </div>
+                    
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-4">
+                        {product.description}
+                      </p>
+                      
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
+                        </div>
+                        <button
+                          onClick={() => handleAddToCartHits(product)}
+                          className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
+                            addedToCartHits.has(product.id)
+                              ? 'bg-green-500 text-white'
+                              : 'bg-orange-500 text-white hover:bg-orange-600'
+                          }`}
+                          title="В корзину"
+                        >
+                          {addedToCartHits.has(product.id) ? (
+                            '✓ В корзине'
+                          ) : (
+                            '+ Добавить'
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => handleAddToCartHits({ 
-                      id: 'meat-pide', 
-                      name: 'Мясная пиде', 
-                      price: 1800, 
-                      category: 'Пиде',
-                      description: 'Сочная говядина, свежие овощи и ароматные специи',
-                      image: '/images/2-myasa-pide.jpg',
-                      ingredients: ['Говядина', 'Овощи', 'Специи'],
-                      isAvailable: true,
-                      createdAt: new Date(),
-                      updatedAt: new Date()
-                    })}
-                    className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
-                      addedToCartHits.has('meat-pide')
-                        ? 'bg-green-500 text-white'
-                        : 'bg-orange-500 text-white hover:bg-orange-600'
-                    }`}
-                    title="В корзину"
-                  >
-                    {addedToCartHits.has('meat-pide') ? (
-                      '✓ В корзине'
-                    ) : (
-                      '+ Добавить'
-                    )}
-                  </button>
-                </div>
+                )
+              })
+            ) : (
+              // Fallback if no featured products
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500 text-lg">Товары-хиты скоро появятся!</p>
               </div>
-            </div>
-
-            {/* Featured product 2 */}
-            <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
-                <img 
-                  src="/images/pepperoni-pide.jpg" 
-                  alt="Пепперони пиде"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                    if (nextElement) {
-                      nextElement.style.display = 'flex';
-                    }
-                  }}
-                />
-                <div 
-                  className="w-full h-full flex items-center justify-center text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                  style={{ display: 'none' }}
-                >
-                  🥟
-                </div>
-                
-                {/* Special badge */}
-                <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                  НОВИНКА
-                </div>
-                
-              </div>
-              
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200">
-                  Пепперони пиде
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Острая колбаса пепперони с сыром моцарелла и томатным соусом
-                </p>
-                
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-2xl font-bold text-orange-500">1600 ֏</span>
-                  </div>
-                  <button
-                    onClick={() => handleAddToCartHits({ 
-                      id: 'pepperoni-pide', 
-                      name: 'Пепперони пиде', 
-                      price: 1600, 
-                      category: 'Пиде',
-                      description: 'Острая колбаса пепперони с сыром моцарелла',
-                      image: '/images/pepperoni-pide.jpg',
-                      ingredients: ['Пепперони', 'Моцарелла', 'Томатный соус'],
-                      isAvailable: true,
-                      createdAt: new Date(),
-                      updatedAt: new Date()
-                    })}
-                    className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
-                      addedToCartHits.has('pepperoni-pide')
-                        ? 'bg-green-500 text-white'
-                        : 'bg-orange-500 text-white hover:bg-orange-600'
-                    }`}
-                    title="В корзину"
-                  >
-                    {addedToCartHits.has('pepperoni-pide') ? (
-                      '✓ В корзине'
-                    ) : (
-                      '+ Добавить'
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured product 3 */}
-            <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
-                <img 
-                  src="/images/classic-chees.jpg" 
-                  alt="Классическая сырная пиде"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                    if (nextElement) {
-                      nextElement.style.display = 'flex';
-                    }
-                  }}
-                />
-                <div 
-                  className="w-full h-full flex items-center justify-center text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                  style={{ display: 'none' }}
-                >
-                  🥟
-                </div>
-                
-                {/* Special badge */}
-                <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                  КЛАССИКА
-                </div>
-                
-              </div>
-              
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200">
-                  Классическая сырная пиде
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Традиционная пиде с тремя видами сыра и свежей зеленью
-                </p>
-                
-                <div className="flex justify-between items-center">
-                  <div>
-                    <span className="text-2xl font-bold text-orange-500">1400 ֏</span>
-                  </div>
-                  <button
-                    onClick={() => handleAddToCartHits({ 
-                      id: 'cheese-pide', 
-                      name: 'Классическая сырная пиде', 
-                      price: 1400, 
-                      category: 'Пиде',
-                      description: 'Традиционная пиде с тремя видами сыра',
-                      image: '/images/classic-chees.jpg',
-                      ingredients: ['Сыр моцарелла', 'Сыр чеддер', 'Сыр пармезан'],
-                      isAvailable: true,
-                      createdAt: new Date(),
-                      updatedAt: new Date()
-                    })}
-                    className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
-                      addedToCartHits.has('cheese-pide')
-                        ? 'bg-green-500 text-white'
-                        : 'bg-orange-500 text-white hover:bg-orange-600'
-                    }`}
-                    title="В корзину"
-                  >
-                    {addedToCartHits.has('cheese-pide') ? (
-                      '✓ В корзине'
-                    ) : (
-                      '+ Добавить'
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* CTA */}

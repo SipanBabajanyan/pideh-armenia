@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
     const search = searchParams.get('search')
+    const status = searchParams.get('status')
 
     const whereClause: any = {
       isAvailable: true
@@ -15,6 +16,10 @@ export async function GET(request: NextRequest) {
 
     if (category && category !== 'Все') {
       whereClause.category = category
+    }
+
+    if (status) {
+      whereClause.status = status
     }
 
     if (search) {
@@ -36,6 +41,7 @@ export async function GET(request: NextRequest) {
         image: true,
         ingredients: true,
         isAvailable: true,
+        status: true,
         createdAt: true
       }
     })
