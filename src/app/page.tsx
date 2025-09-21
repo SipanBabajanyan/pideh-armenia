@@ -97,6 +97,7 @@ export default function Home() {
       <Header />
       {/* Отступ для fixed хедера */}
       <div className="md:hidden h-24"></div>
+      <div className="hidden md:block h-24"></div>
 
       {/* Hero Section - Compact for Mobile */}
       <section className="relative bg-orange-500 text-white overflow-hidden">
