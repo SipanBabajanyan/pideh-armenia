@@ -11,8 +11,7 @@ import {
   DollarSign, 
   TrendingUp,
   Clock,
-  CheckCircle,
-  AlertCircle
+  CheckCircle
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -196,22 +195,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Recent Orders */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Последние заказы</h2>
-            <Link 
-              href="/admin/orders" 
-              className="text-orange-500 hover:text-orange-600 font-medium"
-            >
-              Посмотреть все
-            </Link>
-          </div>
-          <div className="text-center py-8 text-gray-500">
-            <AlertCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <p>Заказы будут отображаться здесь</p>
-          </div>
-        </div>
       </div>
       
       <Footer />

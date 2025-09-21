@@ -149,11 +149,12 @@ export default function AdminProducts() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 bg-white"
+                style={{ color: '#111827' }}
               >
-                <option value="">Все категории</option>
+                <option value="" style={{ color: '#111827', backgroundColor: 'white' }}>Все категории</option>
                 {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
+                  <option key={category} value={category} style={{ color: '#111827', backgroundColor: 'white' }}>{category}</option>
                 ))}
               </select>
             </div>
