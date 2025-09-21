@@ -578,73 +578,21 @@ export default function Home() {
           </div>
 
           {/* Featured products grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {featuredProducts.length > 0 ? (
-              featuredProducts.map((product) => {
-                const badge = getStatusBadge(product.status)
-                return (
-                  <div key={product.id} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <div className="relative h-72 bg-orange-100 flex items-center justify-center overflow-hidden">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (nextElement) {
-                            nextElement.style.display = 'flex';
-                          }
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full flex items-center justify-center text-8xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                        style={{ display: 'none' }}
-                      >
-                        🥟
-                      </div>
-                      
-                      {/* Dynamic badge based on status */}
-                      <div className={`absolute top-4 left-4 ${badge.color} text-white px-3 py-1 rounded-full text-sm font-bold`}>
-                        {badge.text}
-                      </div>
-                    </div>
-                    
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4">
-                        {product.description}
-                      </p>
-                      
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <span className="text-2xl font-bold text-orange-500">{product.price} ֏</span>
-                        </div>
-                        <button
-                          onClick={() => handleAddToCartHits(product)}
-                          className={`w-40 h-14 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center overflow-hidden hover:scale-105 shadow-lg ${
-                            addedToCartHits.has(product.id)
-                              ? 'bg-green-500 text-white'
-                              : 'bg-orange-500 text-white hover:bg-orange-600'
-                          }`}
-                          title="В корзину"
-                        >
-                          {addedToCartHits.has(product.id) ? (
-                            '✓ В корзине'
-                          ) : (
-                            <span className="flex items-center">
-                              <ShoppingCart className="w-4 h-4 mr-1" />
-                              Добавить
-                            </span>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
+              featuredProducts.map((product, index) => (
+                <div 
+                  key={product.id}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <ProductCard
+                    product={product}
+                    onAddToCart={handleAddToCartHits}
+                    variant="compact"
+                    addedToCart={addedToCartHits}
+                  />
+                </div>
+              ))
             ) : (
               // Fallback if no featured products
               <div className="col-span-full text-center py-12">

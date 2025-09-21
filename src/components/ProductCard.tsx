@@ -115,7 +115,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
               }}
             >
               <Star className="w-3 h-3" />
-              ХИТ
+              ХИТ ПРОДАЖ
             </div>
           )}
           
@@ -129,6 +129,19 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
             >
               <Zap className="w-3 h-3" />
               НОВИНКА
+            </div>
+          )}
+          
+          {product.status === 'CLASSIC' && (
+            <div 
+              className="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+              style={{
+                boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <Star className="w-3 h-3" />
+              КЛАССИКА
             </div>
           )}
         </div>
