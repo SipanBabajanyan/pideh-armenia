@@ -193,8 +193,8 @@ export default function Home() {
                       🥟
                     </div>
                     
-                    {/* Price badge */}
-                    <div className="absolute -top-1 -right-1 bg-yellow-400 text-orange-800 px-2 py-1 rounded-full text-xs font-bold">
+                    {/* Price badge - moved to bottom right */}
+                    <div className="absolute -bottom-1 -right-1 bg-yellow-400 text-orange-800 px-3 py-2 rounded-full text-sm font-bold shadow-lg">
                       {bannerProduct.price} ֏
                     </div>
                   </div>
@@ -321,8 +321,8 @@ export default function Home() {
                         🥟
                       </div>
                       
-                      {/* Price badge */}
-                      <div className="absolute -top-2 -right-2 bg-yellow-400 text-orange-800 px-3 py-1 rounded-full text-sm font-bold">
+                      {/* Price badge - moved to bottom right */}
+                      <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-orange-800 px-4 py-2 rounded-full text-lg font-bold shadow-lg">
                         {bannerProduct.price} ֏
                       </div>
                     </>
