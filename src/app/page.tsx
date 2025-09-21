@@ -366,7 +366,7 @@ export default function Home() {
                     {/* Quick action */}
                     <button
                       onClick={() => handleAddToCart(bannerProduct)}
-                      className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 hover:scale-105 transition-all duration-300 shadow-lg"
+                      className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:scale-105 active:bg-green-500 active:text-white transition-all duration-300 shadow-lg"
                     >
                       <ShoppingCart className="inline w-5 h-5 mr-2" />
                       Быстрый заказ
@@ -379,7 +379,7 @@ export default function Home() {
                     
                     <Link 
                       href="/products"
-                      className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 hover:scale-105 transition-all duration-300 shadow-lg inline-block"
+                      className="bg-yellow-400 text-orange-800 px-6 py-3 rounded-xl font-bold hover:scale-105 active:bg-green-500 active:text-white transition-all duration-300 shadow-lg inline-block"
                     >
                       <ShoppingCart className="inline w-5 h-5 mr-2" />
                       Посмотреть меню
