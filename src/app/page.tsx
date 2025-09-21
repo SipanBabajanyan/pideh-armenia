@@ -8,6 +8,7 @@ import { useCart } from "@/hooks/useCart";
 import { Product } from "@/types";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ProductCard from "@/components/ProductCard";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
@@ -482,79 +483,15 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {getFilteredProducts().map((product, index) => (
                 <div 
-                  key={product.id} 
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100"
+                  key={product.id}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  {/* Product image */}
-                  <div className="relative h-32 md:h-40 bg-orange-50 flex items-center justify-center overflow-hidden">
-                    {product.image ? (
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (nextElement) {
-                            nextElement.style.display = 'flex';
-                          }
-                        }}
-                      />
-                    ) : null}
-                    <div 
-                      className="w-full h-full flex items-center justify-center text-4xl md:text-6xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                      style={{ display: product.image ? 'none' : 'flex' }}
-                    >
-                      🥟
-                    </div>
-                    
-                    {/* Badge - только для популярных товаров */}
-                    {isPopularProduct(product) && (
-                      <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                        Популярное
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Product info */}
-                  <div className="p-3 md:p-4">
-                    <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-200 line-clamp-2">
-                      {product.name}
-                    </h3>
-                    
-                    {/* Price */}
-                    <div className="mb-3">
-                      <span className="text-lg md:text-xl font-bold text-orange-500">{product.price} ֏</span>
-                    </div>
-                    
-                    {/* Add to cart button */}
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      className={`w-full h-10 md:h-12 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
-                        addedToCart.has(product.id)
-                          ? 'bg-green-500 text-white shadow-lg'
-                          : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105'
-                      }`}
-                      title="В корзину"
-                    >
-                      {addedToCart.has(product.id) ? (
-                        <span className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          В корзине
-                        </span>
-                      ) : (
-                        <span className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                          </svg>
-                          Добавить
-                        </span>
-                      )}
-                    </button>
-                  </div>
+                  <ProductCard
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                    variant="compact"
+                    addedToCart={addedToCart}
+                  />
                 </div>
               ))}
             </div>
