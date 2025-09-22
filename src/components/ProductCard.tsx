@@ -174,7 +174,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
       </div>
       
       {/* 3D Content Section - Adjusted for 3D product */}
-      <div className={`relative ${isCompact ? 'p-4 pt-16' : 'p-6 pt-20'}`}>
+      <div className={`relative ${isCompact ? 'p-4 -mt-3' : 'p-6 -mt-5'}`}>
         {/* Product Name */}
         <h3 className={`font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors duration-300 ${
           isCompact ? 'text-sm mb-3' : 'text-xl mb-4'
@@ -200,7 +200,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                   e.stopPropagation()
                   onAddToCart(product)
                 }}
-                className={`w-full h-14 rounded-2xl font-bold text-sm transition-all duration-300 shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 hover:shadow-3xl relative active:scale-95 ${
+                className={`w-full h-10 rounded-2xl font-bold text-sm transition-all duration-300 shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 hover:shadow-3xl relative active:scale-95 ${
                   isAdded
                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
                     : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600'
@@ -250,7 +250,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                   e.stopPropagation()
                   onAddToCart(product)
                 }}
-                className={`px-6 h-14 rounded-2xl font-bold text-sm transition-all duration-500 shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 hover:shadow-3xl relative min-w-[140px] ${
+                className={`px-6 h-10 rounded-2xl font-bold text-sm transition-all duration-500 shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 hover:shadow-3xl relative min-w-[140px] ${
                   isAdded
                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
                     : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600'
