@@ -149,7 +149,7 @@ export default function Home() {
         <div className="md:hidden relative max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             {/* Left content - compact */}
-            <div className="flex-1">
+            <div className="flex-1 pr-4">
               <h1 className="text-3xl font-bold leading-tight mb-3">
                 <span className="block text-white">Армянские</span>
                 <span className="block text-yellow-200">пиде</span>
@@ -170,29 +170,15 @@ export default function Home() {
             </div>
             
             {/* Right content - product showcase */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               {bannerProduct ? (
-                <div className="relative bg-white/20 backdrop-blur-xl rounded-3xl p-5 text-center border-2 border-white/40 shadow-2xl hover:shadow-3xl transition-all duration-500 group">
-                  {/* Orange Background Elements */}
-                  <div className="absolute inset-0 overflow-hidden rounded-3xl">
-                    <div className="absolute -top-2 -left-2 w-6 h-6 bg-orange-500/40 rounded-full animate-pulse"></div>
-                    <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-yellow-400/50 rounded-full animate-bounce"></div>
-                  </div>
-
-                  {/* Enhanced Product Image Container - 3D Effect */}
-                  <div className="relative w-36 h-36 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden">
-                    {/* 3D Shadow Effect - Removed */}
-                    {/* <div className="absolute inset-0 bg-gradient-to-br from-gray-300/30 to-gray-400/20 rounded-2xl transform translate-y-2 translate-x-1 group-hover:translate-y-3 group-hover:translate-x-2 transition-all duration-500" style={{ filter: 'blur(4px)' }}></div> */}
-                    
+                <div className="relative bg-white/25 backdrop-blur-xl rounded-2xl p-3 text-center border border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-300 group">
+                  {/* Product Image Container */}
+                  <div className="relative w-28 h-28 mx-auto mb-2 rounded-xl flex items-center justify-center overflow-hidden">
                     <img 
                       src={bannerProduct.image} 
                       alt={bannerProduct.name}
-                      className="relative w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500 z-10"
-                      style={{
-                        imageRendering: 'crisp-edges',
-                        imageRendering: '-webkit-optimize-contrast',
-                        transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
-                      }}
+                      className="relative w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                         const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
@@ -202,46 +188,44 @@ export default function Home() {
                       }}
                     />
                     <div 
-                      className="w-full h-full flex items-center justify-center text-6xl z-10"
+                      className="w-full h-full flex items-center justify-center text-4xl"
                       style={{ display: 'none' }}
                     >
                       🥟
                     </div>
                     
-                    {/* Enhanced Price Badge */}
-                    <div className="absolute -bottom-4 -right-4 bg-yellow-400 text-orange-800 px-4 py-2 rounded-full text-sm font-bold shadow-xl border-2 border-white/40 group-hover:scale-110 transition-all duration-300 z-20">
+                    {/* Price Badge - Bottom Right */}
+                    <div className="absolute bottom-1 right-1 bg-yellow-400 text-orange-800 px-2 py-1 rounded-lg text-xs font-bold shadow-lg">
                       {bannerProduct.price} ֏
                     </div>
-
-                    {/* Orange Floating Accent */}
-                    <div className="absolute -top-2 -left-2 w-4 h-4 bg-orange-500 rounded-full opacity-60 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300 shadow-lg z-20"></div>
                   </div>
                   
-                  {/* Enhanced Text Content */}
-                  <h3 className="text-lg font-bold mb-2 text-white group-hover:text-orange-200 transition-colors duration-300">{bannerProduct.name}</h3>
-                  <p className="text-sm text-orange-100/90 mb-4 line-clamp-2 group-hover:text-orange-100 transition-colors duration-300">{bannerProduct.description}</p>
+                  {/* Text Content */}
+                  <h3 className="text-sm font-bold mb-1 text-white line-clamp-1">{bannerProduct.name}</h3>
+                  <p className="text-xs text-orange-100/90 mb-2 line-clamp-1">{bannerProduct.description}</p>
                   
-                  {/* Enhanced Button - Mobile App Style */}
+                  {/* Add Button */}
                   <button
-                    onClick={() => handleAddToCart(bannerProduct)}
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-4 rounded-2xl text-sm font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 border-0 active:scale-95"
-                    style={{
-                      boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleAddToCart(bannerProduct);
                     }}
+                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-1.5 px-2 rounded-lg text-xs font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                   >
-                    <span className="flex items-center justify-center gap-2">
-                      <ShoppingCart className="w-4 h-4" />
+                    <span className="flex items-center justify-center gap-1">
+                      <ShoppingCart className="w-3 h-3" />
                       Добавить
                     </span>
                   </button>
                 </div>
               ) : (
-                <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-4 text-center border border-white/20">
-                  <div className="relative w-28 h-28 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center">
-                    <span className="text-3xl">🥟</span>
+                <div className="relative bg-white/15 backdrop-blur-lg rounded-2xl p-3 text-center border border-white/20">
+                  <div className="relative w-24 h-24 mx-auto mb-2 bg-white/20 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">🥟</span>
                   </div>
-                  <h3 className="text-sm font-bold mb-1">Армянские пиде</h3>
-                  <p className="text-xs text-orange-100 mb-2">Вкусные и свежие</p>
+                  <h3 className="text-sm font-bold mb-1 text-white">Армянские пиде</h3>
+                  <p className="text-xs text-orange-100">Вкусные и свежие</p>
                 </div>
               )}
             </div>
