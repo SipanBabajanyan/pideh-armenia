@@ -129,7 +129,7 @@ export default function Home() {
   const categories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Напитки']
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       {/* Отступ для fixed хедера */}
       <div className="md:hidden h-20"></div>
@@ -607,7 +607,7 @@ export default function Home() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 md:gap-15">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 md:gap-6">
               {getFilteredProducts().map((product, index) => (
                 <div 
                   key={product.id}

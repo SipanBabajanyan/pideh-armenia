@@ -42,7 +42,7 @@ export default function MobileHeader() {
 
   return (
     <header className="bg-white/95 backdrop-blur-xl shadow-lg fixed top-0 left-0 right-0 z-[100] border-b border-gray-200">
-      <div className="px-4 py-3">
+      <div className="px-4 py-1.5">
         <div className="flex justify-between items-center">
           {/* Mobile Logo - Centered */}
           <div className="flex-1 flex justify-center">
@@ -50,9 +50,9 @@ export default function MobileHeader() {
               <Image 
                 src="/logo.png" 
                 alt="Pideh Armenia Logo" 
-                width={80} 
-                height={24}
-                className="h-6 w-auto"
+                width={60} 
+                height={18}
+                className="h-4 w-auto"
                 style={{ width: "auto", height: "auto" }}
                 priority
               />
@@ -62,7 +62,7 @@ export default function MobileHeader() {
           {/* Mobile Menu Button - Simple and visible */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-3 text-gray-900 hover:text-orange-500 hover:bg-orange-50 rounded-2xl transition-all duration-300 active:scale-95"
+            className="p-3 text-gray-900 hover:text-orange-500 hover:bg-orange-50 rounded-xl transition-all duration-300 active:scale-95"
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>

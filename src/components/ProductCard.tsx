@@ -158,9 +158,9 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
           )}
         </div>
 
-        {/* 3D Floating Price Badge */}
+        {/* 3D Floating Price Badge - Moved to bottom right */}
         <div 
-          className="absolute top-2 right-2 bg-white/95 backdrop-blur-md text-orange-600 px-3 py-1 rounded-2xl text-sm font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
+          className="absolute bottom-2 right-2 bg-white/95 backdrop-blur-md text-orange-600 px-3 py-1 rounded-2xl text-sm font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
           style={{
             boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(15px)',
