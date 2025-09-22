@@ -159,7 +159,7 @@ export default function ProductPage() {
 
       {/* Hide Footer on Mobile */}
       <div className="hidden md:block">
-        <Footer />
+      <Footer />
       </div>
     </div>
   )
@@ -533,11 +533,8 @@ export default function ProductPage() {
 
       {/* Hide Footer on Mobile */}
       <div className="hidden md:block">
-        <Footer />
+      <Footer />
       </div>
-      
-      {/* Bottom margin for mobile when footer is hidden */}
-      <div className="block md:hidden h-20"></div>
     </div>
   )
 }
