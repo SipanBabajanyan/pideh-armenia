@@ -41,8 +41,8 @@ export default function MobileHeader() {
   ]
 
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-[100] border-b border-gray-200">
-      <div className="px-4 py-1">
+    <header className="bg-white/95 backdrop-blur-xl shadow-lg fixed top-0 left-0 right-0 z-[100] border-b border-gray-200">
+      <div className="px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Mobile Logo - Centered */}
           <div className="flex-1 flex justify-center">
@@ -50,9 +50,9 @@ export default function MobileHeader() {
               <Image 
                 src="/logo.png" 
                 alt="Pideh Armenia Logo" 
-                width={60} 
-                height={20}
-                className="h-4 w-auto"
+                width={80} 
+                height={24}
+                className="h-6 w-auto"
                 style={{ width: "auto", height: "auto" }}
                 priority
               />
@@ -62,22 +62,22 @@ export default function MobileHeader() {
           {/* Mobile Menu Button - Simple and visible */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 text-gray-900 hover:text-orange-500 transition-colors duration-200"
+            className="p-3 text-gray-900 hover:text-orange-500 hover:bg-orange-50 rounded-2xl transition-all duration-300 active:scale-95"
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
-        {/* Mobile Navigation Menu - Simple dropdown */}
+        {/* Mobile Navigation Menu - App Style dropdown */}
         {isMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-[100]">
-            <nav className="py-2">
+          <div className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-2xl border-t border-gray-200 z-[100]">
+            <nav className="py-3">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={`
-                    block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-200
+                    block px-6 py-4 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all duration-300 font-medium
                     ${isActive(link.href) ? 'bg-orange-50 text-orange-600 border-r-4 border-orange-500' : ''}
                   `}
                   onClick={() => setIsMenuOpen(false)}

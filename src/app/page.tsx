@@ -132,7 +132,7 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       {/* Отступ для fixed хедера */}
-      <div className="md:hidden h-24"></div>
+      <div className="md:hidden h-20"></div>
       <div className="hidden md:block h-24"></div>
 
       {/* Hero Section - Compact for Mobile */}
@@ -145,26 +145,26 @@ export default function Home() {
           <div className="absolute bottom-32 right-1/3 w-8 h-8 bg-yellow-300/30 rounded-full animate-pulse"></div>
         </div>
         
-        {/* Mobile Compact Version */}
-        <div className="md:hidden relative max-w-7xl mx-auto px-4 py-4">
+        {/* Mobile Compact Version - App Style */}
+        <div className="md:hidden relative max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             {/* Left content - compact */}
             <div className="flex-1">
-              <h1 className="text-2xl font-bold leading-tight mb-2">
+              <h1 className="text-3xl font-bold leading-tight mb-3">
                 <span className="block text-white">Армянские</span>
                 <span className="block text-yellow-200">пиде</span>
               </h1>
-              <p className="text-sm text-orange-100 mb-3">
+              <p className="text-base text-orange-100 mb-4 font-medium">
                 15 уникальных вкусов
               </p>
-              <div className="flex gap-4 text-xs">
+              <div className="flex gap-6 text-sm">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-yellow-200">15+</div>
-                  <div className="text-orange-100">Вкусов</div>
+                  <div className="text-xl font-bold text-yellow-200">15+</div>
+                  <div className="text-orange-100 font-medium">Вкусов</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-yellow-200">20</div>
-                  <div className="text-orange-100">Минут</div>
+                  <div className="text-xl font-bold text-yellow-200">20</div>
+                  <div className="text-orange-100 font-medium">Минут</div>
                 </div>
               </div>
             </div>
@@ -172,22 +172,26 @@ export default function Home() {
             {/* Right content - product showcase */}
             <div className="relative">
               {bannerProduct ? (
-                <div className="relative bg-white/15 backdrop-blur-xl rounded-3xl p-4 text-center border-2 border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-500 group">
+                <div className="relative bg-white/20 backdrop-blur-xl rounded-3xl p-5 text-center border-2 border-white/40 shadow-2xl hover:shadow-3xl transition-all duration-500 group">
                   {/* Orange Background Elements */}
                   <div className="absolute inset-0 overflow-hidden rounded-3xl">
                     <div className="absolute -top-2 -left-2 w-6 h-6 bg-orange-500/40 rounded-full animate-pulse"></div>
                     <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-yellow-400/50 rounded-full animate-bounce"></div>
                   </div>
 
-                  {/* Enhanced Product Image Container */}
-                  <div className="relative w-32 h-32 mx-auto mb-3 bg-white/30 rounded-2xl flex items-center justify-center overflow-hidden shadow-xl group-hover:shadow-2xl transition-all duration-500 border border-white/20">
+                  {/* Enhanced Product Image Container - 3D Effect */}
+                  <div className="relative w-36 h-36 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden">
+                    {/* 3D Shadow Effect - Removed */}
+                    {/* <div className="absolute inset-0 bg-gradient-to-br from-gray-300/30 to-gray-400/20 rounded-2xl transform translate-y-2 translate-x-1 group-hover:translate-y-3 group-hover:translate-x-2 transition-all duration-500" style={{ filter: 'blur(4px)' }}></div> */}
+                    
                     <img 
                       src={bannerProduct.image} 
                       alt={bannerProduct.name}
-                      className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
+                      className="relative w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500 z-10"
                       style={{
                         imageRendering: 'crisp-edges',
                         imageRendering: '-webkit-optimize-contrast',
+                        transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
                       }}
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
@@ -198,33 +202,36 @@ export default function Home() {
                       }}
                     />
                     <div 
-                      className="w-full h-full flex items-center justify-center text-5xl"
+                      className="w-full h-full flex items-center justify-center text-6xl z-10"
                       style={{ display: 'none' }}
                     >
                       🥟
                     </div>
                     
                     {/* Enhanced Price Badge */}
-                    <div className="absolute -bottom-3 -right-3 bg-yellow-400 text-orange-800 px-4 py-2 rounded-full text-sm font-bold shadow-xl border-2 border-white/30 group-hover:scale-110 transition-all duration-300">
+                    <div className="absolute -bottom-4 -right-4 bg-yellow-400 text-orange-800 px-4 py-2 rounded-full text-sm font-bold shadow-xl border-2 border-white/40 group-hover:scale-110 transition-all duration-300 z-20">
                       {bannerProduct.price} ֏
                     </div>
 
                     {/* Orange Floating Accent */}
-                    <div className="absolute -top-2 -left-2 w-4 h-4 bg-orange-500 rounded-full opacity-60 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300 shadow-lg"></div>
+                    <div className="absolute -top-2 -left-2 w-4 h-4 bg-orange-500 rounded-full opacity-60 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300 shadow-lg z-20"></div>
                   </div>
                   
                   {/* Enhanced Text Content */}
-                  <h3 className="text-base font-bold mb-1 text-white group-hover:text-orange-200 transition-colors duration-300">{bannerProduct.name}</h3>
-                  <p className="text-xs text-orange-100/90 mb-3 line-clamp-2 group-hover:text-orange-100 transition-colors duration-300">{bannerProduct.description}</p>
+                  <h3 className="text-lg font-bold mb-2 text-white group-hover:text-orange-200 transition-colors duration-300">{bannerProduct.name}</h3>
+                  <p className="text-sm text-orange-100/90 mb-4 line-clamp-2 group-hover:text-orange-100 transition-colors duration-300">{bannerProduct.description}</p>
                   
-                  {/* Enhanced Button */}
+                  {/* Enhanced Button - Mobile App Style */}
                   <button
                     onClick={() => handleAddToCart(bannerProduct)}
-                    className="w-full bg-orange-500 text-white py-2 px-4 rounded-xl text-sm font-bold hover:bg-orange-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border-2 border-white/20"
+                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-4 rounded-2xl text-sm font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 border-0 active:scale-95"
+                    style={{
+                      boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                    }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <ShoppingCart className="w-3 h-3" />
-                      Заказать
+                      <ShoppingCart className="w-4 h-4" />
+                      Добавить
                     </span>
                   </button>
                 </div>
@@ -442,8 +449,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mobile Search Section */}
-      <div className="md:hidden bg-white py-4 px-4 border-b border-gray-100">
+      {/* Mobile Search Section - App Style */}
+      <div className="md:hidden bg-white py-6 px-4 border-b border-gray-100">
         <div className="max-w-sm mx-auto">
           <div className="flex gap-3">
             <div className="relative flex-1">
@@ -453,7 +460,7 @@ export default function Home() {
                 placeholder="Поиск по меню..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base text-gray-900 placeholder-gray-600 bg-white transition-all duration-300 shadow-md hover:shadow-lg"
+                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base text-gray-900 placeholder-gray-500 bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md focus:bg-white"
               />
             </div>
             <button 
@@ -464,7 +471,10 @@ export default function Home() {
                   console.log('Поиск:', searchQuery)
                 }
               }}
-              className="w-14 h-14 bg-orange-500 rounded-xl flex items-center justify-center hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+              className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center hover:from-orange-600 hover:to-red-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+              style={{
+                boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+              }}
             >
               <Search className="w-6 h-6 text-white" />
             </button>
@@ -482,18 +492,21 @@ export default function Home() {
             <div className="mb-16">
               {/* Mobile - 2 rows with better design */}
               <div className="md:hidden">
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {/* First row - Пиде и Комбо занимают весь ряд */}
                   <div className="grid grid-cols-2 gap-3">
                     {categories.slice(0, 2).map((category) => (
                       <button
                         key={category}
                         onClick={() => setActiveCategory(category)}
-                        className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
+                        className={`px-6 py-4 rounded-2xl font-bold transition-all duration-300 text-base ${
                           activeCategory === category
-                            ? 'bg-orange-500 text-white shadow-md'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
                         }`}
+                        style={activeCategory === category ? {
+                          boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                        } : {}}
                       >
                         {category}
                       </button>
@@ -506,11 +519,14 @@ export default function Home() {
                       <button
                         key={category}
                         onClick={() => setActiveCategory(category)}
-                        className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm ${
+                        className={`px-5 py-3 rounded-2xl font-semibold transition-all duration-300 text-sm ${
                           activeCategory === category
-                            ? 'bg-orange-500 text-white shadow-md'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
                         }`}
+                        style={activeCategory === category ? {
+                          boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                        } : {}}
                       >
                         {category}
                       </button>
@@ -591,11 +607,12 @@ export default function Home() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
               {getFilteredProducts().map((product, index) => (
                 <div 
                   key={product.id}
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  className="transform hover:scale-105 transition-transform duration-300"
                 >
                   <ProductCard
                     product={product}
@@ -899,7 +916,7 @@ export default function Home() {
       </div>
       
       {/* Add bottom padding for mobile nav */}
-      <div className="md:hidden h-20"></div>
+      <div className="md:hidden h-24"></div>
     </div>
   );
 }

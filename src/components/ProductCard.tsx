@@ -32,30 +32,42 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
       <div className={`relative overflow-visible ${
         isCompact ? 'h-48' : 'h-80'
       }`}>
-        {/* Background Gradient - Removed dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-orange-100 to-red-50 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+        {/* Background Gradient - Removed */}
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-orange-100 to-red-50 opacity-40 group-hover:opacity-60 transition-opacity duration-500" /> */}
         
         {/* 3D Floating Product - No top border */}
         {product.image && product.image !== 'no-image' ? (
           <div className="relative w-full h-full">
-            {/* 3D Product Image with floating effect */}
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)]">
-              {/* 3D Shadow Layer - No blur for maximum quality */}
-              <div 
-                className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+            {/* 3D Product Image with floating effect - Mobile App Style */}
+            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-[calc(100%+4rem)] h-[calc(100%+4rem)]">
+              {/* Enhanced 3D Shadow Layer - Removed for cleaner look */}
+              {/* <div 
+                className="absolute inset-0 bg-gradient-to-br from-gray-300/30 to-gray-400/20 rounded-3xl transform translate-y-6 translate-x-4 group-hover:translate-y-8 group-hover:translate-x-5 transition-all duration-700"
                 style={{
-                  filter: 'none',
+                  filter: 'blur(8px)',
                 }}
               />
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-gray-200/25 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                style={{
+                  filter: 'blur(4px)',
+                }}
+              />
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-3xl transform translate-y-2 translate-x-1 group-hover:translate-y-4 group-hover:translate-x-2 transition-all duration-700"
+                style={{
+                  filter: 'blur(2px)',
+                }}
+              /> */}
               
-              {/* Main 3D Product Image */}
+              {/* Main 3D Product Image - Enhanced mobile app style */}
               <img 
                 src={product.image} 
                 alt={product.name}
-                className="relative w-full h-full object-contain group-hover:scale-125 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
+                className="relative w-full h-full object-contain group-hover:scale-110 group-hover:-translate-y-2 group-hover:rotate-1 transition-all duration-500 ease-out"
                 style={{
                   filter: 'none',
-                  transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                  transform: 'perspective(1000px) rotateX(8deg) rotateY(-3deg)',
                   imageRendering: 'crisp-edges',
                   imageRendering: '-webkit-optimize-contrast',
                 }}
@@ -78,12 +90,12 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
           </div>
         ) : (
           <div 
-            className={`absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)] flex items-center justify-center bg-gradient-to-br from-orange-200 to-red-200 opacity-70 group-hover:opacity-90 transition-opacity duration-500 rounded-3xl shadow-2xl ${
+            className={`absolute -top-12 left-1/2 transform -translate-x-1/2 w-[calc(100%+4rem)] h-[calc(100%+4rem)] flex items-center justify-center ${
               isCompact ? 'text-6xl' : 'text-8xl'
             }`}
             style={{
               filter: 'none',
-              transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+              transform: 'perspective(1000px) rotateX(8deg) rotateY(-3deg)',
             }}
           >
             🥟
@@ -91,7 +103,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
         )}
         
         {/* 3D Floating Elements - Adjusted for 3D product */}
-        <div className="absolute top-12 left-4 flex flex-col gap-2 z-20">
+        <div className="absolute top-16 left-4 flex flex-col gap-2 z-20">
           {/* 3D Category Badge */}
           {!isCompact && (
             <div 
@@ -148,7 +160,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
 
         {/* 3D Floating Price Badge */}
         <div 
-          className="absolute top-12 right-4 bg-white/95 backdrop-blur-md text-orange-600 px-4 py-2 rounded-2xl text-lg font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
+          className="absolute top-16 right-4 bg-white/95 backdrop-blur-md text-orange-600 px-4 py-2 rounded-2xl text-lg font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
           style={{
             boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(15px)',
@@ -162,7 +174,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
       </div>
       
       {/* 3D Content Section - Adjusted for 3D product */}
-      <div className={`relative ${isCompact ? 'p-4 pt-12' : 'p-6 pt-16'}`}>
+      <div className={`relative ${isCompact ? 'p-4 pt-16' : 'p-6 pt-20'}`}>
         {/* Product Name */}
         <h3 className={`font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors duration-300 ${
           isCompact ? 'text-sm mb-3' : 'text-xl mb-4'
@@ -188,15 +200,15 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                   e.stopPropagation()
                   onAddToCart(product)
                 }}
-                className={`w-full h-12 rounded-2xl font-bold text-sm transition-all duration-500 shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 hover:shadow-3xl relative ${
+                className={`w-full h-14 rounded-2xl font-bold text-sm transition-all duration-300 shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 hover:shadow-3xl relative active:scale-95 ${
                   isAdded
                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
                     : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600'
                 }`}
                 style={{
                   boxShadow: isAdded 
-                    ? '0 15px 35px rgba(34, 197, 94, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)'
-                    : '0 15px 35px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                    ? '0 8px 25px rgba(34, 197, 94, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)'
+                    : '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                   backdropFilter: 'blur(10px)',
                 }}
                 title="В корзину"
@@ -214,7 +226,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 ) : (
                   <span className="flex items-center relative z-10">
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    Добавить в корзину
+                    Добавить
                   </span>
                 )}
               </button>
