@@ -103,7 +103,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
         )}
         
         {/* 3D Floating Elements - Adjusted for 3D product */}
-        <div className="absolute top-16 left-4 flex flex-col gap-2 z-20">
+        <div className="absolute top-2 left-2 flex flex-col gap-2 z-20">
           {/* 3D Category Badge */}
           {!isCompact && (
             <div 
@@ -160,7 +160,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
 
         {/* 3D Floating Price Badge */}
         <div 
-          className="absolute top-16 right-4 bg-white/95 backdrop-blur-md text-orange-600 px-4 py-2 rounded-2xl text-lg font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
+          className="absolute top-2 right-2 bg-white/95 backdrop-blur-md text-orange-600 px-3 py-1 rounded-2xl text-sm font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 z-20"
           style={{
             boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(15px)',
