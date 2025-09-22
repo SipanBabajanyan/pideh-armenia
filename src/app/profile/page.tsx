@@ -259,9 +259,9 @@ export default function ProfilePage() {
             {/* Mobile Delete Account Button */}
             <button
               onClick={() => setIsDeleteModalOpen(true)}
-              className="w-full bg-red-50 text-red-600 py-3 rounded-xl font-medium hover:bg-red-100 transition-colors flex items-center justify-center space-x-2"
+              className="w-full text-gray-400 text-sm py-2 rounded-lg font-normal hover:text-red-500 hover:bg-red-50 transition-all duration-200 flex items-center justify-center space-x-1 border border-gray-200 hover:border-red-200"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-3 w-3" />
               <span>Удалить аккаунт</span>
             </button>
           </div>
@@ -331,9 +331,9 @@ export default function ProfilePage() {
                 
                 <button
                   onClick={() => setIsDeleteModalOpen(true)}
-                  className="w-full bg-red-50 text-red-600 py-3 rounded-xl font-medium hover:bg-red-100 transition-colors flex items-center justify-center space-x-2"
+                  className="w-full text-gray-400 text-sm py-2 rounded-lg font-normal hover:text-red-500 hover:bg-red-50 transition-all duration-200 flex items-center justify-center space-x-1 border border-gray-200 hover:border-red-200"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3" />
                   <span>Удалить аккаунт</span>
                 </button>
               </div>
