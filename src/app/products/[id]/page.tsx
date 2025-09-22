@@ -74,7 +74,7 @@ export default function ProductPage() {
 
   // Компонент скелетона для страницы товара
   const ProductPageSkeleton = () => (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{ overflow: 'auto' }}>
       <Header />
       
       {/* Breadcrumb Skeleton */}
@@ -170,7 +170,7 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50" style={{ overflow: 'auto' }}>
         <Header />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -195,7 +195,7 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{ overflow: 'auto' }}>
       <Header />
       
       {/* Breadcrumb */}

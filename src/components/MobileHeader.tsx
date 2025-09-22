@@ -15,12 +15,12 @@ export default function MobileHeader() {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
     }
     
     // Очистка при размонтировании
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
     }
   }, [isMenuOpen])
 
@@ -41,7 +41,7 @@ export default function MobileHeader() {
   ]
 
   return (
-    <header className="bg-white/95 backdrop-blur-xl shadow-lg fixed top-0 left-0 right-0 z-[100] border-b border-gray-200">
+    <header className="bg-white/95 backdrop-blur-xl shadow-lg fixed top-0 left-0 right-0 z-[100] border-b border-gray-200" style={{ position: 'fixed' }}>
       <div className="px-4 py-1.5">
         <div className="flex justify-between items-center">
           {/* Mobile Logo - Centered */}
