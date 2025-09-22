@@ -222,13 +222,13 @@ export default function ProductsPage() {
             {/* Mobile - 2 rows */}
             <div className="md:hidden">
               <div className="space-y-3">
-                {/* First row - Все и Комбо занимают весь ряд */}
-                <div className="grid grid-cols-2 gap-3">
-                  {categories.slice(0, 2).map((category) => (
+                {/* First row - Все, Пиде, Комбо - 3 большие кнопки */}
+                <div className="grid grid-cols-3 gap-3">
+                  {['Все', 'Пиде', 'Комбо'].map((category) => (
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`px-6 py-4 rounded-2xl font-bold transition-all duration-300 text-base ${
+                      className={`px-4 py-4 rounded-2xl font-bold transition-all duration-300 text-base ${
                         selectedCategory === category
                           ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
@@ -244,7 +244,7 @@ export default function ProductsPage() {
                 
                 {/* Second row - остальные категории */}
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {categories.slice(2).map((category) => (
+                  {['Снэк', 'Соусы', 'Напитки'].map((category) => (
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
