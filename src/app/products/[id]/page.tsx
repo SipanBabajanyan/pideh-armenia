@@ -157,7 +157,10 @@ export default function ProductPage() {
         </section>
       </div>
 
-      <Footer />
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
     </div>
   )
 
@@ -183,7 +186,10 @@ export default function ProductPage() {
             </Link>
           </div>
         </div>
+        {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
         <Footer />
+      </div>
       </div>
     )
   }
@@ -525,7 +531,13 @@ export default function ProductPage() {
         )}
       </div>
 
-      <Footer />
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
+      
+      {/* Bottom margin for mobile when footer is hidden */}
+      <div className="block md:hidden h-20"></div>
     </div>
   )
 }
