@@ -207,7 +207,7 @@ export default function ProductsPage() {
                 placeholder="Поиск по названию, описанию или ингредиентам..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg text-gray-900 placeholder-gray-600 bg-white transition-all duration-300 shadow-md hover:shadow-lg"
+                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg text-gray-900 placeholder-gray-500 bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md focus:bg-white"
               />
               {searching && (
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -228,11 +228,14 @@ export default function ProductsPage() {
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
+                      className={`px-6 py-4 rounded-2xl font-bold transition-all duration-300 text-base ${
                         selectedCategory === category
-                          ? 'bg-orange-500 text-white shadow-md'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
                       }`}
+                      style={selectedCategory === category ? {
+                        boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                      } : {}}
                     >
                       {category}
                     </button>
@@ -245,11 +248,14 @@ export default function ProductsPage() {
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm ${
+                      className={`px-5 py-3 rounded-2xl font-semibold transition-all duration-300 text-sm ${
                         selectedCategory === category
-                          ? 'bg-orange-500 text-white shadow-md'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
                       }`}
+                      style={selectedCategory === category ? {
+                        boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                      } : {}}
                     >
                       {category}
                     </button>
@@ -259,16 +265,19 @@ export default function ProductsPage() {
             </div>
             
             {/* Desktop - single row */}
-            <div className="hidden md:flex flex-wrap gap-3">
+            <div className="hidden md:flex flex-wrap gap-4">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${
+                  className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 ${
                     selectedCategory === category
-                      ? 'bg-orange-500 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-600'
                   }`}
+                  style={selectedCategory === category ? {
+                    boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  } : {}}
                 >
                   {category}
                 </button>
@@ -292,7 +301,7 @@ export default function ProductsPage() {
                 </div>
                 
                 {/* Продукты категории */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 md:gap-15">
                   {categoryProducts.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -308,7 +317,7 @@ export default function ProductsPage() {
           </div>
         ) : (
           // Показываем продукты в обычной сетке (для конкретной категории или поиска)
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 md:gap-15">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
