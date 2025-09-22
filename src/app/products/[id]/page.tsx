@@ -497,22 +497,17 @@ export default function ProductPage() {
         {/* Similar Products */}
         {memoizedSimilarProducts.length > 0 && (
           <section className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-3xl font-bold text-gray-900">
-                  Похожие товары
-                </h2>
-                <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
-              </div>
+            <div className="flex items-center space-x-4 mb-8">
+              <h2 className="text-3xl font-bold text-gray-900">
+                Похожие товары
+              </h2>
+              <div className="w-1 h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
               <Link 
                 href="/products" 
-                className="group relative bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-xl font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center space-x-2 min-w-[160px] justify-center"
-                style={{
-                  boxShadow: '0 8px 25px rgba(255, 107, 53, 0.3)',
-                }}
+                className="group text-orange-500 hover:text-orange-600 text-lg font-bold flex items-center space-x-2 transition-colors duration-300 ml-2"
               >
-                <span>Посмотреть все</span>
-                <ArrowLeft className="h-4 w-4 rotate-180 group-hover:translate-x-1 transition-transform duration-300" />
+                <span>Все</span>
+                <ArrowLeft className="h-5 w-5 rotate-180 group-hover:translate-x-1 transition-transform duration-300" style={{ strokeWidth: 3 }} />
               </Link>
             </div>
             
