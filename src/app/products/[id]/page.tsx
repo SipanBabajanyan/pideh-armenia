@@ -225,10 +225,10 @@ export default function ProductPage() {
                 {product.image && product.image !== 'no-image' ? (
                   <div className="relative w-full h-full">
                     {/* 3D Product Image with floating effect */}
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)]">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-[calc(100%+1rem)] h-[calc(100%+1rem)]">
                       {/* 3D Shadow Layer */}
                       <div 
-                        className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                        className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-2 translate-x-1 group-hover:translate-y-3 group-hover:translate-x-2 transition-all duration-700"
                         style={{
                           filter: 'none',
                         }}
@@ -326,23 +326,23 @@ export default function ProductPage() {
 
               </div>
               
-              {/* 3D Floating Decorative Elements */}
+              {/* 3D Floating Decorative Elements - positioned inside container */}
               <div 
-                className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                className="absolute top-2 right-2 w-6 h-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
                 style={{
                   boxShadow: '0 10px 25px rgba(255, 107, 53, 0.3)',
                   filter: 'blur(1px)',
                 }}
               />
               <div 
-                className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                className="absolute bottom-2 left-2 w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
                 style={{
                   boxShadow: '0 10px 25px rgba(255, 193, 7, 0.3)',
                   filter: 'blur(1px)',
                 }}
               />
               <div 
-                className="absolute top-1/2 -left-4 w-3 h-3 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-125"
+                className="absolute top-1/2 left-2 w-2 h-2 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-125"
                 style={{
                   boxShadow: '0 5px 15px rgba(236, 72, 153, 0.2)',
                   filter: 'blur(0.5px)',
@@ -527,10 +527,10 @@ export default function ProductPage() {
                     {similarProduct.image && similarProduct.image !== 'no-image' ? (
                       <div className="relative w-full h-full">
                         {/* 3D Product Image with floating effect */}
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-[calc(100%+2rem)] h-[calc(100%+2rem)]">
+                        <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-[calc(100%+0.5rem)] h-[calc(100%+0.5rem)]">
                           {/* 3D Shadow Layer */}
                           <div 
-                            className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-4 translate-x-2 group-hover:translate-y-6 group-hover:translate-x-3 transition-all duration-700"
+                            className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-1 translate-x-1 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-700"
                             style={{
                               filter: 'none',
                             }}
@@ -650,23 +650,23 @@ export default function ProductPage() {
                     </div>
                   </div>
 
-                  {/* 3D Floating Decorative Elements */}
+                  {/* 3D Floating Decorative Elements - positioned inside container */}
                   <div 
-                    className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                    className="absolute top-1 right-1 w-4 h-4 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
                     style={{
                       boxShadow: '0 10px 25px rgba(255, 107, 53, 0.3)',
                       filter: 'blur(1px)',
                     }}
                   />
                   <div 
-                    className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                    className="absolute bottom-1 left-1 w-3 h-3 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
                     style={{
                       boxShadow: '0 10px 25px rgba(255, 193, 7, 0.3)',
                       filter: 'blur(1px)',
                     }}
                   />
                   <div 
-                    className="absolute top-1/2 -left-4 w-3 h-3 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-125"
+                    className="absolute top-1/2 left-1 w-2 h-2 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-125"
                     style={{
                       boxShadow: '0 5px 15px rgba(236, 72, 153, 0.2)',
                       filter: 'blur(0.5px)',
