@@ -539,7 +539,7 @@ export default function Home() {
           </div>
 
           {/* Products grid */}
-          <div className="mt-12">
+          <div className="mt-24">
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="flex flex-col items-center space-y-4">
