@@ -498,13 +498,28 @@ export default function ProductPage() {
         {memoizedSimilarProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Похожие товары</h2>
+              <div className="relative">
+                <h2 className="text-4xl font-bold text-gray-900 relative z-10">
+                  Похожие товары
+                </h2>
+                <div className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
+              </div>
               <Link 
                 href="/products" 
-                className="text-orange-500 hover:text-orange-600 font-semibold flex items-center"
+                className="group relative bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 flex items-center space-x-2 overflow-hidden"
+                style={{
+                  boxShadow: '0 15px 35px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                }}
               >
-                Посмотреть все
-                <ArrowLeft className="h-4 w-4 ml-1 rotate-180" />
+                <span className="relative z-10">Посмотреть все</span>
+                <ArrowLeft className="h-4 w-4 ml-1 rotate-180 group-hover:translate-x-1 transition-transform duration-300 relative z-10" />
+                
+                {/* Animated background effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 rounded-2xl"></div>
               </Link>
             </div>
             
