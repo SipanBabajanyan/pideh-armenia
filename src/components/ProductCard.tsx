@@ -287,13 +287,6 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
 
       {/* 3D Floating Decorative Elements */}
       <div 
-        className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
-        style={{
-          boxShadow: '0 10px 25px rgba(255, 107, 53, 0.3)',
-          filter: 'blur(1px)',
-        }}
-      />
-      <div 
         className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
         style={{
           boxShadow: '0 10px 25px rgba(255, 193, 7, 0.3)',
