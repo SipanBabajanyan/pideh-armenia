@@ -11,7 +11,8 @@ import {
   DollarSign, 
   TrendingUp,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Settings
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -169,6 +170,17 @@ export default function AdminDashboard() {
                 <div>
                   <h3 className="font-semibold text-gray-900">Управление заказами</h3>
                   <p className="text-sm text-gray-600">Просмотр и изменение статусов заказов</p>
+                </div>
+              </Link>
+              
+              <Link 
+                href="/admin/settings" 
+                className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors"
+              >
+                <Settings className="h-6 w-6 text-purple-500 mr-4" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">Настройки сайта</h3>
+                  <p className="text-sm text-gray-600">Управление логотипом и настройками</p>
                 </div>
               </Link>
             </div>

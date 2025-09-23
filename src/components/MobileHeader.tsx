@@ -5,9 +5,11 @@ import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { useSettings } from '@/hooks/useSettings'
 
 export default function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { settings } = useSettings()
   const pathname = usePathname()
 
   // Блокировка скролла когда меню открыто
@@ -48,8 +50,8 @@ export default function MobileHeader() {
           <div className="flex-1 flex justify-center">
             <Link href="/" className="hover:opacity-80 transition-all duration-300 hover:scale-105">
               <Image 
-                src="/logo.png" 
-                alt="Pideh Armenia Logo" 
+                src={settings.logo || "/logo.png"} 
+                alt={settings.siteName || "Pideh Armenia Logo"} 
                 width={60} 
                 height={18}
                 className="h-4 w-auto"
