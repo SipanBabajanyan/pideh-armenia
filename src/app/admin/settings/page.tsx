@@ -81,6 +81,15 @@ export default function AdminSettings() {
     setSettings(prev => ({ ...prev, [key]: value }))
   }
 
+  const updateLogo = () => {
+    // Логотип обновляется автоматически через API
+    setMessage({ type: 'success', text: 'Логотип успешно обновлен!' })
+    // Обновляем страницу через 1 секунду, чтобы показать новый логотип
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
+  }
+
   if (status === 'loading' || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -148,10 +157,31 @@ export default function AdminSettings() {
                 Загрузите новый логотип для сайта. Рекомендуемый размер: 180x60px
               </p>
               
+              {/* Текущий логотип */}
+              <div className="mb-4">
+                <p className="text-sm font-medium text-gray-700 mb-2">Текущий логотип:</p>
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <img 
+                    src="/logo.png" 
+                    alt="Current Logo" 
+                    className="h-16 w-auto"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                </div>
+              </div>
+
               <ImageUpload
-                currentImage={settings.logo}
-                onImageChange={(url) => updateSetting('logo', url)}
-                onImageRemove={() => updateSetting('logo', '')}
+                currentImage="/logo.png"
+                onImageChange={(url) => {
+                  // Обновляем логотип через специальный API
+                  updateLogo()
+                }}
+                onImageRemove={() => {
+                  // Можно добавить функцию сброса к дефолтному логотипу
+                  console.log('Reset to default logo')
+                }}
                 maxSize={2}
                 className="max-w-md"
               />

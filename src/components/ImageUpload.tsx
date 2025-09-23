@@ -47,9 +47,9 @@ export default function ImageUpload({
       // Создаем FormData для загрузки
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('folder', 'logos') // Папка для логотипов
 
-      const response = await fetch('/api/upload', {
+      // Используем специальный API для логотипа
+      const response = await fetch('/api/upload-logo', {
         method: 'POST',
         body: formData
       })

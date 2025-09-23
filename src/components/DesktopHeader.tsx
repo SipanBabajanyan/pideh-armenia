@@ -6,13 +6,11 @@ import { ShoppingCart, User, LogOut } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useCart } from '@/hooks/useCart'
 import { useHydration } from '@/hooks/useHydration'
-import { useSettings } from '@/hooks/useSettings'
 import { useSession, signOut } from 'next-auth/react'
 
 export default function DesktopHeader() {
   const isHydrated = useHydration()
   const { getTotalItems } = useCart()
-  const { settings } = useSettings()
   const { data: session, status } = useSession()
   const pathname = usePathname()
 
@@ -39,8 +37,8 @@ export default function DesktopHeader() {
           {/* Logo */}
           <Link href="/" className="hover:opacity-80 transition-opacity">
             <Image 
-              src={settings.logo || "/logo.png"} 
-              alt={settings.siteName || "Pideh Armenia Logo"} 
+              src="/logo.png" 
+              alt="Pideh Armenia Logo" 
               width={180} 
               height={60}
               className="h-16 w-auto"
