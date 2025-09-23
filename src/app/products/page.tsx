@@ -12,6 +12,7 @@ import ProductCard from '@/components/ProductCard'
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('Все')
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
@@ -21,16 +22,7 @@ export default function ProductsPage() {
   const { addItem } = useCart()
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const categories: string[] = [
-    'Все',
-    'Комбо',
-    'Пиде',
-    'Снэк',
-    'Соусы',
-    'Напитки',
-  ]
-
-  // Порядок категорий для сортировки
+  // Порядок категорий для сортировки (приоритетные категории)
   const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Напитки']
 
   const fetchProducts = async () => {
@@ -42,6 +34,16 @@ export default function ProductsPage() {
       console.error('Error fetching products:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories')
+      const data = await response.json()
+      setCategories(data)
+    } catch (error) {
+      console.error('Error fetching categories:', error)
     }
   }
 
@@ -69,7 +71,13 @@ export default function ProductsPage() {
   }, [products, selectedCategory, debouncedSearchQuery])
 
   useEffect(() => {
-    fetchProducts()
+    const loadData = async () => {
+      await Promise.all([
+        fetchProducts(),
+        fetchCategories()
+      ])
+    }
+    loadData()
   }, [])
 
   // Debounce search query
@@ -110,8 +118,10 @@ export default function ProductsPage() {
       grouped[categoryName].push(product)
     })
 
-    // Сортируем категории в нужном порядке
-    const sortedCategories = categoryOrder.filter(cat => grouped[cat])
+    // Сортируем категории: сначала приоритетные, потом остальные
+    const priorityCategories = categoryOrder.filter(cat => grouped[cat])
+    const otherCategories = Object.keys(grouped).filter(cat => !categoryOrder.includes(cat))
+    const sortedCategories = [...priorityCategories, ...otherCategories]
     
     return sortedCategories.map(category => ({
       category,
@@ -245,20 +255,22 @@ export default function ProductsPage() {
                 
                 {/* Second row - остальные категории */}
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {['Снэк', 'Соусы', 'Напитки'].map((category) => (
+                  {categories
+                    .filter(cat => !['Пиде', 'Комбо'].includes(cat.name))
+                    .map((category) => (
                     <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
+                      key={`mobile-${category.id}`}
+                      onClick={() => setSelectedCategory(category.name)}
                       className={`px-5 py-3 rounded-2xl font-semibold transition-all duration-300 text-sm ${
-                        selectedCategory === category
+                        selectedCategory === category.name
                           ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
                       }`}
-                      style={selectedCategory === category ? {
+                      style={selectedCategory === category.name ? {
                         boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                       } : {}}
                     >
-                      {category}
+                      {category.name}
                     </button>
                   ))}
                 </div>
@@ -267,20 +279,36 @@ export default function ProductsPage() {
             
             {/* Desktop - single row */}
             <div className="hidden md:flex flex-wrap gap-4">
+              {/* Кнопка "Все" */}
+              <button
+                onClick={() => setSelectedCategory('Все')}
+                className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 ${
+                  selectedCategory === 'Все'
+                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-600'
+                }`}
+                style={selectedCategory === 'Все' ? {
+                  boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                } : {}}
+              >
+                Все
+              </button>
+              
+              {/* Динамические категории */}
               {categories.map((category) => (
                 <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  key={`desktop-${category.id}`}
+                  onClick={() => setSelectedCategory(category.name)}
                   className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 ${
-                    selectedCategory === category
+                    selectedCategory === category.name
                       ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-600'
                   }`}
-                  style={selectedCategory === category ? {
+                  style={selectedCategory === category.name ? {
                     boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                   } : {}}
                 >
-                  {category}
+                  {category.name}
                 </button>
               ))}
             </div>

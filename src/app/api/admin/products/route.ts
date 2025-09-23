@@ -26,10 +26,10 @@ export async function POST(request: NextRequest) {
 
     // Получаем данные из запроса
     const body = await request.json()
-    const { name, description, price, category, image, ingredients, isAvailable = true, status = 'REGULAR' } = body
+    const { name, description, price, categoryId, image, ingredients, isAvailable = true, status = 'REGULAR' } = body
 
     // Валидация обязательных полей
-    if (!name || !description || !price || !category) {
+    if (!name || !description || !price || !categoryId) {
       return NextResponse.json(
         { error: 'Missing required fields: name, description, price, category' },
         { status: 400 }
@@ -44,11 +44,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Валидация категории
-    const validCategories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Напитки']
-    if (!validCategories.includes(category)) {
+    // Проверяем, что категория существует
+    const category = await prisma.category.findUnique({
+      where: { id: categoryId }
+    })
+
+    if (!category) {
       return NextResponse.json(
-        { error: 'Invalid category. Must be one of: ' + validCategories.join(', ') },
+        { error: 'Category not found' },
         { status: 400 }
       )
     }
@@ -68,11 +71,20 @@ export async function POST(request: NextRequest) {
         name,
         description,
         price,
-        category,
-        image: image || 'no-image', // Специальное значение для отсутствия изображения
+        categoryId,
+        image: image || '', // Пустая строка для отсутствия изображения
         ingredients: ingredients || [],
         isAvailable,
         status: status || 'REGULAR' // Если статус не выбран, то REGULAR
+      },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true
+          }
+        }
       }
     })
 

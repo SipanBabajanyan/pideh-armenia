@@ -166,7 +166,7 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
         {/* Предпросмотр выбранного изображения - слева, квадратное */}
         <div className="relative flex-shrink-0">
           <div className="relative w-36 h-36 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-            {value ? (
+            {value && value !== 'no-image' ? (
               <Image
                 src={value}
                 alt="Предпросмотр"
@@ -184,7 +184,7 @@ export default function ImageSelector({ value, onChange, className = '' }: Image
               </div>
             )}
           </div>
-          {value && (
+          {value && value !== 'no-image' && (
             <Button
               type="button"
               variant="destructive"
