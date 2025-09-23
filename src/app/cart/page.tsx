@@ -33,7 +33,7 @@ export default function CartPage() {
         <Header />
         
         {/* Отступ для fixed хедера */}
-        <div className="md:hidden h-24"></div>
+        <div className="h-24 md:h-20"></div>
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
@@ -64,7 +64,7 @@ export default function CartPage() {
       <Header />
       
       {/* Отступ для fixed хедера */}
-      <div className="md:hidden h-24"></div>
+      <div className="h-24 md:h-20"></div>
       
       {/* Mobile App Style Container */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 md:pb-8">
