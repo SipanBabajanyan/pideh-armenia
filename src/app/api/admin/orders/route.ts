@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { auth } from '@/lib/auth'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 
 // GET /api/admin/orders - получить все заказы (только для админов)
 export async function GET(request: NextRequest) {
   try {
     // Проверяем аутентификацию
-    const session = await auth()
+    const session = await getServerSession(authOptions)
     
     if (!session?.user) {
       return NextResponse.json(

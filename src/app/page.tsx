@@ -29,17 +29,68 @@ export default function Home() {
   const fetchProducts = async () => {
     try {
       const [productsResponse, featuredResponse, bannerResponse] = await Promise.all([
-        fetch('/api/products'),
-        fetch('/api/products/featured'),
-        fetch('/api/products/banner')
+        fetch('/api/products', { 
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        }),
+        fetch('/api/products/featured', { 
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        }),
+        fetch('/api/products/banner', { 
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        })
       ])
+      
+      // Проверяем статус ответов
+      if (!productsResponse.ok) {
+        const errorText = await productsResponse.text()
+        console.error('Products API error:', productsResponse.status, errorText)
+        throw new Error(`Products API error: ${productsResponse.status} - ${errorText}`)
+      }
+      if (!featuredResponse.ok) {
+        const errorText = await featuredResponse.text()
+        console.error('Featured API error:', featuredResponse.status, errorText)
+        throw new Error(`Featured API error: ${featuredResponse.status} - ${errorText}`)
+      }
+      if (!bannerResponse.ok) {
+        const errorText = await bannerResponse.text()
+        console.error('Banner API error:', bannerResponse.status, errorText)
+        throw new Error(`Banner API error: ${bannerResponse.status} - ${errorText}`)
+      }
       
       const productsData = await productsResponse.json()
       const featuredData = await featuredResponse.json()
       const bannerData = await bannerResponse.json()
       
-      setProducts(productsData)
-      setBannerProduct(bannerData) // Устанавливаем товар-баннер
+      console.log('API Responses:', {
+        productsData: Array.isArray(productsData) ? `Array(${productsData.length})` : typeof productsData,
+        featuredData: Array.isArray(featuredData) ? `Array(${featuredData.length})` : typeof featuredData,
+        bannerData: bannerData ? typeof bannerData : 'null'
+      })
+      
+      // Проверяем, что productsData является массивом
+      if (Array.isArray(productsData)) {
+        setProducts(productsData)
+        
+        // Фильтруем комбо товары для секции хитов
+        const combos = productsData.filter((product: Product) => product.category?.name === 'Комбо')
+        setComboProducts(combos.slice(0, 4)) // Берем первые 4 комбо
+      } else {
+        console.error('Products API returned non-array:', productsData)
+        setProducts([])
+        setComboProducts([])
+      }
       
       // Проверяем, что featuredData является массивом
       if (Array.isArray(featuredData)) {
@@ -49,9 +100,8 @@ export default function Home() {
         setFeaturedProducts([])
       }
       
-      // Фильтруем комбо товары для секции хитов
-      const combos = productsData.filter((product: Product) => product.category === 'Комбо')
-      setComboProducts(combos.slice(0, 4)) // Берем первые 4 комбо
+      // Устанавливаем товар-баннер (может быть null)
+      setBannerProduct(bannerData)
     } catch (error) {
       console.error('Error fetching products:', error)
       setFeaturedProducts([])
@@ -105,6 +155,11 @@ export default function Home() {
   }
 
   const getFilteredProducts = () => {
+    // Проверяем, что products является массивом
+    if (!Array.isArray(products)) {
+      return []
+    }
+    
     // Если есть поисковый запрос, ищем по всем товарам
     if (searchQuery.trim()) {
       return products.filter(product => 
@@ -117,7 +172,7 @@ export default function Home() {
     }
     
     // Если нет поискового запроса, показываем товары выбранной категории
-    return products.filter(product => product.category === activeCategory)
+    return products.filter(product => product.category?.name === activeCategory)
   }
 
   const isPopularProduct = (product: Product) => {

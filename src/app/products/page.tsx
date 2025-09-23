@@ -60,7 +60,7 @@ export default function ProductsPage() {
     } else {
       // Если нет поискового запроса, показываем товары выбранной категории
       if (selectedCategory !== 'Все') {
-        filtered = filtered.filter(product => product.category === selectedCategory)
+        filtered = filtered.filter(product => product.category?.name === selectedCategory)
       }
       // Если выбрано "Все", показываем все товары без фильтрации
     }
@@ -103,10 +103,11 @@ export default function ProductsPage() {
     const grouped: Record<string, Product[]> = {}
     
     products.forEach(product => {
-      if (!grouped[product.category]) {
-        grouped[product.category] = []
+      const categoryName = product.category?.name || 'Без категории'
+      if (!grouped[categoryName]) {
+        grouped[categoryName] = []
       }
-      grouped[product.category].push(product)
+      grouped[categoryName].push(product)
     })
 
     // Сортируем категории в нужном порядке

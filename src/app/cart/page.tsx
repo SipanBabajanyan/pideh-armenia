@@ -155,7 +155,7 @@ export default function CartPage() {
                         {item.product.name}
                       </h3>
                       <p className="text-sm text-gray-600 mb-2">
-                        {item.product.category}
+                        {item.product.category?.name || 'Без категории'}
                       </p>
                       <div className="text-lg font-bold text-orange-500 mb-3">
                         {item.product.price} ֏
@@ -249,7 +249,7 @@ export default function CartPage() {
                           {item.product.name}
                         </h3>
                         <p className="text-sm text-gray-600 mb-2">
-                          {item.product.category}
+                          {item.product.category?.name || 'Без категории'}
                         </p>
                         <div className="text-xl font-bold text-orange-500">
                           {item.product.price} ֏

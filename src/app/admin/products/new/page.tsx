@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -10,14 +10,7 @@ import { ArrowLeft, Save, X } from 'lucide-react'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import ImageSelector from '@/components/ImageSelector'
-
-const categories = [
-  'Пиде',
-  'Комбо', 
-  'Снэк',
-  'Соусы',
-  'Напитки'
-]
+import { Category } from '@/types'
 
 const statuses = [
   { value: 'HIT', label: 'Хит продаж' },
@@ -30,11 +23,12 @@ export default function NewProductPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   
+  const [categories, setCategories] = useState<Category[]>([])
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
-    category: '',
+    categoryId: '',
     image: '',
     ingredients: '',
     isAvailable: true,
@@ -43,6 +37,25 @@ export default function NewProductPage() {
   
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Загружаем категории
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/admin/categories')
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data)
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    }
+
+    if (session?.user?.role === 'ADMIN') {
+      fetchCategories()
+    }
+  }, [session])
 
   // Проверяем права доступа
   if (status === 'loading') {
@@ -196,15 +209,15 @@ export default function NewProductPage() {
                     Категория *
                   </label>
                   <select
-                    value={formData.category}
-                    onChange={(e) => handleInputChange('category', e.target.value)}
+                    value={formData.categoryId}
+                    onChange={(e) => handleInputChange('categoryId', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
                     required
                   >
                     <option value="">Выберите категорию</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
+                    {categories.filter(cat => cat.isActive).map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
                       </option>
                     ))}
                   </select>

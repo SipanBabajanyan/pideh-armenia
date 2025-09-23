@@ -287,7 +287,7 @@ export default function ProductPage() {
                       backdropFilter: 'blur(10px)',
                     }}
                   >
-                    {product.category}
+                    {product.category?.name || 'Без категории'}
                   </div>
                   
                   {/* 3D Special Badge */}
@@ -364,7 +364,7 @@ export default function ProductPage() {
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-center">
                     <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                    Категория: {product.category}
+                    Категория: {product.category?.name || 'Без категории'}
                   </li>
                   <li className="flex items-center">
                     <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>

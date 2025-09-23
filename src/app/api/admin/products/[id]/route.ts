@@ -1,6 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { auth } from '@/lib/auth'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
+
+// GET /api/admin/products/[id] - получить товар по ID для админки
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    
+    // Проверяем аутентификацию
+    const session = await getServerSession(authOptions)
+    
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    // Проверяем права администратора
+    if (session.user.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true
+          }
+        }
+      }
+    })
+
+    if (!product) {
+      return NextResponse.json(
+        { error: 'Product not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(product)
+  } catch (error) {
+    console.error('Error fetching product:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch product' },
+      { status: 500 }
+    )
+  }
+}
 
 // PUT /api/admin/products/[id] - обновить товар (только для админов)
 export async function PUT(
@@ -11,7 +68,7 @@ export async function PUT(
     const { id } = await params
     
     // Проверяем аутентификацию
-    const session = await auth()
+    const session = await getServerSession(authOptions)
     
     if (!session?.user) {
       return NextResponse.json(
@@ -30,7 +87,7 @@ export async function PUT(
 
     // Получаем данные из запроса
     const body = await request.json()
-    const { name, description, price, category, image, ingredients, isAvailable, status } = body
+    const { name, description, price, categoryId, image, ingredients, isAvailable, status } = body
 
     // Проверяем существование товара
     const existingProduct = await prisma.product.findUnique({
@@ -53,11 +110,14 @@ export async function PUT(
     }
 
     // Валидация категории
-    if (category) {
-      const validCategories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Напитки']
-      if (!validCategories.includes(category)) {
+    if (categoryId) {
+      const category = await prisma.category.findUnique({
+        where: { id: categoryId }
+      })
+      
+      if (!category) {
         return NextResponse.json(
-          { error: 'Invalid category. Must be one of: ' + validCategories.join(', ') },
+          { error: 'Category not found' },
           { status: 400 }
         )
       }
@@ -81,11 +141,20 @@ export async function PUT(
         ...(name && { name }),
         ...(description && { description }),
         ...(price !== undefined && { price }),
-        ...(category && { category }),
+        ...(categoryId && { categoryId }),
         ...(image !== undefined && { image: image || 'no-image' }), // Специальное значение для отсутствия изображения
         ...(ingredients && { ingredients }),
         ...(isAvailable !== undefined && { isAvailable }),
         ...(status !== undefined && { status: status || 'REGULAR' }) // Если статус пустой, то REGULAR
+      },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true
+          }
+        }
       }
     })
 

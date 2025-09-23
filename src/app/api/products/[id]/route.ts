@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { auth } from '@/lib/auth'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 
 // GET /api/products/[id] - получить товар по ID
 export async function GET(
@@ -19,6 +20,7 @@ export async function GET(
         name: true,
         description: true,
         price: true,
+        categoryId: true,
         category: true,
         image: true,
         ingredients: true,
@@ -58,7 +60,7 @@ export async function DELETE(
     const { id } = await params
     
     // Проверяем аутентификацию
-    const session = await auth()
+    const session = await getServerSession(authOptions)
     
     if (!session?.user) {
       return NextResponse.json(

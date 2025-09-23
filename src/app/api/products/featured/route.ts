@@ -30,7 +30,14 @@ export async function GET(request: NextRequest) {
         name: true,
         description: true,
         price: true,
-        category: true,
+        categoryId: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true
+          }
+        },
         image: true,
         ingredients: true,
         isAvailable: true,

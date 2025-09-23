@@ -113,7 +113,7 @@ const ProductCard = memo(({ product, onAddToCart, variant = 'default', addedToCa
                 backdropFilter: 'blur(10px)',
               }}
             >
-              {product.category}
+              {product.category?.name || 'Без категории'}
             </div>
           )}
           

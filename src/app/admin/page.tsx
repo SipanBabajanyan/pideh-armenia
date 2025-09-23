@@ -12,7 +12,8 @@ import {
   TrendingUp,
   Clock,
   CheckCircle,
-  Settings
+  Settings,
+  Tag
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -170,6 +171,17 @@ export default function AdminDashboard() {
                 <div>
                   <h3 className="font-semibold text-gray-900">Управление заказами</h3>
                   <p className="text-sm text-gray-600">Просмотр и изменение статусов заказов</p>
+                </div>
+              </Link>
+              
+              <Link 
+                href="/admin/categories" 
+                className="flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors"
+              >
+                <Tag className="h-6 w-6 text-green-500 mr-4" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">Управление категориями</h3>
+                  <p className="text-sm text-gray-600">Добавлять, редактировать и удалять категории</p>
                 </div>
               </Link>
               
