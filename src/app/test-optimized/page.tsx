@@ -80,7 +80,7 @@ export default async function TestOptimizedPage() {
                 <li>• Объединенные API запросы</li>
                 <li>• Оптимизированные изображения (WebP)</li>
                 <li>• Агрессивное кэширование</li>
-                <li>• Время загрузки: < 1 секунда</li>
+                <li>• Время загрузки: &lt; 1 секунда</li>
               </ul>
               <Link 
                 href="/products"
