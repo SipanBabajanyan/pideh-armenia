@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -8,31 +8,54 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Save, X } from 'lucide-react'
 import Link from 'next/link'
+import Header from '@/components/Header'
+import ImageSelector from '@/components/ImageSelector'
+import { Category } from '@/types'
 
-const categories = [
-  'Пиде',
-  'Комбо', 
-  'Снэк',
-  'Соусы',
-  'Освежающие напитки'
+const statuses = [
+  { value: 'HIT', label: 'Хит продаж' },
+  { value: 'NEW', label: 'Новинка' },
+  { value: 'CLASSIC', label: 'Классика' },
+  { value: 'BANNER', label: 'Баннер' }
 ]
 
 export default function NewProductPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   
+  const [categories, setCategories] = useState<Category[]>([])
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
-    category: '',
+    categoryId: '',
     image: '',
     ingredients: '',
-    isAvailable: true
+    isAvailable: true,
+    status: ''
   })
   
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Загружаем категории
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/admin/categories')
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data)
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    }
+
+    if (session?.user?.role === 'ADMIN') {
+      fetchCategories()
+    }
+  }, [session])
 
   // Проверяем права доступа
   if (status === 'loading') {
@@ -96,6 +119,12 @@ export default function NewProductPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      <div className="hidden md:block h-24"></div>
+      
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -152,7 +181,7 @@ export default function NewProductPage() {
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     placeholder="Введите описание товара"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
                     rows={3}
                     required
                   />
@@ -161,7 +190,7 @@ export default function NewProductPage() {
                 {/* Цена */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Цена (₽) *
+                    Цена (֏) *
                   </label>
                   <Input
                     type="number"
@@ -180,15 +209,34 @@ export default function NewProductPage() {
                     Категория *
                   </label>
                   <select
-                    value={formData.category}
-                    onChange={(e) => handleInputChange('category', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    value={formData.categoryId}
+                    onChange={(e) => handleInputChange('categoryId', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
                     required
                   >
                     <option value="">Выберите категорию</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
+                    {categories.filter(cat => cat.isActive).map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Статус */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Статус товара
+                  </label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 bg-white"
+                  >
+                    <option value="">Не выбрано (обычный товар)</option>
+                    {statuses.map((status) => (
+                      <option key={status.value} value={status.value}>
+                        {status.label}
                       </option>
                     ))}
                   </select>
@@ -197,16 +245,12 @@ export default function NewProductPage() {
                 {/* Изображение */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL изображения
+                    Изображение товара
                   </label>
-                  <Input
+                  <ImageSelector
                     value={formData.image}
-                    onChange={(e) => handleInputChange('image', e.target.value)}
-                    placeholder="https://example.com/image.jpg"
+                    onChange={(imagePath) => handleInputChange('image', imagePath)}
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Если не указано, будет использовано изображение по умолчанию
-                  </p>
                 </div>
 
                 {/* Ингредиенты */}
@@ -241,7 +285,7 @@ export default function NewProductPage() {
               </div>
 
               {/* Кнопки */}
-              <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-200">
+              <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-300">
                 <Link href="/admin/products">
                   <Button type="button" variant="outline">
                     Отмена

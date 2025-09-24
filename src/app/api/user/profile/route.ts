@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
     if (!session) {
       return NextResponse.json(
@@ -15,10 +16,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Получаем данные пользователя
+    // Получаем данные пользователя (только не удаленных)
     const user = await prisma.user.findUnique({
       where: {
-        id: session.user.id
+        id: session.user.id,
+        deletedAt: null
       },
       select: {
         id: true,
@@ -49,7 +51,7 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
 
     if (!session) {
       return NextResponse.json(
@@ -60,10 +62,11 @@ export async function PUT(request: NextRequest) {
 
     const { name, phone, address } = await request.json()
 
-    // Обновляем данные пользователя
+    // Обновляем данные пользователя (только не удаленных)
     const updatedUser = await prisma.user.update({
       where: {
-        id: session.user.id
+        id: session.user.id,
+        deletedAt: null
       },
       data: {
         name: name || undefined,

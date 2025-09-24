@@ -5,12 +5,12 @@ export const companyInfo = {
   addresses: [
     {
       name: 'Филиал 1',
-      address: 'Zoravar Andranik 151/2, Yerevan, Armenia',
+      address: 'ул. Зоравар Андраник 151/2',
       type: 'main'
     },
     {
       name: 'Филиал 2', 
-      address: 'Yeznik Koghbatsi 83, Yerevan, Armenia 0002',
+      address: 'ул. Езник Кохбаци 83',
       type: 'secondary'
     }
   ],

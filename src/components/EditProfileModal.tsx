@@ -90,7 +90,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
       {/* Modal */}
       <div className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200/50 bg-white/80 backdrop-blur-sm">
+        <div className="flex items-center justify-between p-6 border-b border-gray-300/50 bg-white/80 backdrop-blur-sm">
           <h2 className="text-xl font-semibold text-gray-900">Редактировать профиль</h2>
           <button
             onClick={onClose}

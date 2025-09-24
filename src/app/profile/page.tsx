@@ -14,11 +14,13 @@ import {
   XCircle,
   Package,
   ArrowLeft,
-  Edit
+  Edit,
+  Trash2
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import EditProfileModal from '@/components/EditProfileModal'
+import DeleteAccountModal from '@/components/DeleteAccountModal'
 
 interface Order {
   id: string
@@ -41,6 +43,7 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [userProfile, setUserProfile] = useState({
     name: session?.user?.name || null,
     email: session?.user?.email || null,
@@ -128,6 +131,29 @@ export default function ProfilePage() {
     }
   }
 
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch('/api/user/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        // Выходим из системы и перенаправляем на главную
+        const { signOut } = await import('next-auth/react')
+        await signOut({ callbackUrl: '/' })
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to delete account')
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error)
+      throw error
+    }
+  }
+
   const getStatusInfo = (status: string) => {
     switch (status) {
       case 'PENDING':
@@ -183,9 +209,66 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex items-center space-x-4 mb-8">
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 md:pb-8">
+        {/* Mobile Header */}
+        <div className="md:hidden mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <Link 
+              href="/"
+              className="flex items-center text-gray-600 hover:text-orange-500 transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Назад
+            </Link>
+            <h1 className="text-xl font-bold text-gray-900">Профиль</h1>
+            <div className="w-10"></div> {/* Spacer for centering */}
+          </div>
+          
+          {/* Mobile Profile Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-lg font-bold text-gray-900">{userProfile.name || 'Пользователь'}</h2>
+                <p className="text-sm text-gray-600">{userProfile.email}</p>
+              </div>
+              <button 
+                onClick={() => setIsEditModalOpen(true)}
+                className="p-2 text-orange-500 hover:bg-orange-50 rounded-full transition-colors"
+              >
+                <Edit className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+              <div className="flex items-center space-x-2">
+                <Phone className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-600">{userProfile.phone || 'Не указан'}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <MapPin className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-600 truncate">{userProfile.address || 'Не указан'}</span>
+              </div>
+            </div>
+            
+            {/* Mobile Delete Account Button */}
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="w-full text-gray-400 text-sm py-2 rounded-lg font-normal hover:text-red-500 hover:bg-red-50 transition-all duration-200 flex items-center justify-center space-x-1 border border-gray-200 hover:border-red-200"
+            >
+              <Trash2 className="h-3 w-3" />
+              <span>Удалить аккаунт</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop Header */}
+        <div className="hidden md:flex items-center space-x-4 mb-8">
           <Link 
             href="/"
             className="flex items-center text-gray-600 hover:text-orange-500 transition-colors"
@@ -197,9 +280,9 @@ export default function ProfilePage() {
           <h1 className="text-3xl font-bold text-gray-900">Мой профиль</h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Info */}
-          <div className="lg:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+          {/* Profile Info - Desktop Only */}
+          <div className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Информация о профиле</h2>
               
@@ -237,20 +320,30 @@ export default function ProfilePage() {
                 </div>
               </div>
               
-              <button 
-                onClick={() => setIsEditModalOpen(true)}
-                className="w-full mt-6 bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center"
-              >
-                <Edit className="h-5 w-5 mr-2" />
-                Редактировать профиль
-              </button>
+              <div className="space-y-3 mt-6">
+                <button 
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="w-full bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center"
+                >
+                  <Edit className="h-5 w-5 mr-2" />
+                  Редактировать профиль
+                </button>
+                
+                <button
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="w-full text-gray-400 text-sm py-2 rounded-lg font-normal hover:text-red-500 hover:bg-red-50 transition-all duration-200 flex items-center justify-center space-x-1 border border-gray-200 hover:border-red-200"
+                >
+                  <Trash2 className="h-3 w-3" />
+                  <span>Удалить аккаунт</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Orders History */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">История заказов</h2>
+            <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6">
+              <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">История заказов</h2>
               
               {orders.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
@@ -264,26 +357,26 @@ export default function ProfilePage() {
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   {orders.map((order) => {
                     const statusInfo = getStatusInfo(order.status)
                     return (
-                      <div key={order.id} className="border border-gray-200 rounded-xl p-4">
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <h3 className="font-semibold text-gray-900">Заказ #{order.id.slice(-8)}</h3>
-                            <p className="text-sm text-gray-600">
+                      <div key={order.id} className="border border-gray-200 rounded-xl p-3 md:p-4">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-3 md:mb-4">
+                          <div className="mb-2 md:mb-0">
+                            <h3 className="font-semibold text-gray-900 text-sm md:text-base">Заказ #{order.id.slice(-8)}</h3>
+                            <p className="text-xs md:text-sm text-gray-600">
                               {new Date(order.createdAt).toLocaleDateString('ru-RU', {
                                 year: 'numeric',
-                                month: 'long',
+                                month: 'short',
                                 day: 'numeric',
                                 hour: '2-digit',
                                 minute: '2-digit'
                               })}
                             </p>
                           </div>
-                          <div className="text-right">
-                            <p className="text-lg font-bold text-gray-900">{order.total} ֏</p>
+                          <div className="flex items-center justify-between md:flex-col md:items-end">
+                            <p className="text-base md:text-lg font-bold text-gray-900">{order.total} ֏</p>
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${statusInfo.bg} ${statusInfo.color}`}>
                               {getStatusIcon(order.status)}
                               <span className="ml-1">{statusInfo.text}</span>
@@ -293,8 +386,8 @@ export default function ProfilePage() {
                         
                         <div className="space-y-2">
                           {order.items.map((item, index) => (
-                            <div key={index} className="flex items-center space-x-3">
-                              <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center overflow-hidden">
+                            <div key={index} className="flex items-center space-x-2 md:space-x-3">
+                              <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-50 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
                                 {item.product.image ? (
                                   <img 
                                     src={item.product.image} 
@@ -302,14 +395,14 @@ export default function ProfilePage() {
                                     className="w-full h-full object-cover"
                                   />
                                 ) : (
-                                  <Package className="h-6 w-6 text-orange-500" />
+                                  <Package className="h-5 w-5 md:h-6 md:w-6 text-orange-500" />
                                 )}
                               </div>
-                              <div className="flex-1">
-                                <p className="font-medium text-gray-900">{item.product.name}</p>
-                                <p className="text-sm text-gray-600">{item.quantity} шт. × {item.price} ֏</p>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-gray-900 text-sm md:text-base truncate">{item.product.name}</p>
+                                <p className="text-xs md:text-sm text-gray-600">{item.quantity} шт. × {item.price} ֏</p>
                               </div>
-                              <p className="font-semibold text-gray-900">{item.quantity * item.price} ֏</p>
+                              <p className="font-semibold text-gray-900 text-sm md:text-base flex-shrink-0">{item.quantity * item.price} ֏</p>
                             </div>
                           ))}
                         </div>
@@ -323,7 +416,10 @@ export default function ProfilePage() {
         </div>
       </div>
       
-      <Footer />
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
       
       {/* Edit Profile Modal */}
       <EditProfileModal
@@ -331,6 +427,13 @@ export default function ProfilePage() {
         onClose={() => setIsEditModalOpen(false)}
         user={userProfile}
         onSave={handleSaveProfile}
+      />
+      
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteAccount}
       />
     </div>
   )

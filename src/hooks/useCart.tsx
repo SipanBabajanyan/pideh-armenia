@@ -146,6 +146,37 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return items.reduce((total, item) => total + item.quantity, 0)
   }
 
+  // Функция для валидации корзины (удаляет несуществующие продукты)
+  const validateCart = async () => {
+    if (items.length === 0) return
+
+    try {
+      const productIds = items.map(item => item.product.id)
+      const response = await fetch('/api/products/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productIds }),
+      })
+
+      if (response.ok) {
+        const { validIds } = await response.json()
+        const invalidItems = items.filter(item => !validIds.includes(item.product.id))
+        
+        if (invalidItems.length > 0) {
+          console.warn('Удаляем несуществующие продукты из корзины:', invalidItems.map(item => item.product.name))
+          // Удаляем несуществующие продукты
+          invalidItems.forEach(item => {
+            dispatch({ type: 'REMOVE_ITEM', payload: { productId: item.product.id } })
+          })
+        }
+      }
+    } catch (error) {
+      console.warn('Не удалось валидировать корзину:', error)
+    }
+  }
+
   const value: CartContextType = {
     items: isHydrated ? items : [], // На сервере всегда пустая корзина
     addItem,
@@ -154,6 +185,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     clearCart,
     getTotalPrice,
     getTotalItems,
+    validateCart,
   }
 
   return (

@@ -70,6 +70,24 @@ const statusColors = {
   CANCELLED: 'bg-red-100 text-red-800'
 }
 
+const statusBackgroundColors = {
+  PENDING: 'bg-yellow-100',
+  CONFIRMED: 'bg-blue-100',
+  PREPARING: 'bg-orange-100',
+  READY: 'bg-green-100',
+  DELIVERED: 'bg-emerald-100',
+  CANCELLED: 'bg-red-100'
+}
+
+const statusBorderColors = {
+  PENDING: 'border-yellow-300',
+  CONFIRMED: 'border-blue-300',
+  PREPARING: 'border-orange-300',
+  READY: 'border-green-300',
+  DELIVERED: 'border-emerald-300',
+  CANCELLED: 'border-red-300'
+}
+
 const statusLabels = {
   PENDING: 'Ожидает',
   CONFIRMED: 'Подтвержден',
@@ -220,9 +238,11 @@ export default function AdminOrdersPage() {
     
     const searchLower = searchTerm.toLowerCase()
     return (
-      order.user.name.toLowerCase().includes(searchLower) ||
-      order.user.email.toLowerCase().includes(searchLower) ||
-      order.user.phone?.toLowerCase().includes(searchLower) ||
+      (order.user?.name?.toLowerCase().includes(searchLower)) ||
+      (order.user?.email?.toLowerCase().includes(searchLower)) ||
+      (order.user?.phone?.toLowerCase().includes(searchLower)) ||
+      order.name.toLowerCase().includes(searchLower) ||
+      order.phone.toLowerCase().includes(searchLower) ||
       order.id.toLowerCase().includes(searchLower)
     )
   })
@@ -245,6 +265,10 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      <div className="hidden md:block h-24"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -340,7 +364,7 @@ export default function AdminOrdersPage() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 bg-white border-2 border-gray-500 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 font-medium"
                 placeholder="Поиск по имени, email, телефону или ID..."
               />
             </div>
@@ -353,7 +377,7 @@ export default function AdminOrdersPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                className="w-full px-4 py-3 bg-white border-2 border-gray-500 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 font-medium"
               >
                 <option value="">Все статусы</option>
                 <option value="PENDING">Ожидает</option>
@@ -369,7 +393,7 @@ export default function AdminOrdersPage() {
 
         {/* Orders List */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-300">
             <h2 className="text-xl font-semibold text-gray-900">
               Заказы ({filteredOrders.length})
             </h2>
@@ -437,7 +461,7 @@ export default function AdminOrdersPage() {
                           <div>
                             <span className="text-gray-500 text-xs">Клиент:</span>
                             <div className="text-sm font-medium text-gray-900">
-                              {order.user.name}
+                              {order.user?.name || order.name || 'Гость'}
                             </div>
                           </div>
                         </div>
@@ -516,9 +540,9 @@ export default function AdminOrdersPage() {
 
         {/* Модальное окно с деталями заказа */}
         {showModal && selectedOrder && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20">
-              <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-white/20 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Заказ #{selectedOrder.id.slice(-8)}
                 </h2>
@@ -535,120 +559,124 @@ export default function AdminOrdersPage() {
               <div className="p-6 space-y-6">
                 {/* Статус и основная информация */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-orange-50 rounded-2xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className={`${statusBackgroundColors[selectedOrder.status]} ${statusBorderColors[selectedOrder.status]} border rounded-2xl p-4`}>
+                    <div className="flex items-center gap-2 mb-3">
                       {getStatusIcon(selectedOrder.status)}
-                      <span className="font-medium">Статус</span>
+                      <span className="font-medium text-gray-900">Статус</span>
                     </div>
-                    <Badge className={statusColors[selectedOrder.status]}>
-                      {statusLabels[selectedOrder.status]}
-                    </Badge>
                     <select
                       value={selectedOrder.status}
                       onChange={(e) => updateOrderStatus(selectedOrder.id, e.target.value)}
-                      className="w-full mt-2 px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                      className={`w-full px-3 py-2 bg-white border-2 ${statusBorderColors[selectedOrder.status]} rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-gray-900 font-medium`}
                     >
-                      <option value="PENDING">Ожидает</option>
-                      <option value="CONFIRMED">Подтвержден</option>
-                      <option value="PREPARING">Готовится</option>
-                      <option value="READY">Готов</option>
-                      <option value="DELIVERED">Доставлен</option>
-                      <option value="CANCELLED">Отменен</option>
+                      <option value="PENDING">⏳ Ожидает</option>
+                      <option value="CONFIRMED">✅ Подтвержден</option>
+                      <option value="PREPARING">👨‍🍳 Готовится</option>
+                      <option value="READY">📦 Готов</option>
+                      <option value="DELIVERED">🚚 Доставлен</option>
+                      <option value="CANCELLED">❌ Отменен</option>
                     </select>
                   </div>
 
                   <div className="bg-blue-50 rounded-2xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <Calendar className="h-4 w-4 text-blue-500" />
-                      <span className="font-medium">Время заказа</span>
+                      <span className="font-medium text-gray-900">Время заказа</span>
                     </div>
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm font-medium text-gray-900">
                       {new Date(selectedOrder.createdAt).toLocaleString('ru-RU')}
                     </div>
                   </div>
 
                   <div className="bg-green-50 rounded-2xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <CreditCard className="h-4 w-4 text-green-500" />
-                      <span className="font-medium">Сумма</span>
+                      <span className="font-medium text-gray-900">Сумма</span>
                     </div>
                     <div className="text-lg font-semibold text-orange-600">
                       {selectedOrder.totalAmount.toLocaleString()} ֏
                     </div>
-                    <div className="text-sm text-gray-500">{selectedOrder.paymentMethod}</div>
+                    <div className="text-sm font-medium text-gray-700">{selectedOrder.paymentMethod}</div>
                   </div>
                 </div>
 
-                {/* Информация о клиенте */}
-                <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
+                {/* Информация о клиенте и доставке */}
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <UserIcon className="h-5 w-5 text-orange-500" />
-                    Информация о клиенте
+                    Информация о клиенте и доставке
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                      <p className="text-sm text-gray-500">Имя</p>
-                      <p className="font-medium">{selectedOrder.user.name}</p>
+                      <p className="text-sm text-gray-600 mb-1">Имя</p>
+                      <p className="font-medium text-gray-900">{selectedOrder.user.name}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Email</p>
-                      <p className="font-medium">{selectedOrder.user.email}</p>
+                      <p className="text-sm text-gray-600 mb-1">Email</p>
+                      <p className="font-medium text-gray-900">{selectedOrder.user.email}</p>
                     </div>
                     {selectedOrder.user.phone && (
                       <div>
-                        <p className="text-sm text-gray-500">Телефон</p>
-                        <p className="font-medium flex items-center gap-1">
+                        <p className="text-sm text-gray-600 mb-1">Телефон</p>
+                        <p className="font-medium text-gray-900 flex items-center gap-1">
                           <Phone className="h-4 w-4" />
                           {selectedOrder.user.phone}
                         </p>
                       </div>
                     )}
-                  </div>
-                </div>
-
-                {/* Информация о доставке */}
-                <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-orange-500" />
-                    Информация о доставке
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-500">Адрес доставки</p>
-                      <p className="font-medium">{selectedOrder.deliveryAddress}</p>
+                      <p className="text-sm text-gray-600 mb-1">Адрес доставки</p>
+                      <p className="font-medium text-gray-900">{selectedOrder.deliveryAddress}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Время доставки</p>
-                      <p className="font-medium">{selectedOrder.deliveryTime}</p>
+                      <p className="text-sm text-gray-600 mb-1">Время доставки</p>
+                      <p className="font-medium text-gray-900">{selectedOrder.deliveryTime}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Товары в заказе */}
-                <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <Package className="h-5 w-5 text-orange-500" />
                     Товары в заказе
                   </h3>
                   <div className="space-y-3">
                     {selectedOrder.items.map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-orange-50/80 backdrop-blur-sm rounded-xl border border-orange-200/50">
+                      <div key={index} className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200">
                         <div className="flex items-center gap-3">
-                          <img
-                            src={item.product.image}
-                            alt={item.product.name}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
+                          {item.product.image && item.product.image !== 'no-image' ? (
+                            <img
+                              src={item.product.image}
+                              alt={item.product.name}
+                              className="w-12 h-12 rounded-lg object-cover"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                              <span className="text-lg">🥟</span>
+                            </div>
+                          )}
                           <div>
-                            <p className="font-medium text-sm">{item.product.name}</p>
-                            <p className="text-xs text-gray-500">
-                              {item.product.price.toLocaleString()} ֏ × {item.quantity}
-                            </p>
+                            <p className="font-medium text-sm text-gray-900">{item.product.name}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-xs text-gray-600">
+                                {item.product.price.toLocaleString()} ֏
+                              </span>
+                              <span className="text-gray-400">×</span>
+                              <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-semibold">
+                                {item.quantity} шт.
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <p className="font-semibold text-sm">
-                          {(item.product.price * item.quantity).toLocaleString()} ֏
-                        </p>
+                        <div className="text-right">
+                          <p className="font-semibold text-sm text-gray-900">
+                            {(item.product.price * item.quantity).toLocaleString()} ֏
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {item.quantity} × {item.product.price.toLocaleString()} ֏
+                          </p>
+                        </div>
                       </div>
                     ))}
                   </div>

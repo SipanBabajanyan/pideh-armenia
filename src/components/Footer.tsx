@@ -11,14 +11,13 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
               <Image 
-                src="/logo.png" 
+                src="/logo.png?v=2" 
                 alt="Pideh Armenia Logo" 
                 width={120} 
                 height={40}
-                className="h-10 w-auto mr-3"
+                className="h-10 w-auto"
                 style={{ width: "auto", height: "auto" }}
               />
-              <h3 className="text-2xl font-bold text-orange-500">Pideh Armenia</h3>
             </div>
             <p className="text-gray-300 mb-4">
               Армянские пиде - новый вкус. Свежие, вкусные, быстрые!
@@ -36,26 +35,26 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Меню</h4>
+            <h4 className="text-lg font-semibold mb-4">Навигация</h4>
             <ul className="space-y-2">
               <li>
+                <Link href="/" className="text-gray-300 hover:text-orange-500 transition-colors">
+                  Главная
+                </Link>
+              </li>
+              <li>
                 <Link href="/products" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Все товары
+                  Меню
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Классические" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Классические
+                <Link href="/about" className="text-gray-300 hover:text-orange-500 transition-colors">
+                  О нас
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Мясные" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Мясные
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=Сырные" className="text-gray-300 hover:text-orange-500 transition-colors">
-                  Сырные
+                <Link href="/contact" className="text-gray-300 hover:text-orange-500 transition-colors">
+                  Контакты
                 </Link>
               </li>
             </ul>
@@ -80,11 +79,25 @@ export default function Footer() {
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-orange-500" />
-                  <span className="text-gray-300">Zoravar Andranik 151/2</span>
+                  <a 
+                    href="https://maps.google.com/?q=ул.+Зоравар+Андраник+151/2,+Ереван,+Армения"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-orange-500 transition-colors"
+                  >
+                    ул. Зоравар Андраник 151/2
+                  </a>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-orange-500" />
-                  <span className="text-gray-300">Yeznik Koghbatsi 83</span>
+                  <a 
+                    href="https://maps.google.com/?q=ул.+Езник+Кохбаци+83,+Ереван,+Армения"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-orange-500 transition-colors"
+                  >
+                    ул. Езник Кохбаци 83
+                  </a>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -99,8 +112,18 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 Pideh Armenia. Все права защищены.</p>
+        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+          <p className="text-sm font-light tracking-wide">
+            Copyright © 2025. All Rights Reserved. Created by{' '}
+            <a 
+              href="https://neetrino.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-orange-500 hover:text-orange-400 transition-colors font-normal"
+            >
+              Neetrino IT Company
+            </a>
+          </p>
         </div>
       </div>
     </footer>

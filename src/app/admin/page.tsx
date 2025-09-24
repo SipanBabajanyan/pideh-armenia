@@ -12,7 +12,8 @@ import {
   TrendingUp,
   Clock,
   CheckCircle,
-  AlertCircle
+  Settings,
+  Tag
 } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -83,6 +84,10 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      <div className="hidden md:block h-24"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -168,6 +173,28 @@ export default function AdminDashboard() {
                   <p className="text-sm text-gray-600">Просмотр и изменение статусов заказов</p>
                 </div>
               </Link>
+              
+              <Link 
+                href="/admin/categories" 
+                className="flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors"
+              >
+                <Tag className="h-6 w-6 text-green-500 mr-4" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">Управление категориями</h3>
+                  <p className="text-sm text-gray-600">Добавлять, редактировать и удалять категории</p>
+                </div>
+              </Link>
+              
+              <Link 
+                href="/admin/settings" 
+                className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors"
+              >
+                <Settings className="h-6 w-6 text-purple-500 mr-4" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">Настройки сайта</h3>
+                  <p className="text-sm text-gray-600">Управление логотипом и настройками</p>
+                </div>
+              </Link>
             </div>
           </div>
 
@@ -193,22 +220,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Recent Orders */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Последние заказы</h2>
-            <Link 
-              href="/admin/orders" 
-              className="text-orange-500 hover:text-orange-600 font-medium"
-            >
-              Посмотреть все
-            </Link>
-          </div>
-          <div className="text-center py-8 text-gray-500">
-            <AlertCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <p>Заказы будут отображаться здесь</p>
-          </div>
-        </div>
       </div>
       
       <Footer />

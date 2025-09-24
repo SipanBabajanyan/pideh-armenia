@@ -1,32 +1,28 @@
-import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { withAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server"
 
-export async function middleware(request: NextRequest) {
-  const session = await auth()
-
-  // Проверяем, если пользователь пытается зайти в админку
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    // Если пользователь не авторизован, перенаправляем на страницу входа
-    if (!session) {
-      return NextResponse.redirect(new URL('/login', request.url))
+export default withAuth(
+  function middleware(req) {
+    // Проверяем, если пользователь пытается зайти в админку
+    if (req.nextUrl.pathname.startsWith('/admin')) {
+      // Проверяем роль пользователя
+      if (req.nextauth.token?.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/login', req.url))
+      }
     }
-    
-    // Проверяем роль пользователя
-    if (session.user?.role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        // Если пользователь пытается зайти в админку или профиль, проверяем авторизацию
+        if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/profile')) {
+          return !!token
+        }
+        return true
+      },
+    },
   }
-
-  // Проверяем, если пользователь пытается зайти в профиль
-  if (request.nextUrl.pathname.startsWith('/profile')) {
-    // Если пользователь не авторизован, перенаправляем на страницу входа
-    if (!session) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
-  }
-
-  return NextResponse.next()
-}
+)
 
 export const config = {
   matcher: ['/admin/:path*', '/profile/:path*']

@@ -4,11 +4,12 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, ShoppingCart, Plus, Minus, Star, Clock, MapPin, Phone, Heart, Share2 } from 'lucide-react'
+import { ArrowLeft, ShoppingCart, Plus, Minus, Star, Clock, MapPin, Phone, Zap } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { Product } from '@/types'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ProductCard from '@/components/ProductCard'
 
 export default function ProductPage() {
   const params = useParams()
@@ -73,11 +74,11 @@ export default function ProductPage() {
 
   // Компонент скелетона для страницы товара
   const ProductPageSkeleton = () => (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{ overflow: 'auto' }}>
       <Header />
       
       {/* Breadcrumb Skeleton */}
-      <div className="bg-white">
+      <div className="bg-white pt-20 md:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-2">
             <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
@@ -98,11 +99,6 @@ export default function ProductPage() {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <div className="h-96 bg-gray-200 animate-pulse"></div>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
-              ))}
             </div>
           </div>
 
@@ -161,7 +157,10 @@ export default function ProductPage() {
         </section>
       </div>
 
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
       <Footer />
+      </div>
     </div>
   )
 
@@ -171,7 +170,7 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50" style={{ overflow: 'auto' }}>
         <Header />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -187,17 +186,20 @@ export default function ProductPage() {
             </Link>
           </div>
         </div>
+        {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
         <Footer />
+      </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{ overflow: 'auto' }}>
       <Header />
       
       {/* Breadcrumb */}
-      <div className="bg-white">
+      <div className="bg-white pt-20 md:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center space-x-2 text-sm">
             <Link href="/" className="text-gray-500 hover:text-orange-500">Главная</Link>
@@ -222,64 +224,168 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Product Image */}
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden group">
-              <div className="relative h-96 bg-gradient-to-br from-orange-50 to-orange-100">
-                {product.image ? (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (nextElement) {
-                        nextElement.style.display = 'flex';
-                      }
-                    }}
-                  />
-                ) : null}
-                <div 
-                  className="w-full h-full flex items-center justify-center text-8xl opacity-60"
-                  style={{ display: product.image ? 'none' : 'flex' }}
-                >
-                  🥟
-                </div>
+            <div className="bg-white rounded-2xl shadow-lg overflow-visible group relative">
+              <div className="relative h-96 overflow-visible">
+                {/* Transparent background - no gradient */}
                 
-                {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col space-y-2">
-                  <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    {product.category}
+                {/* 3D Product Container */}
+                {product.image && product.image !== 'no-image' ? (
+                  <div className="relative w-full h-full">
+                    {/* 3D Product Image with floating effect */}
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-[calc(100%+1rem)] h-[calc(100%+1rem)]">
+                      {/* 3D Shadow Layer */}
+                      <div 
+                        className="absolute inset-0 bg-gradient-to-br from-gray-200/20 to-gray-300/15 rounded-3xl transform translate-y-2 translate-x-1 group-hover:translate-y-3 group-hover:translate-x-2 transition-all duration-700"
+                        style={{
+                          filter: 'none',
+                        }}
+                      />
+                      
+                      {/* Main 3D Product Image */}
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority
+                        className="relative w-full h-full object-contain group-hover:scale-125 group-hover:-translate-y-3 group-hover:rotate-2 transition-all duration-700 ease-out"
+                        style={{
+                          filter: 'none',
+                          transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                          imageRendering: 'crisp-edges',
+                          imageRendering: '-webkit-optimize-contrast',
+                        }}
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                          if (nextElement) {
+                            nextElement.style.display = 'flex';
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                  {product.category === 'Пиде' && (
-                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      ХИТ
+                ) : (
+                  <div 
+                    className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[calc(100%+3rem)] h-[calc(100%+3rem)] flex items-center justify-center opacity-70 group-hover:opacity-90 transition-opacity duration-500 text-8xl"
+                    style={{
+                      filter: 'none',
+                      transform: 'perspective(1000px) rotateX(5deg) rotateY(-2deg)',
+                    }}
+                  >
+                    🥟
+                  </div>
+                )}
+                
+                {/* 3D Floating Badges */}
+                <div className="absolute top-12 left-4 flex flex-col gap-2 z-20">
+                  {/* 3D Category Badge */}
+                  <div 
+                    className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-2xl text-xs font-bold shadow-2xl transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                    style={{
+                      boxShadow: '0 10px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                    }}
+                  >
+                    {product.category?.name || 'Без категории'}
+                  </div>
+                  
+                  {/* 3D Special Badge */}
+                  {product.status === 'HIT' && (
+                    <div 
+                      className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                      style={{
+                        boxShadow: '0 10px 25px rgba(255, 193, 7, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    >
+                      <Star className="w-3 h-3" />
+                      ХИТ ПРОДАЖ
+                    </div>
+                  )}
+                  
+                  {product.status === 'NEW' && (
+                    <div 
+                      className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                      style={{
+                        boxShadow: '0 10px 25px rgba(34, 197, 94, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    >
+                      <Zap className="w-3 h-3" />
+                      НОВИНКА
+                    </div>
+                  )}
+                  
+                  {product.status === 'CLASSIC' && (
+                    <div 
+                      className="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-3 py-1 rounded-2xl text-xs font-bold shadow-2xl flex items-center gap-1 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500"
+                      style={{
+                        boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    >
+                      <Star className="w-3 h-3" />
+                      КЛАССИКА
                     </div>
                   )}
                 </div>
 
-                {/* Action buttons */}
-                <div className="absolute top-4 right-4 flex space-x-2">
-                  <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
-                    <Heart className="h-5 w-5" />
-                  </button>
-                  <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
-                    <Share2 className="h-5 w-5" />
-                  </button>
-                </div>
+              </div>
+              
+              {/* 3D Floating Decorative Elements - positioned inside container */}
+              <div 
+                className="absolute top-2 right-2 w-6 h-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                style={{
+                  boxShadow: '0 10px 25px rgba(255, 107, 53, 0.3)',
+                  filter: 'blur(1px)',
+                }}
+              />
+              <div 
+                className="absolute bottom-2 left-2 w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"
+                style={{
+                  boxShadow: '0 10px 25px rgba(255, 193, 7, 0.3)',
+                  filter: 'blur(1px)',
+                }}
+              />
+              <div 
+                className="absolute top-1/2 left-2 w-2 h-2 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-all duration-500 group-hover:scale-125"
+                style={{
+                  boxShadow: '0 5px 15px rgba(236, 72, 153, 0.2)',
+                  filter: 'blur(0.5px)',
+                }}
+              />
+            </div>
+
+            {/* Additional Info */}
+            <div style={{ marginTop: '50px' }}>
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Информация о товаре:</h4>
+                <ul className="space-y-2 text-gray-700">
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                    Категория: {product.category?.name || 'Без категории'}
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                    Время приготовления: 15-20 минут
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                    Вес: ~300г
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                    Только свежие ингредиенты
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                    Без консервантов
+                  </li>
+                </ul>
               </div>
             </div>
 
-            {/* Additional images placeholder */}
-            <div className="grid grid-cols-4 gap-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl opacity-50">📷</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Product Info */}
@@ -324,17 +430,17 @@ export default function ProductPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-6">
                 <label className="text-lg font-medium text-gray-900">Количество:</label>
-                <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden">
+                <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden bg-white shadow-sm">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 hover:bg-gray-100 transition-colors"
+                    className="p-3 hover:bg-orange-100 transition-colors text-gray-700 hover:text-orange-600"
                   >
                     <Minus className="h-5 w-5" />
                   </button>
-                  <span className="px-6 py-3 min-w-[4rem] text-center text-lg font-semibold">{quantity}</span>
+                  <span className="px-6 py-3 min-w-[4rem] text-center text-lg font-semibold bg-gray-50 text-gray-900">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 hover:bg-gray-100 transition-colors"
+                    className="p-3 hover:bg-orange-100 transition-colors text-gray-700 hover:text-orange-600"
                   >
                     <Plus className="h-5 w-5" />
                   </button>
@@ -390,114 +496,45 @@ export default function ProductPage() {
                 </div>
               </div>
             </div>
-
-            {/* Additional Info */}
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl p-6">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Информация о товаре:</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Категория: {product.category}
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Время приготовления: 15-20 минут
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Вес: ~300г
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Только свежие ингредиенты
-                </li>
-                <li className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                  Без консервантов
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
+
 
         {/* Similar Products */}
         {memoizedSimilarProducts.length > 0 && (
           <section className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Похожие товары</h2>
+            <div className="flex items-center space-x-4 mb-8">
+              <h2 className="text-3xl font-bold text-gray-900">
+                Похожие товары
+              </h2>
+              <div className="w-1 h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
               <Link 
                 href="/products" 
-                className="text-orange-500 hover:text-orange-600 font-semibold flex items-center"
+                className="group text-orange-500 hover:text-orange-600 text-lg font-bold flex items-center space-x-2 transition-colors duration-300 ml-2"
               >
-                Посмотреть все
-                <ArrowLeft className="h-4 w-4 ml-1 rotate-180" />
+                <span>Все</span>
+                <ArrowLeft className="h-5 w-5 rotate-180 group-hover:translate-x-1 transition-transform duration-300" style={{ strokeWidth: 3 }} />
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {memoizedSimilarProducts.map((similarProduct) => (
-                <Link
+                <ProductCard
                   key={similarProduct.id}
-                  href={`/products/${similarProduct.id}`}
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div className="relative h-48 bg-orange-50 flex items-center justify-center overflow-hidden">
-                    {similarProduct.image ? (
-                      <Image
-                        src={similarProduct.image}
-                        alt={similarProduct.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
-                        loading="lazy"
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (nextElement) {
-                            nextElement.style.display = 'flex';
-                          }
-                        }}
-                      />
-                    ) : null}
-                    <div 
-                      className="w-full h-full flex items-center justify-center text-6xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                      style={{ display: similarProduct.image ? 'none' : 'flex' }}
-                    >
-                      🥟
-                    </div>
-                  </div>
-                  
-                  <div className="p-4">
-                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
-                      {similarProduct.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {similarProduct.description}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-orange-500">
-                        {similarProduct.price} ֏
-                      </span>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          addItem(similarProduct, 1);
-                        }}
-                        className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </Link>
+                  product={similarProduct}
+                  onAddToCart={addItem}
+                  variant="compact"
+                />
               ))}
             </div>
           </section>
         )}
       </div>
 
+      {/* Hide Footer on Mobile */}
+      <div className="hidden md:block">
       <Footer />
+      </div>
     </div>
   )
 }

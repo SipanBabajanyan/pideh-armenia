@@ -1,13 +1,13 @@
 import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
+import CredentialsProvider from "next-auth/providers/credentials"
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-const authConfig = {
+export const authOptions = {
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -47,7 +47,7 @@ const authConfig = {
     })
   ],
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as const,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -69,7 +69,4 @@ const authConfig = {
   },
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
-
-// Для совместимости с getServerSession
-export const authOptions = authConfig
+export default NextAuth(authOptions)

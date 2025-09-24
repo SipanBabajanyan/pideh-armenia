@@ -8,13 +8,20 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
     const search = searchParams.get('search')
+    const status = searchParams.get('status')
 
     const whereClause: any = {
       isAvailable: true
     }
 
     if (category && category !== 'Все') {
-      whereClause.category = category
+      whereClause.category = {
+        name: category
+      }
+    }
+
+    if (status) {
+      whereClause.status = status
     }
 
     if (search) {
@@ -32,10 +39,18 @@ export async function GET(request: NextRequest) {
         name: true,
         description: true,
         price: true,
-        category: true,
+        categoryId: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true
+          }
+        },
         image: true,
         ingredients: true,
         isAvailable: true,
+        status: true,
         createdAt: true
       }
     })
@@ -58,11 +73,29 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    const { categoryId, ...productData } = body
+    
+    if (!categoryId) {
+      return NextResponse.json(
+        { error: 'Category ID is required' },
+        { status: 400 }
+      )
+    }
     
     const product = await prisma.product.create({
       data: {
-        ...body,
-        ingredients: body.ingredients || []
+        ...productData,
+        categoryId,
+        ingredients: productData.ingredients || []
+      },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true
+          }
+        }
       }
     })
 

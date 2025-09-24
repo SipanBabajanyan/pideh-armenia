@@ -12,7 +12,8 @@ import ProductCard from '@/components/ProductCard'
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<Category>('Все')
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('Все')
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
@@ -21,17 +22,8 @@ export default function ProductsPage() {
   const { addItem } = useCart()
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const categories: Category[] = [
-    'Все',
-    'Комбо',
-    'Пиде',
-    'Снэк',
-    'Соусы',
-    'Освежающие напитки',
-  ]
-
-  // Порядок категорий для сортировки
-  const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Освежающие напитки']
+  // Порядок категорий для сортировки (приоритетные категории)
+  const categoryOrder = ['Комбо', 'Пиде', 'Снэк', 'Соусы', 'Напитки']
 
   const fetchProducts = async () => {
     try {
@@ -45,25 +37,47 @@ export default function ProductsPage() {
     }
   }
 
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories')
+      const data = await response.json()
+      setCategories(data)
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+    }
+  }
+
   const filterProducts = useCallback(() => {
     let filtered = products
 
-    if (selectedCategory !== 'Все') {
-      filtered = filtered.filter(product => product.category === selectedCategory)
-    }
-
+    // Если есть поисковый запрос, ищем по всем товарам
     if (debouncedSearchQuery) {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        product.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        product.ingredients.some(ingredient => 
+          ingredient.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        )
       )
+    } else {
+      // Если нет поискового запроса, показываем товары выбранной категории
+      if (selectedCategory !== 'Все') {
+        filtered = filtered.filter(product => product.category?.name === selectedCategory)
+      }
+      // Если выбрано "Все", показываем все товары без фильтрации
     }
 
     setFilteredProducts(filtered)
   }, [products, selectedCategory, debouncedSearchQuery])
 
   useEffect(() => {
-    fetchProducts()
+    const loadData = async () => {
+      await Promise.all([
+        fetchProducts(),
+        fetchCategories()
+      ])
+    }
+    loadData()
   }, [])
 
   // Debounce search query
@@ -97,14 +111,17 @@ export default function ProductsPage() {
     const grouped: Record<string, Product[]> = {}
     
     products.forEach(product => {
-      if (!grouped[product.category]) {
-        grouped[product.category] = []
+      const categoryName = product.category?.name || 'Без категории'
+      if (!grouped[categoryName]) {
+        grouped[categoryName] = []
       }
-      grouped[product.category].push(product)
+      grouped[categoryName].push(product)
     })
 
-    // Сортируем категории в нужном порядке
-    const sortedCategories = categoryOrder.filter(cat => grouped[cat])
+    // Сортируем категории: сначала приоритетные, потом остальные
+    const priorityCategories = categoryOrder.filter(cat => grouped[cat])
+    const otherCategories = Object.keys(grouped).filter(cat => !categoryOrder.includes(cat))
+    const sortedCategories = [...priorityCategories, ...otherCategories]
     
     return sortedCategories.map(category => ({
       category,
@@ -171,7 +188,10 @@ export default function ProductsPage() {
             ))}
           </div>
         </div>
-        <Footer />
+        <div className="hidden md:block">
+          <Footer />
+        </div>
+        <div className="md:hidden h-24"></div>
       </div>
     )
   }
@@ -179,31 +199,26 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      {/* Отступ для fixed хедера */}
+      <div className="md:hidden h-24"></div>
+      <div className="hidden md:block h-24"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Наше меню
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Выберите из {products.length} вкусных блюд. Свежие ингредиенты, быстрая доставка!
-          </p>
-        </div>
 
         {/* Search and Filter */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
-                searching ? 'text-orange-500 animate-pulse' : 'text-gray-400'
+                searching ? 'text-orange-500 animate-pulse' : 'text-gray-500'
               }`} />
               <input
                 type="text"
-                placeholder="Поиск по названию или описанию..."
+                placeholder="Поиск по названию, описанию или ингредиентам..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg transition-all duration-300"
+                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg text-gray-900 placeholder-gray-500 bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md focus:bg-white"
               />
               {searching && (
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -213,48 +228,115 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
+          {/* Category Filter - Mobile 2 rows, Desktop single row */}
+          <div>
+            {/* Mobile - 2 rows */}
+            <div className="md:hidden">
+              <div className="space-y-3">
+                {/* First row - Все, Пиде, Комбо - 3 большие кнопки */}
+                <div className="grid grid-cols-3 gap-3">
+                  {['Все', 'Пиде', 'Комбо'].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`px-4 py-4 rounded-2xl font-bold transition-all duration-300 text-base ${
+                        selectedCategory === category
+                          ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
+                      }`}
+                      style={selectedCategory === category ? {
+                        boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                      } : {}}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+                
+                {/* Second row - остальные категории */}
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {categories
+                    .filter(cat => !['Пиде', 'Комбо'].includes(cat.name))
+                    .map((category) => (
+                    <button
+                      key={`mobile-${category.id}`}
+                      onClick={() => setSelectedCategory(category.name)}
+                      className={`px-5 py-3 rounded-2xl font-semibold transition-all duration-300 text-sm ${
+                        selectedCategory === category.name
+                          ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95'
+                      }`}
+                      style={selectedCategory === category.name ? {
+                        boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                      } : {}}
+                    >
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Desktop - single row */}
+            <div className="hidden md:flex flex-wrap gap-4">
+              {/* Кнопка "Все" */}
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${
-                  selectedCategory === category
-                    ? 'bg-orange-500 text-white shadow-lg'
+                onClick={() => setSelectedCategory('Все')}
+                className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 ${
+                  selectedCategory === 'Все'
+                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-600'
                 }`}
+                style={selectedCategory === 'Все' ? {
+                  boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                } : {}}
               >
-                {category}
+                Все
               </button>
-            ))}
+              
+              {/* Динамические категории */}
+              {categories.map((category) => (
+                <button
+                  key={`desktop-${category.id}`}
+                  onClick={() => setSelectedCategory(category.name)}
+                  className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 ${
+                    selectedCategory === category.name
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-600'
+                  }`}
+                  style={selectedCategory === category.name ? {
+                    boxShadow: '0 8px 25px rgba(255, 107, 53, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  } : {}}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Products by Categories */}
-        {selectedCategory === 'Все' ? (
-          // Показываем все категории с заголовками
+        {/* Products Display */}
+        {selectedCategory === 'Все' && !debouncedSearchQuery ? (
+          // Показываем продукты сгруппированными по категориям
           <div className="space-y-12">
-            {groupedProducts.map(({ category, products }) => (
-              <div key={category} className="space-y-6">
-                {/* Category Header */}
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="bg-orange-500 w-1 h-8 rounded-full"></div>
-                  <h2 className="text-3xl font-bold text-gray-900">{category}</h2>
-                  <div className="flex-1 h-px bg-orange-200"></div>
-                  <span className="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold">
-                    {products.length} товаров
-                  </span>
+            {groupedProducts.map(({ category, products: categoryProducts }) => (
+              <div key={category}>
+                {/* Заголовок категории */}
+                <div className="flex items-center mb-6">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mr-4">
+                    {category}
+                  </h2>
+                  <div className="flex-1 h-px bg-gradient-to-r from-orange-200 to-transparent"></div>
                 </div>
                 
-                {/* Products Grid for this category */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {products.map((product) => (
+                {/* Продукты категории */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 md:gap-15">
+                  {categoryProducts.map((product) => (
                     <ProductCard
                       key={product.id}
                       product={product}
                       onAddToCart={handleAddToCart}
-                      variant="default"
+                      variant="compact"
                       addedToCart={addedToCart}
                     />
                   ))}
@@ -263,8 +345,8 @@ export default function ProductsPage() {
             ))}
           </div>
         ) : (
-          // Показываем товары выбранной категории
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          // Показываем продукты в обычной сетке (для конкретной категории или поиска)
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 md:gap-15">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
@@ -279,13 +361,47 @@ export default function ProductsPage() {
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Товары не найдены</p>
-            <p className="text-gray-400">Попробуйте изменить фильтры или поисковый запрос</p>
+            <div className="text-6xl mb-4">🍽️</div>
+            {debouncedSearchQuery ? (
+              <>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  По запросу "{debouncedSearchQuery}" ничего не найдено
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Поиск выполнен по всему меню. Попробуйте изменить поисковый запрос или выбрать категорию
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="bg-gray-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-600 transition-colors"
+                  >
+                    Очистить поиск
+                  </button>
+                  <button
+                    onClick={() => setSelectedCategory('Все')}
+                    className="bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors"
+                  >
+                    Показать все товары
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-500 text-lg">Товары в категории "{selectedCategory}" не найдены</p>
+                <p className="text-gray-400">Попробуйте выбрать другую категорию</p>
+              </>
+            )}
           </div>
         )}
       </div>
       
-      <Footer />
+      {/* Footer - Hidden on mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
+      
+      {/* Add bottom padding for mobile nav */}
+      <div className="md:hidden h-20"></div>
     </div>
   )
 }
