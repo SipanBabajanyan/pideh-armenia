@@ -48,7 +48,7 @@ export default function MobileHeader() {
           <div className="flex-1 flex justify-center">
             <Link href="/" className="hover:opacity-80 transition-all duration-300 hover:scale-105">
               <Image 
-                src="/logo.png" 
+                src="/logo.png?v=2" 
                 alt="Pideh Armenia Logo" 
                 width={60} 
                 height={18}

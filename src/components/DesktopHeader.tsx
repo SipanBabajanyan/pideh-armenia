@@ -37,7 +37,7 @@ export default function DesktopHeader() {
           {/* Logo */}
           <Link href="/" className="hover:opacity-80 transition-opacity">
             <Image 
-              src="/logo.png" 
+              src="/logo.png?v=2" 
               alt="Pideh Armenia Logo" 
               width={180} 
               height={60}

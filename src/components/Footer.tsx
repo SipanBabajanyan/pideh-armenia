@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
               <Image 
-                src="/logo.png" 
+                src="/logo.png?v=2" 
                 alt="Pideh Armenia Logo" 
                 width={120} 
                 height={40}
