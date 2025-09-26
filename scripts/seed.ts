@@ -17,19 +17,42 @@ async function main() {
   await prisma.orderItem.deleteMany()
   await prisma.order.deleteMany()
   await prisma.product.deleteMany()
+  await prisma.category.deleteMany()
   await prisma.user.deleteMany()
 
   console.log('🗑️ Очистили существующие данные')
 
+  // Создаем категории
+  const categories = ['Пиде', 'Комбо', 'Снэк', 'Соусы', 'Напитки']
+  const categoryMap = new Map()
+  
+  for (const categoryName of categories) {
+    const category = await prisma.category.create({
+      data: {
+        name: categoryName,
+        description: `Категория ${categoryName}`,
+        isActive: true
+      }
+    })
+    categoryMap.set(categoryName, category.id)
+    console.log(`✅ Создана категория: ${category.name}`)
+  }
+
   // Создаем товары
   for (const productData of productsData) {
+    const categoryId = categoryMap.get(productData.category)
+    if (!categoryId) {
+      console.log(`⚠️ Категория не найдена для товара: ${productData.name}`)
+      continue
+    }
+
     const product = await prisma.product.create({
       data: {
         name: productData.name,
         description: productData.description,
         price: productData.price,
         image: productData.image,
-        category: productData.category,
+        categoryId: categoryId,
         ingredients: productData.ingredients,
         isAvailable: productData.isAvailable
       }
